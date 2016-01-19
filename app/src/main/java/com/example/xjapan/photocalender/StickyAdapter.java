@@ -20,13 +20,14 @@ import java.util.ArrayList;
 /**
  * Created by xjapan on 15/12/21.
  */
-public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter{
+public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter {
 
     private LayoutInflater inflater;
     private ArrayList<CalenderList> allList;
     private ArrayList<DayList> allDays;
     private Context context;
     private Common common;
+    private ViewHolder holder;
 
     public StickyAdapter(Context context, ArrayList<CalenderList> allList, ArrayList<DayList> allDays, Common common) {
         this.inflater = LayoutInflater.from(context);
@@ -53,7 +54,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        ViewHolder holder;
 
         if (view == null) {
             view = inflater.inflate(R.layout.grid_image, viewGroup, false);
@@ -61,6 +61,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             holder.gridImageView = (ImageView) view.findViewById(R.id.item_imageview);
             holder.gridTextView = (TextView) view.findViewById(R.id.day_text);
             holder.stampImageView = (ImageView) view.findViewById(R.id.stamp_imageview);
+            holder.titleMemoTextView = (TextView) view.findViewById(R.id.title_memo);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -83,12 +84,20 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
                         common.day = Integer.parseInt(dayList.day);
                         View layout = inflater.inflate(R.layout.select_stamp, (ViewGroup) view.findViewById(R.id.select_stamp_layout));
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(dayList.year+"年"+dayList.month+"月"+dayList.day+"日");
+                        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
                         builder.setView(layout);
                         AlertDialog alertDialog = builder.show();
                         common.alertDialog = alertDialog;
                     } else if (common.isPencil) {
-
+                        common.year = dayList.year;
+                        common.month = dayList.month;
+                        common.day = Integer.parseInt(dayList.day);
+                        View layout = inflater.inflate(R.layout.edit_title_memo, (ViewGroup) view.findViewById(R.id.edit_title_memo_layout));
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
+                        builder.setView(layout);
+                        AlertDialog alertDialog = builder.show();
+                        common.alertDialog = alertDialog;
                     } else {
                         CalenderList postCalenderList = getCalenderListByDayId(i);
                         Intent intent = new Intent(view.getContext(), MonthDetailActivity.class);

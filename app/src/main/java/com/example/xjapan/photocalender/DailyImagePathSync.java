@@ -23,6 +23,7 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
     private ViewHolder holder;
     private DailyImageDB dailyImageDB;
     private DailyStampDB dailyStampDB;
+    private DailyTitleMemoDB dailyTitleMemoDB;
     private Common common;
 
     public DailyImagePathSync(Context context, int year, int month, String day, ViewHolder holder, Common common) {
@@ -34,6 +35,7 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
         this.holder = holder;
         this.dailyImageDB = new DailyImageDB(context);
         this.dailyStampDB = new DailyStampDB(context);
+        this.dailyTitleMemoDB = new DailyTitleMemoDB(context);
         this.common = common;
     }
 
@@ -42,8 +44,10 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
         ArrayList<String> resultDB = new ArrayList<>();
         String path = dailyImageDB.selectPath(year, month, Integer.parseInt(day));
         String stamp = dailyStampDB.selectStamp(year, month, Integer.parseInt(day));
+        String titleMemo = dailyTitleMemoDB.selectTitleMemo(year, month, Integer.parseInt(day));
         resultDB.add(path);
         resultDB.add(stamp);
+        resultDB.add(titleMemo);
         return resultDB;
     }
 
@@ -61,6 +65,9 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
                 params.height = displayMetrics.widthPixels / 14;
                 holder.stampImageView.setVisibility(View.VISIBLE);
                 holder.stampImageView.setImageResource(Integer.parseInt(result.get(1)));
+            }else if(!result.get(2).equals("")){
+                holder.titleMemoTextView.setVisibility(View.VISIBLE);
+                holder.titleMemoTextView.setText(result.get(2));
             }
             holder.gridImageView.setImageResource(R.drawable.noimage1);
 

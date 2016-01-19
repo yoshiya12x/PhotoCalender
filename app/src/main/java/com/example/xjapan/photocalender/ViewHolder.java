@@ -1,6 +1,5 @@
 package com.example.xjapan.photocalender;
 
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,5 +10,5 @@ public class ViewHolder {
     public ImageView gridImageView;
     public TextView gridTextView;
     public ImageView stampImageView;
-    public EditText titleMemoEditText;
+    public TextView titleMemoTextView;
 }
