@@ -2,12 +2,15 @@ package com.example.xjapan.photocalender;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -54,7 +57,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-
         if (view == null) {
             view = inflater.inflate(R.layout.grid_image, viewGroup, false);
             holder = new ViewHolder();
@@ -93,9 +95,26 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
                         common.month = dayList.month;
                         common.day = Integer.parseInt(dayList.day);
                         View layout = inflater.inflate(R.layout.edit_title_memo, (ViewGroup) view.findViewById(R.id.edit_title_memo_layout));
+                        final EditText editText = (EditText) layout.findViewById(R.id.edit_title_memo);
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
                         builder.setView(layout);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                DailyTitleMemoDB dailyTitleMemoDB = new DailyTitleMemoDB(context);
+                                String titleMemo = dailyTitleMemoDB.selectTitleMemo(common.year, common.month, common.day);
+                                SpannableStringBuilder sb = (SpannableStringBuilder) editText.getText();
+                                if (titleMemo.equals("")) {
+                                    dailyTitleMemoDB.insertTitleMemo(common.year, common.month, common.day, sb.toString());
+                                } else {
+                                    dailyTitleMemoDB.updateTitleMemo(common.year, common.month, common.day, sb.toString());
+                                }
+                            }
+                        });
+                        builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
                         AlertDialog alertDialog = builder.show();
                         common.alertDialog = alertDialog;
                     } else {
