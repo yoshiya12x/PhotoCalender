@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.xjapan.photocalender.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabs"
+        android:paddingTop="48dip" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/top_stamp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/activity_horizontal_quoter_margin"
+        android:src="@drawable/stamp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/top_pencil"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignTop="@+id/top_stamp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="@dimen/activity_horizontal_quoter_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_quoter_margin"
+        android:layout_toStartOf="@+id/top_stamp"
+        android:src="@drawable/pencil" />
+
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PhotoCalender</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_test1">Test1</string>
+    <string name="title_activity_month_detail">MonthDetailActivity</string>
+    <string name="title_activity_day_detail">DayDetailActivity</string>
+</resources>

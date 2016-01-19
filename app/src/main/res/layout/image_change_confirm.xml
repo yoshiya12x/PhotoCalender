@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alertdialog_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+        android:id="@+id/change_image_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/pre_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:adjustViewBounds="true"
+            android:src="@drawable/kid" />
+
+        <ImageView
+            android:id="@+id/allow_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/activity_horizontal_quoter_margin"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/allow" />
+
+        <ImageView
+            android:id="@+id/take_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:adjustViewBounds="true"
+            android:src="@drawable/kid" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/change_image_alert"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/change_image_linearLayout"
+        android:text="変更してもよろしいですか？"
+        android:textSize="20dp" />
+
+</RelativeLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:text="Large Text"-->
+        <!--android:textColor="@color/colorBlack"-->
+        <!--android:id="@+id/monthTextView"-->
+        <!--android:layout_gravity="center_horizontal" />-->
+
+    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+        android:id="@+id/listViewCalendar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnWidth="160dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:gravity="left"
+        android:background="@color/colorSubImage"/>
+
+
+    <!--<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:id="@+id/recyclerView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@color/colorDarkGray">-->
+
+    <!--</android.support.v7.widget.RecyclerView>-->
+
+</LinearLayout>

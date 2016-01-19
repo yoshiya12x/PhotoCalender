@@ -1,0 +1,43 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorSubImage</item>
+        <item name="colorPrimaryDark">@color/colorMainImage</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
+        <item name="android:textColorHint">@color/colorDarkGray</item>
+        <item name="android:colorControlNormal">@color/colorDarkGray</item>
+        <!--<item name="android:calendarViewStyle">@style/Widget.CalendarView.Custom</item>-->
+    </style>
+
+    <style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">
+        <item name="android:weekSeparatorLineColor">@color/colorSubImage</item>
+        <item name="android:focusedMonthDateColor">@color/colorBlack</item>
+        <item name="android:unfocusedMonthDateColor">@color/colorDarkGray</item>
+        <item name="android:selectedDateVerticalBar">@color/colorSubImage</item>
+        <item name="android:selectedWeekBackgroundColor">@color/colorSubImageTransparent</item>
+        <item name="android:weekDayTextAppearance">@style/dateText</item>
+        <item name="android:headerYearTextAppearance">@style/TextAppearance.AppCompat.Large</item>
+    </style>
+
+    <style name="dateText">
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="hogeTest">
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+</resources>

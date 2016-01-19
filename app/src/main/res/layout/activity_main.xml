@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.xjapan.photocalender.MainActivity">
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dip"
+        android:background="@color/colorMainImage"
+        android:textColor="@color/colorWhite"
+        android:textSize="26sp"
+        app:pstsDividerColor="@color/colorWhite"
+        app:pstsIndicatorColor="@color/colorWhite"
+        app:pstsIndicatorHeight="4dp" />
+
+    <include layout="@layout/content_main" />
+
+</android.support.design.widget.CoordinatorLayout>
