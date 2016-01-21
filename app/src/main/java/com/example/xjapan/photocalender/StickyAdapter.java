@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by xjapan on 15/12/21.
@@ -133,10 +134,13 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
 
         holder.gridTextView.setText(dayList.day);
 
+        Calendar genzai = Calendar.getInstance();
         if (dayList.isSunday || dayList.isHoliday) {
             holder.gridTextView.setTextColor(Color.RED);
         } else if (dayList.isSaturday) {
             holder.gridTextView.setTextColor(Color.BLUE);
+        } else if (!dayList.day.equals("") && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
+            holder.gridTextView.setTextColor(context.getResources().getColor(R.color.colorDarkGray));
         } else {
             holder.gridTextView.setTextColor(Color.WHITE);
         }

@@ -25,6 +25,7 @@ public class PagerFragment extends Fragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_month, null);
         ArrayList<CalenderList> allList = myCalender.getAllList();
         CalenderList currentDate = myCalender.getCurrentDate();
+
         ArrayList<DayList> allDays = setDays(allList);
         StickyGridHeadersGridView stickyGridHeadersGridView = (StickyGridHeadersGridView) view.findViewById(R.id.listViewCalendar);
         stickyGridHeadersGridView.setAdapter(new StickyAdapter(getActivity(), allList, allDays, (Common) getActivity().getApplication()));
