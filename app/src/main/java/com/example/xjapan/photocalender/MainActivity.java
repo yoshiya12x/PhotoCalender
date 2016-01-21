@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableStringBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -130,17 +128,5 @@ public class MainActivity extends FragmentActivity {
             dailyStampDB.updateStamp(common.year, common.month, common.day, updateStamp);
         }
         common.alertDialog.dismiss();
-    }
-
-    public void onMemoButtonClick(View view) {
-        DailyTitleMemoDB dailyTitleMemoDB = new DailyTitleMemoDB(this);
-        String titleMemo = dailyTitleMemoDB.selectTitleMemo(common.year, common.month, common.day);
-        EditText editText = (EditText) view.findViewById(R.id.edit_title_memo);
-        SpannableStringBuilder sb = (SpannableStringBuilder) editText.getText();
-        if (titleMemo.equals("")) {
-            dailyTitleMemoDB.insertTitleMemo(common.year, common.month, common.day, sb.toString());
-        } else {
-            dailyTitleMemoDB.updateTitleMemo(common.year, common.month, common.day, sb.toString());
-        }
     }
 }
