@@ -77,6 +77,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(context, dayList.year, dayList.month, dayList.day, holder, common);
             dailyImagePathSync.forceLoad();
 
+            
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
