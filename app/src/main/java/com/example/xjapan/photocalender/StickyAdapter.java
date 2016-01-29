@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     private ArrayList<DayList> allDays;
     private Context context;
     private Common common;
-    private ViewHolder holder;
+    private int temp_i;
 
     public StickyAdapter(Context context, ArrayList<CalenderList> allList, ArrayList<DayList> allDays, Common common) {
         this.inflater = LayoutInflater.from(context);
@@ -57,9 +58,13 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     }
 
     @Override
-    public View getView(final int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        ViewHolder holder;
+        temp_i = i;
         if (view == null) {
-            view = inflater.inflate(R.layout.grid_image, viewGroup, false);
+            Log.d("getView_test", "view_null");
+//            view = inflater.inflate(R.layout.grid_image, viewGroup, false);
+            view = inflater.inflate(R.layout.grid_image, null);
             holder = new ViewHolder();
             holder.gridImageView = (ImageView) view.findViewById(R.id.item_imageview);
             holder.gridTextView = (TextView) view.findViewById(R.id.day_text);
@@ -67,8 +72,10 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             holder.titleMemoTextView = (TextView) view.findViewById(R.id.title_memo);
             view.setTag(holder);
         } else {
+            Log.d("getView_test", "view_not_null");
             holder = (ViewHolder) view.getTag();
         }
+
         final DayList dayList = allDays.get(i);
 
         if (dayList.day.equals("")) {
@@ -77,7 +84,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(context, dayList.year, dayList.month, dayList.day, holder, common);
             dailyImagePathSync.forceLoad();
 
-            
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -120,7 +126,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
                         AlertDialog alertDialog = builder.show();
                         common.alertDialog = alertDialog;
                     } else {
-                        CalenderList postCalenderList = getCalenderListByDayId(i);
+                        CalenderList postCalenderList = getCalenderListByDayId(temp_i);
                         Intent intent = new Intent(view.getContext(), MonthDetailActivity.class);
                         intent.putExtra("dayListDay", dayList.day);
                         intent.putExtra("calenderListYear", postCalenderList.year);
