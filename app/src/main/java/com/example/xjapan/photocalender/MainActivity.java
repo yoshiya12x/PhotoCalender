@@ -12,6 +12,8 @@ import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import java.util.ArrayList;
+
 public class MainActivity extends FragmentActivity {
 
     private Common common;
@@ -87,8 +89,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onStampClick(View view) {
-        DailyStampDB dailyStampDB = new DailyStampDB(this);
-        String stamp = dailyStampDB.selectStamp(common.year, common.month, common.day);
+        DailyTopDB dailyTopDB = new DailyTopDB(this);
+        ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
         int updateStamp;
         switch (view.getId()) {
             case R.id.stamp_image_1:
@@ -122,10 +124,10 @@ public class MainActivity extends FragmentActivity {
                 updateStamp = R.drawable.heart;
                 break;
         }
-        if (stamp.equals("")) {
-            dailyStampDB.insertStamp(common.year, common.month, common.day, updateStamp);
+        if (item == null) {
+            dailyTopDB.insertStamp(common.year, common.month, common.day, updateStamp);
         } else {
-            dailyStampDB.updateStamp(common.year, common.month, common.day, updateStamp);
+            dailyTopDB.updateStamp(common.year, common.month, common.day, updateStamp);
         }
         common.alertDialog.dismiss();
     }

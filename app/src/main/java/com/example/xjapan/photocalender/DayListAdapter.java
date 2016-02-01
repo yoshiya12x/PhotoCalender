@@ -88,17 +88,20 @@ public class DayListAdapter extends BaseAdapter {
 
         ImageView dayImage = (ImageView) view.findViewById(R.id.day_image);
         dayImage.setImageResource(R.drawable.hidedoll);
-        DailyImageDB dailyImageDB = new DailyImageDB(context);
-        String path = dailyImageDB.selectPath(calenderList.year, calenderList.month, i_temp);
-        File imageFile = new File(path);
-        if(imageFile.exists()){
-            //AsyncTaskを使う場合
-            //SetMonthDetailImage setMonthDetailImage = new SetMonthDetailImage(context, dayImage, imageFile);
-            //setMonthDetailImage.forceLoad();
-            //Picassoを使う場合
-            Picasso.with(context).load(imageFile).into(dayImage);
-            //普通にセットする場合
-            //dayImage.setImageURI(Uri.fromFile(imageFile));
+        DailyTopDB dailyTopDB = new DailyTopDB(context);
+        ArrayList<String> allItem = dailyTopDB.selectAll(calenderList.year, calenderList.month, i_temp);
+
+        if(allItem.size() != 0){
+            File imageFile = new File(allItem.get(0));
+            if (imageFile.exists()) {
+                //AsyncTaskを使う場合
+                //SetMonthDetailImage setMonthDetailImage = new SetMonthDetailImage(context, dayImage, imageFile);
+                //setMonthDetailImage.forceLoad();
+                //Picassoを使う場合
+                Picasso.with(context).load(imageFile).into(dayImage);
+                //普通にセットする場合
+                //dayImage.setImageURI(Uri.fromFile(imageFile));
+            }
         }
 
         TextView day = (TextView) view.findViewById(R.id.day_list_day_text);

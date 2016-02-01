@@ -7,12 +7,12 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by xjapan on 16/01/16.
@@ -24,70 +24,44 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
     private int month;
     private String day;
     private ViewHolder holder;
-    private DailyImageDB dailyImageDB;
-    private DailyStampDB dailyStampDB;
-    private DailyTitleMemoDB dailyTitleMemoDB;
+    private DailyTopDB dailyTopDB;
     private Common common;
+    private ImageView imageView;
 
-    public DailyImagePathSync(Context context, int year, int month, String day, ViewHolder holder, Common common) {
+    public DailyImagePathSync(Context context, int year, int month, String day, ViewHolder holder, Common common, ImageView imageView) {
         super(context);
         this.context = context;
         this.year = year;
         this.month = month;
         this.day = day;
         this.holder = holder;
-        this.dailyImageDB = new DailyImageDB(context);
-        this.dailyStampDB = new DailyStampDB(context);
-        this.dailyTitleMemoDB = new DailyTitleMemoDB(context);
+        this.dailyTopDB = new DailyTopDB(context);
         this.common = common;
+        this.imageView = imageView;
     }
 
     @Override
     public ArrayList<String> loadInBackground() {
-        ArrayList<String> resultDB = new ArrayList<>();
-        String path = dailyImageDB.selectPath(year, month, Integer.parseInt(day));
-        String stamp = dailyStampDB.selectStamp(year, month, Integer.parseInt(day));
-        String stampDate = dailyStampDB.selectUpdated(year, month, Integer.parseInt(day));
-        String titleMemo = dailyTitleMemoDB.selectTitleMemo(year, month, Integer.parseInt(day));
-        String titleMemoDate = dailyTitleMemoDB.selectUpdated(year, month, Integer.parseInt(day));
-        resultDB.add(path);
-        resultDB.add(stamp);
-        resultDB.add(stampDate);
-        resultDB.add(titleMemo);
-        resultDB.add(titleMemoDate);
-        return resultDB;
+        return dailyTopDB.selectAll(year, month, Integer.parseInt(day));
     }
 
     @Override
     public void deliverResult(ArrayList<String> result) {
-        File imageFile = new File(result.get(0));
-        if (!imageFile.exists()) {
-
-            if (result.get(1).equals("") && result.get(3).equals("")) {
-            } else {
+        if (result.size() != 0) {
+            File imageFile = new File(result.get(0));
+            if (!imageFile.exists()) {
                 if (result.get(1).equals("")) {
                     setTitleMemo(result);
-                } else if (result.get(3).equals("")) {
+                } else if (result.get(2).equals("")) {
                     setStamp(result);
                 } else {
-                    try {
-                        Date stampDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(result.get(2));
-                        Date titleMemoDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(result.get(4));
-                        if (stampDate.compareTo(titleMemoDate) > 0) {
-                            setStamp(result);
-                        } else {
-                            setTitleMemo(result);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    holder.gridImageView.setImageResource(R.drawable.noimage1);
                 }
+            } else {
+                Picasso.with(context).load(imageFile).into(imageView);
             }
-            holder.gridImageView.setImageResource(R.drawable.noimage1);
-
         } else {
             holder.gridImageView.setImageResource(R.drawable.noimage1);
-//            Picasso.with(context).load(imageFile).into(imageView);
         }
     }
 

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by xjapan on 16/01/16.
@@ -22,7 +23,7 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
     private int year;
     private int month;
     private int day;
-    private DailyImageDB dailyImageDB;
+    private DailyTopDB dailyTopDB;
     private Common common;
 
     public SetDayDetailImage(Context context, RelativeLayout relativeLayout, ImageView imageView, int year, int month, int day, Common common) {
@@ -33,14 +34,14 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
         this.year = year;
         this.month = month;
         this.day = day;
-        this.dailyImageDB = new DailyImageDB(context);
+        this.dailyTopDB = new DailyTopDB(context);
         this.common = common;
     }
 
     @Override
     public String loadInBackground() {
-        String imagePath = dailyImageDB.selectPath(year, month, day);
-        return imagePath;
+        ArrayList<String> item = dailyTopDB.selectAll(year, month, day);
+        return item.get(0);
     }
 
     @Override
@@ -49,7 +50,6 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
         } else {
             File imageFile = new File(result);
             if (imageFile.exists()) {
-
                 WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 DisplayMetrics displayMetrics = new DisplayMetrics();

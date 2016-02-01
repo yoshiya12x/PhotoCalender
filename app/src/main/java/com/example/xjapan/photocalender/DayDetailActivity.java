@@ -19,18 +19,20 @@ import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import java.util.ArrayList;
+
 public class DayDetailActivity extends AppCompatActivity {
 
     private Common common;
     private Context context;
     private String imagePath;
-    private DailyImageDB dailyImageDB;
+    private DailyTopDB dailyTopDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_detail);
-        dailyImageDB = new DailyImageDB(this);
+        dailyTopDB = new DailyTopDB(this);
         CalenderList calenderList = new CalenderList();
         calenderList.year = getIntent().getIntExtra("calenderListYear", 0);
         calenderList.month = getIntent().getIntExtra("calenderListMonth", 0);
@@ -92,11 +94,11 @@ public class DayDetailActivity extends AppCompatActivity {
             builder.setView(layout);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    int id = dailyImageDB.selectDailyImageId(common.year, common.month, common.day);
-                    if (id == 0) {
-                        dailyImageDB.insertPath(common.year, common.month, common.day, common.m_uri.getPath());
+                    ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
+                    if (item == null) {
+                        dailyTopDB.insertPath(common.year, common.month, common.day, common.m_uri.getPath());
                     } else {
-                        dailyImageDB.updatePath(common.year, common.month, common.day, common.m_uri.getPath());
+                        dailyTopDB.updatePath(common.year, common.month, common.day, common.m_uri.getPath());
                     }
                 }
             });
@@ -133,11 +135,11 @@ public class DayDetailActivity extends AppCompatActivity {
             builder.setView(layout);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    int id = dailyImageDB.selectDailyImageId(common.year, common.month, common.day);
-                    if (id == 0) {
-                        dailyImageDB.insertPath(common.year, common.month, common.day, imagePath);
+                    ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
+                    if (item == null) {
+                        dailyTopDB.insertPath(common.year, common.month, common.day, imagePath);
                     } else {
-                        dailyImageDB.updatePath(common.year, common.month, common.day, imagePath);
+                        dailyTopDB.updatePath(common.year, common.month, common.day, imagePath);
                     }
                 }
             });

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by xjapan on 16/01/17.
@@ -20,7 +21,7 @@ public class SetDialogImage extends AsyncTaskLoader<String> {
     private int year;
     private int month;
     private int day;
-    private DailyImageDB dailyImageDB;
+    private DailyTopDB dailyTopDB;
 
     public SetDialogImage(Context context, ImageView nextImageView, ImageView preImageView, String nextPath, int year, int month, int day) {
         super(context);
@@ -31,13 +32,13 @@ public class SetDialogImage extends AsyncTaskLoader<String> {
         this.year = year;
         this.month = month;
         this.day = day;
-        this.dailyImageDB = new DailyImageDB(context);
+        this.dailyTopDB = new DailyTopDB(context);
     }
 
     @Override
     public String loadInBackground() {
-        String preImagePath = dailyImageDB.selectPath(year, month, day);
-        return preImagePath;
+        ArrayList<String> item = dailyTopDB.selectAll(year, month, day);
+        return item.get(0);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class SetDialogImage extends AsyncTaskLoader<String> {
         Picasso.with(context).load(imageFile).into(nextImageView);
 
         imageFile = new File(preImagePath);
-        if(imageFile.exists()){
+        if (imageFile.exists()) {
             Picasso.with(context).load(imageFile).into(preImageView);
         }
 //        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

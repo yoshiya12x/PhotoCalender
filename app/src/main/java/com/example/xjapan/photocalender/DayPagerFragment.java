@@ -36,7 +36,6 @@ public class DayPagerFragment extends Fragment {
     private EditText editText;
     private Button memoButton;
     private DailyMemoDB dailyMemoDB;
-    private DailyImageDB dailyImageDB;
     private int year;
     private int month;
     private int day;
@@ -60,7 +59,6 @@ public class DayPagerFragment extends Fragment {
         day = getArguments().getInt("day");
 
         dailyMemoDB = new DailyMemoDB(getActivity());
-        dailyImageDB = new DailyImageDB(getActivity());
         String memo = dailyMemoDB.selectMemo(year, month, day);
 
         memoConfirmText = (Button) view.findViewById(R.id.memoConfirm);
