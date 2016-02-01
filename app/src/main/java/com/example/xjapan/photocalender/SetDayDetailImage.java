@@ -41,6 +41,9 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
     @Override
     public String loadInBackground() {
         ArrayList<String> item = dailyTopDB.selectAll(year, month, day);
+        if(item.size() == 0){
+            return "";
+        }
         return item.get(0);
     }
 

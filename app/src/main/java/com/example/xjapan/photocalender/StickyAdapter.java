@@ -60,6 +60,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
+        int test = i;
         temp_i = i;
         if (view == null) {
 //            view = inflater.inflate(R.layout.grid_image, viewGroup, false);
@@ -77,7 +78,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
         dayList = allDays.get(i);
 
         if (dayList.day.equals("")) {
-            //ここのせいで年、月、日~土の表示をさまたげているかも
             holder.gridImageView.setImageBitmap(null);
         } else {
             DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(context, dayList.year, dayList.month, dayList.day, holder, common, holder.gridImageView);
@@ -86,6 +86,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (common.isStamp) {
                         //スタンプ9つに絞る
                         common.year = dayList.year;

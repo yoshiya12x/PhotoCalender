@@ -28,6 +28,7 @@ public class MyCalender {
         return calenderList;
     }
 
+    //去年、今年、来年のcalenderList作成
     public ArrayList<CalenderList> getAllList() {
         ArrayList<CalenderList> allList = new ArrayList();
         for (int i = -1; i < 2; i++) {
