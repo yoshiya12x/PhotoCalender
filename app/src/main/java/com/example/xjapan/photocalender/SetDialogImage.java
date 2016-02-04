@@ -39,7 +39,7 @@ public class SetDialogImage extends AsyncTaskLoader<String> {
     public String loadInBackground() {
         ArrayList<String> item = dailyTopDB.selectAll(year, month, day);
         if(item.size() == 0){
-            return "";
+            return null;
         }
         return item.get(0);
     }
@@ -49,10 +49,13 @@ public class SetDialogImage extends AsyncTaskLoader<String> {
         File imageFile = new File(nextPath);
         Picasso.with(context).load(imageFile).into(nextImageView);
 
-        imageFile = new File(preImagePath);
-        if (imageFile.exists()) {
-            Picasso.with(context).load(imageFile).into(preImageView);
+        if(preImagePath != null){
+            imageFile = new File(preImagePath);
+            if (imageFile.exists()) {
+                Picasso.with(context).load(imageFile).into(preImageView);
+            }
         }
+
 //        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 //        Display display = wm.getDefaultDisplay();
 //        DisplayMetrics displayMetrics = new DisplayMetrics();

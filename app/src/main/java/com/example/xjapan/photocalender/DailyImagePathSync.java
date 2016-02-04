@@ -48,17 +48,21 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
     @Override
     public void deliverResult(ArrayList<String> result) {
         if (result.size() != 0) {
-            File imageFile = new File(result.get(0));
-            if (!imageFile.exists()) {
-                if (result.get(1).equals("")) {
-                    setTitleMemo(result);
-                } else if (result.get(2).equals("")) {
-                    setStamp(result);
+            if (result.get(0) != null) {
+                File imageFile = new File(result.get(0));
+                if (imageFile.exists()) {
+                    Picasso.with(context).load(imageFile).into(imageView);
                 } else {
                     holder.gridImageView.setImageResource(R.drawable.noimage1);
                 }
             } else {
-                Picasso.with(context).load(imageFile).into(imageView);
+                holder.gridImageView.setImageResource(R.drawable.noimage1);
+
+                if (result.get(3).equals("0")) {
+                    setStamp(result);
+                } else if (result.get(3).equals("1")) {
+                    setTitleMemo(result);
+                }
             }
         } else {
             holder.gridImageView.setImageResource(R.drawable.noimage1);
@@ -79,7 +83,7 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
 
     public void setTitleMemo(ArrayList<String> result) {
         holder.titleMemoTextView.setVisibility(View.VISIBLE);
-        holder.titleMemoTextView.setText(result.get(3));
+        holder.titleMemoTextView.setText(result.get(2));
     }
 
 }

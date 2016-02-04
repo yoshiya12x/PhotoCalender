@@ -41,15 +41,15 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
     @Override
     public String loadInBackground() {
         ArrayList<String> item = dailyTopDB.selectAll(year, month, day);
-        if(item.size() == 0){
-            return "";
+        if (item.size() == 0) {
+            return null;
         }
         return item.get(0);
     }
 
     @Override
     public void deliverResult(String result) {
-        if (result.equals("")) {
+        if (result == null) {
         } else {
             File imageFile = new File(result);
             if (imageFile.exists()) {

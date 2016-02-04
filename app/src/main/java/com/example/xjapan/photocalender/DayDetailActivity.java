@@ -95,7 +95,7 @@ public class DayDetailActivity extends AppCompatActivity {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
-                    if (item == null) {
+                    if (item.size() == 0) {
                         dailyTopDB.insertPath(common.year, common.month, common.day, common.m_uri.getPath());
                     } else {
                         dailyTopDB.updatePath(common.year, common.month, common.day, common.m_uri.getPath());
@@ -136,7 +136,7 @@ public class DayDetailActivity extends AppCompatActivity {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
-                    if (item == null) {
+                    if (item.size() == 0) {
                         dailyTopDB.insertPath(common.year, common.month, common.day, imagePath);
                     } else {
                         dailyTopDB.updatePath(common.year, common.month, common.day, imagePath);

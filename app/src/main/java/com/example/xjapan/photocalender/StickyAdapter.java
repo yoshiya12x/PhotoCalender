@@ -31,8 +31,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     private ArrayList<DayList> allDays;
     private Context context;
     private Common common;
-    private int temp_i;
-    private DayList dayList;
 
     public StickyAdapter(Context context, ArrayList<CalenderList> allList, ArrayList<DayList> allDays, Common common) {
         this.inflater = LayoutInflater.from(context);
@@ -60,8 +58,9 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
-        int test = i;
-        temp_i = i;
+        final int temp_i = i;
+        final DayList dayList;
+
         if (view == null) {
 //            view = inflater.inflate(R.layout.grid_image, viewGroup, false);
             view = inflater.inflate(R.layout.grid_image, null);
@@ -86,7 +85,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (common.isStamp) {
                         //スタンプ9つに絞る
                         common.year = dayList.year;
@@ -112,7 +110,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
                                 DailyTopDB dailyTopDB = new DailyTopDB(context);
                                 SpannableStringBuilder sb = (SpannableStringBuilder) editText.getText();
                                 ArrayList<String> topList = dailyTopDB.selectAll(common.year, common.month, common.day);
-                                if (topList == null) {
+                                if (topList.size() == 0) {
                                     dailyTopDB.insertTitleMemo(common.year, common.month, common.day, sb.toString());
                                 } else {
                                     dailyTopDB.updateTitleMemo(common.year, common.month, common.day, sb.toString());

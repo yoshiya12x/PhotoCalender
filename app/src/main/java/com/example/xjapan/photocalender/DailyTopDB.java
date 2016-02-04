@@ -20,7 +20,7 @@ public class DailyTopDB {
     }
 
     public ArrayList<String> selectAll(int year, int month, int day) {
-        String[] tableColumn = {"dailyTopId", "year", "month", "day", "path", "stamp", "titleMemo"};
+        String[] tableColumn = {"dailyTopId", "year", "month", "day", "path", "stamp", "titleMemo", "flag"};
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
         boolean mov = cursor.moveToFirst();
@@ -29,6 +29,7 @@ public class DailyTopDB {
             query.add(cursor.getString(4));
             query.add(cursor.getString(5));
             query.add(cursor.getString(6));
+            query.add(cursor.getString(7));
             mov = cursor.moveToNext();
         }
         cursor.close();
@@ -36,8 +37,8 @@ public class DailyTopDB {
         return query;
     }
 
-    public int selectId(int year, int month, int day){
-        String[] tableColumn = {"dailyTopId", "year", "month", "day", "path", "stamp", "titleMemo"};
+    public int selectId(int year, int month, int day) {
+        String[] tableColumn = {"dailyTopId", "year", "month", "day", "path", "stamp", "titleMemo", "flag"};
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
         boolean mov = cursor.moveToFirst();
@@ -51,7 +52,7 @@ public class DailyTopDB {
         return query;
     }
 
-    public void insertPath(int year, int month, int day, String path){
+    public void insertPath(int year, int month, int day, String path) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues insertValues = new ContentValues();
         insertValues.put("year", year + "");
@@ -69,6 +70,7 @@ public class DailyTopDB {
         insertValues.put("month", month + "");
         insertValues.put("day", day + "");
         insertValues.put("stamp", stamp + "");
+        insertValues.put("flag", "0");
         long id = db.insert(tableName, "00", insertValues);
         db.close();
     }
@@ -80,6 +82,7 @@ public class DailyTopDB {
         insertValues.put("month", month + "");
         insertValues.put("day", day + "");
         insertValues.put("titleMemo", titleMemo);
+        insertValues.put("flag", "1");
         long id = db.insert(tableName, "00", insertValues);
         db.close();
     }
@@ -96,7 +99,7 @@ public class DailyTopDB {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues updateValues = new ContentValues();
         updateValues.put("stamp", stamp + "");
-        updateValues.put("titleMemo", "");
+        updateValues.put("flag", "0");
         db.update(tableName, updateValues, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""});
         db.close();
     }
@@ -104,8 +107,8 @@ public class DailyTopDB {
     public void updateTitleMemo(int year, int month, int day, String titleMemo) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues updateValues = new ContentValues();
-        updateValues.put("stamp", "");
         updateValues.put("titleMemo", titleMemo);
+        updateValues.put("flag", "1");
         db.update(tableName, updateValues, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""});
         db.close();
     }

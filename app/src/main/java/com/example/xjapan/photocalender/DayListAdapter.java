@@ -91,16 +91,18 @@ public class DayListAdapter extends BaseAdapter {
         DailyTopDB dailyTopDB = new DailyTopDB(context);
         ArrayList<String> allItem = dailyTopDB.selectAll(calenderList.year, calenderList.month, i_temp);
 
-        if(allItem.size() != 0){
-            File imageFile = new File(allItem.get(0));
-            if (imageFile.exists()) {
-                //AsyncTaskを使う場合
-                //SetMonthDetailImage setMonthDetailImage = new SetMonthDetailImage(context, dayImage, imageFile);
-                //setMonthDetailImage.forceLoad();
-                //Picassoを使う場合
-                Picasso.with(context).load(imageFile).into(dayImage);
-                //普通にセットする場合
-                //dayImage.setImageURI(Uri.fromFile(imageFile));
+        if (allItem.size() != 0) {
+            if (allItem.get(0) != null) {
+                File imageFile = new File(allItem.get(0));
+                if (imageFile.exists()) {
+                    //AsyncTaskを使う場合
+                    //SetMonthDetailImage setMonthDetailImage = new SetMonthDetailImage(context, dayImage, imageFile);
+                    //setMonthDetailImage.forceLoad();
+                    //Picassoを使う場合
+                    Picasso.with(context).load(imageFile).into(dayImage);
+                    //普通にセットする場合
+                    //dayImage.setImageURI(Uri.fromFile(imageFile));
+                }
             }
         }
 

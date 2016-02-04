@@ -124,7 +124,7 @@ public class MainActivity extends FragmentActivity {
                 updateStamp = R.drawable.heart;
                 break;
         }
-        if (item == null) {
+        if (item.size() == 0) {
             dailyTopDB.insertStamp(common.year, common.month, common.day, updateStamp);
         } else {
             dailyTopDB.updateStamp(common.year, common.month, common.day, updateStamp);
