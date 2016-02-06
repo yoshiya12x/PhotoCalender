@@ -33,6 +33,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     private Common common;
 
     public StickyAdapter(Context context, ArrayList<CalenderList> allList, ArrayList<DayList> allDays, Common common) {
+        super();
         this.inflater = LayoutInflater.from(context);
         this.allList = allList;
         this.allDays = allDays;
@@ -57,9 +58,9 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder holder;
+        final ViewHolder holder;
         final int temp_i = i;
-        final DayList dayList;
+        final DayList dayList = allDays.get(i);
 
         if (view == null) {
 //            view = inflater.inflate(R.layout.grid_image, viewGroup, false);
@@ -74,14 +75,14 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             holder = (ViewHolder) view.getTag();
         }
 
-        dayList = allDays.get(i);
-
         if (dayList.day.equals("")) {
             holder.gridImageView.setImageBitmap(null);
         } else {
-            DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(context, dayList.year, dayList.month, dayList.day, holder, common, holder.gridImageView);
-            dailyImagePathSync.forceLoad();
-
+            holder.gridImageView.setTag(i+"");
+            DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(holder, context);
+            dailyImagePathSync.execute(dayList.year, dayList.month, Integer.parseInt(dayList.day));
+//            DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(context, dayList.year, dayList.month, dayList.day, holder, common);
+//            dailyImagePathSync.forceLoad();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

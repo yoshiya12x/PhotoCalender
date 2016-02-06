@@ -35,7 +35,7 @@ public class DayListAdapter extends BaseAdapter {
     public DayListAdapter(Context context, int resource, CalenderList calenderList, int currentDay, ArrayList<Integer> sundayList, ArrayList<Integer> saturdayList, List<Calendar> holidayList) {
         this.context = context;
         this.resourceId = resource;
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = LayoutInflater.from(context);
         this.calenderList = calenderList;
         this.currentDay = currentDay;
         this.sundayList = sundayList;
@@ -60,9 +60,10 @@ public class DayListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, final View convertView, ViewGroup viewGroup) {
+        ViewHolder holder;
         View view;
         final int i_temp = i + 1;
-        if (convertView != null) {
+        if (convertView == null) {
             view = this.inflater.inflate(resourceId, null);
         } else {
             view = this.inflater.inflate(resourceId, null);
@@ -87,7 +88,7 @@ public class DayListAdapter extends BaseAdapter {
         });
 
         ImageView dayImage = (ImageView) view.findViewById(R.id.day_image);
-        dayImage.setImageResource(R.drawable.hidedoll);
+        dayImage.setImageResource(R.drawable.noimage1);
         DailyTopDB dailyTopDB = new DailyTopDB(context);
         ArrayList<String> allItem = dailyTopDB.selectAll(calenderList.year, calenderList.month, i_temp);
 
@@ -103,6 +104,8 @@ public class DayListAdapter extends BaseAdapter {
                     //普通にセットする場合
                     //dayImage.setImageURI(Uri.fromFile(imageFile));
                 }
+            }else{
+
             }
         }
 

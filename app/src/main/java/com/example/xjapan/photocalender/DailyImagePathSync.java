@@ -1,15 +1,13 @@
 package com.example.xjapan.photocalender;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
+import android.os.AsyncTask;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,55 +15,52 @@ import java.util.ArrayList;
 /**
  * Created by xjapan on 16/01/16.
  */
-public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
+public class DailyImagePathSync extends AsyncTask<Integer, Void, ArrayList<String>>{
 
     private Context context;
-    private int year;
-    private int month;
-    private String day;
-    private ViewHolder holder;
     private DailyTopDB dailyTopDB;
-    private Common common;
-    private ImageView imageView;
+    private ViewHolder holder;
+    private String tag;
 
-    public DailyImagePathSync(Context context, int year, int month, String day, ViewHolder holder, Common common, ImageView imageView) {
-        super(context);
+    public DailyImagePathSync(ViewHolder viewHolder, Context context) {
         this.context = context;
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        this.holder = holder;
         this.dailyTopDB = new DailyTopDB(context);
-        this.common = common;
-        this.imageView = imageView;
+        this.holder = viewHolder;
+        this.tag = viewHolder.gridImageView.getTag().toString();
     }
 
     @Override
-    public ArrayList<String> loadInBackground() {
-        return dailyTopDB.selectAll(year, month, Integer.parseInt(day));
+    protected ArrayList<String> doInBackground(Integer... ints) {
+        return dailyTopDB.selectAll(ints[0], ints[1], ints[2]);
     }
 
     @Override
-    public void deliverResult(ArrayList<String> result) {
-        if (result.size() != 0) {
-            if (result.get(0) != null) {
-                File imageFile = new File(result.get(0));
-                if (imageFile.exists()) {
-                    Picasso.with(context).load(imageFile).into(imageView);
+    protected void onPostExecute(ArrayList<String> result){
+        if(this.tag.equals(this.holder.gridImageView.getTag())){
+            Log.d("onPostExecute", holder.gridImageView.getTag().toString());
+            if (result.size() != 0) {
+                if (result.get(0) != null) {
+                    File imageFile = new File(result.get(0));
+                    if (imageFile.exists()) {
+                        holder.gridImageView.setImageResource(R.drawable.noimage1);
+//                    Picasso.with(context).load(imageFile).into(imageView);
+                    } else {
+                        holder.gridImageView.setImageResource(R.drawable.noimage1);
+                    }
                 } else {
                     holder.gridImageView.setImageResource(R.drawable.noimage1);
+
+                    if (result.get(3).equals("0")) {
+                        setStamp(result);
+                    } else if (result.get(3).equals("1")) {
+                        setTitleMemo(result);
+                    }
                 }
             } else {
                 holder.gridImageView.setImageResource(R.drawable.noimage1);
-
-                if (result.get(3).equals("0")) {
-                    setStamp(result);
-                } else if (result.get(3).equals("1")) {
-                    setTitleMemo(result);
-                }
             }
-        } else {
-            holder.gridImageView.setImageResource(R.drawable.noimage1);
+        }else{
+            Log.d("onPostExecute", "はいらない");
         }
     }
 
@@ -85,5 +80,4 @@ public class DailyImagePathSync extends AsyncTaskLoader<ArrayList<String>> {
         holder.titleMemoTextView.setVisibility(View.VISIBLE);
         holder.titleMemoTextView.setText(result.get(2));
     }
-
 }
