@@ -27,19 +27,21 @@ public class DayDetailActivity extends AppCompatActivity {
     private Context context;
     private String imagePath;
     private DailyTopDB dailyTopDB;
+    private CalenderList calenderList;
+    private int currentDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_detail);
         dailyTopDB = new DailyTopDB(this);
-        CalenderList calenderList = new CalenderList();
+        calenderList = new CalenderList();
         calenderList.year = getIntent().getIntExtra("calenderListYear", 0);
         calenderList.month = getIntent().getIntExtra("calenderListMonth", 0);
         calenderList.days = getIntent().getIntExtra("calenderListDays", 0);
         calenderList.startDay = getIntent().getIntExtra("calenderListStartDay", 0);
         int selectedDay = getIntent().getIntExtra("selectedDay", 0);
-        int currentDay = getIntent().getIntExtra("currentDay", 0);
+        currentDay = getIntent().getIntExtra("currentDay", 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(calenderList.year + "年" + calenderList.month + "月");
@@ -47,6 +49,10 @@ public class DayDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        setViewPager(selectedDay);
+    }
+
+    public void setViewPager(int selectedDay){
         ViewPager viewPager = (ViewPager) findViewById(R.id.day_pager);
         viewPager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), calenderList, selectedDay, currentDay));
         viewPager.setCurrentItem(selectedDay - 1);
@@ -100,6 +106,7 @@ public class DayDetailActivity extends AppCompatActivity {
                     } else {
                         dailyTopDB.updatePath(common.year, common.month, common.day, common.m_uri.getPath());
                     }
+                    setViewPager(common.day);
                 }
             });
             builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
@@ -141,6 +148,7 @@ public class DayDetailActivity extends AppCompatActivity {
                     } else {
                         dailyTopDB.updatePath(common.year, common.month, common.day, imagePath);
                     }
+                    setViewPager(common.day);
                 }
             });
             builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {

@@ -16,6 +16,7 @@
             android:id="@+id/pre_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="4"
             android:adjustViewBounds="true"
             android:src="@drawable/noimage2" />
@@ -34,6 +35,7 @@
             android:id="@+id/take_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="4"
             android:adjustViewBounds="true"
             android:src="@drawable/noimage2" />

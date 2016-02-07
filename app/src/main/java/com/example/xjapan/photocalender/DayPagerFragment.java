@@ -12,7 +12,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableStringBuilder;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,20 +43,20 @@ public class DayPagerFragment extends Fragment {
     private RelativeLayout imageRelativeLayout;
     private ImageView dayImage;
     public Common common;
-    private DisplayMetrics displayMetrics;
+    private DailyTopDB dailyTopDB;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.date, null);
         common = (Common) getActivity().getApplication();
         dayImage = (ImageView) view.findViewById(R.id.day_detail_image);
-
         imageRelativeLayout = (RelativeLayout) view.findViewById(R.id.imageRelativeLayout);
 
         year = getArguments().getInt("year");
         month = getArguments().getInt("month");
         day = getArguments().getInt("day");
 
+        dailyTopDB = new DailyTopDB(getActivity());
         dailyMemoDB = new DailyMemoDB(getActivity());
         String memo = dailyMemoDB.selectMemo(year, month, day);
 
@@ -142,7 +141,7 @@ public class DayPagerFragment extends Fragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            CharSequence[] items = {"ギャラリーから選択", "写真を撮る", "キャンセル"};
+            CharSequence[] items = {"ギャラリーから選択", "写真を撮る", "削除する", "キャンセル"};
             common = (Common) getActivity().getApplication();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -160,7 +159,9 @@ public class DayPagerFragment extends Fragment {
                             camera();
                             break;
                         case 2:
-
+                            delImagePath();
+                            break;
+                        case 3:
                             break;
                         default:
                             break;
@@ -168,6 +169,25 @@ public class DayPagerFragment extends Fragment {
                 }
             });
             return builder.create();
+        }
+
+        public void delImagePath() {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            builder.setTitle(common.year + "年" + common.month + "月" + common.day + "日の画像");
+            builder.setMessage("削除してもよろしいですか");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    int id = dailyTopDB.selectId(year, month, day);
+                    if (id != 0) {
+                        dailyTopDB.updatePath(year, month, day, "");
+                    }
+                }
+            });
+            builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.create().show();
         }
 
         public void camera() {
