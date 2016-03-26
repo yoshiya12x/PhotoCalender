@@ -1,7 +1,6 @@
 package com.example.xjapan.photocalender;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,14 +75,7 @@ public class DayListAdapter extends BaseAdapter {
         dayRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(convertView.getContext(), DayDetailActivity.class);
-                intent.putExtra("calenderListYear", calenderList.year);
-                intent.putExtra("calenderListMonth", calenderList.month);
-                intent.putExtra("calenderListDays", calenderList.days);
-                intent.putExtra("calenderListStartDay", calenderList.startDay);
-                intent.putExtra("selectedDay", i_temp);
-                intent.putExtra("currentDay", currentDay);
-                convertView.getContext().startActivity(intent);
+                convertView.getContext().startActivity(DayDetailActivity.createIntent(convertView.getContext(), calenderList, i_temp, currentDay));
             }
         });
 
@@ -104,7 +96,7 @@ public class DayListAdapter extends BaseAdapter {
                     //普通にセットする場合
                     //dayImage.setImageURI(Uri.fromFile(imageFile));
                 }
-            }else{
+            } else {
 
             }
         }

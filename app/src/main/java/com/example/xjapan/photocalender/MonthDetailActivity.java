@@ -1,5 +1,7 @@
 package com.example.xjapan.photocalender;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -73,6 +75,16 @@ public class MonthDetailActivity extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    public static Intent createIntent(Context context, DayList dayList, CalenderList postCalenderList ){
+        Intent intent = new Intent(context.getApplicationContext(), MonthDetailActivity.class);
+        intent.putExtra("dayListDay", dayList.day);
+        intent.putExtra("calenderListYear", postCalenderList.year);
+        intent.putExtra("calenderListMonth", postCalenderList.month);
+        intent.putExtra("calenderListDays", postCalenderList.days);
+        intent.putExtra("calenderListStartDay", postCalenderList.startDay);
+        return intent;
     }
 
 }

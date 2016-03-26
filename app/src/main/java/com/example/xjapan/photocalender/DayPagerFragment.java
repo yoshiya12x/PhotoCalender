@@ -118,10 +118,14 @@ public class DayPagerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setImage();
+        memoConfirmText.setVisibility(View.GONE);
+    }
+
+    public void setImage() {
         //ここではRalativeLayoutに縦幅横幅を設定するため，Picassoを使わない．
         SetDayDetailImage setDayDetailImage = new SetDayDetailImage(getContext(), imageRelativeLayout, dayImage, year, month, day, common);
         setDayDetailImage.forceLoad();
-        memoConfirmText.setVisibility(View.GONE);
     }
 
     public void animateAlpha1(Button target) {
@@ -180,6 +184,7 @@ public class DayPagerFragment extends Fragment {
                     int id = dailyTopDB.selectId(year, month, day);
                     if (id != 0) {
                         dailyTopDB.updatePath(year, month, day, "");
+                        dayImage.setImageResource(R.drawable.noimage2);
                     }
                 }
             });
@@ -236,5 +241,13 @@ public class DayPagerFragment extends Fragment {
 
     private RelativeLayout.LayoutParams createRelativeLayoutParam(int w, int h) {
         return new RelativeLayout.LayoutParams(w, h);
+    }
+
+    public static Bundle createArguments(int position, CalenderList calenderList) {
+        Bundle arguments = new Bundle();
+        arguments.putInt("day", position + 1);
+        arguments.putInt("year", calenderList.year);
+        arguments.putInt("month", calenderList.month);
+        return arguments;
     }
 }

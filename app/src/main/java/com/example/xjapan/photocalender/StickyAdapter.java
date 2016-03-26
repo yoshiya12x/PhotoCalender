@@ -3,7 +3,6 @@ package com.example.xjapan.photocalender;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -126,13 +125,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
                         common.alertDialog = alertDialog;
                     } else {
                         CalenderList postCalenderList = getCalenderListByDayId(temp_i);
-                        Intent intent = new Intent(view.getContext(), MonthDetailActivity.class);
-                        intent.putExtra("dayListDay", dayList.day);
-                        intent.putExtra("calenderListYear", postCalenderList.year);
-                        intent.putExtra("calenderListMonth", postCalenderList.month);
-                        intent.putExtra("calenderListDays", postCalenderList.days);
-                        intent.putExtra("calenderListStartDay", postCalenderList.startDay);
-                        view.getContext().startActivity(intent);
+                        view.getContext().startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
                     }
                 }
             });

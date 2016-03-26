@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class DayDetailActivity extends AppCompatActivity {
 
     private Common common;
-    private Context context;
     private String imagePath;
     private DailyTopDB dailyTopDB;
     private CalenderList calenderList;
@@ -52,7 +51,7 @@ public class DayDetailActivity extends AppCompatActivity {
         setViewPager(selectedDay);
     }
 
-    public void setViewPager(int selectedDay){
+    public void setViewPager(int selectedDay) {
         ViewPager viewPager = (ViewPager) findViewById(R.id.day_pager);
         viewPager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), calenderList, selectedDay, currentDay));
         viewPager.setCurrentItem(selectedDay - 1);
@@ -78,7 +77,6 @@ public class DayDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        context = this;
         common = (Common) getApplication();
 
         if (common.isCamera && resultCode == RESULT_OK) {
@@ -158,6 +156,17 @@ public class DayDetailActivity extends AppCompatActivity {
             builder.create().show();
         }
 
+    }
+
+    public static Intent createIntent(Context context, CalenderList calenderList, int selectedDay, int currentDay) {
+        Intent intent = new Intent(context.getApplicationContext(), DayDetailActivity.class);
+        intent.putExtra("calenderListYear", calenderList.year);
+        intent.putExtra("calenderListMonth", calenderList.month);
+        intent.putExtra("calenderListDays", calenderList.days);
+        intent.putExtra("calenderListStartDay", calenderList.startDay);
+        intent.putExtra("selectedDay", selectedDay);
+        intent.putExtra("currentDay", currentDay);
+        return intent;
     }
 
 }

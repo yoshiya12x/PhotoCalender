@@ -1,6 +1,5 @@
 package com.example.xjapan.photocalender;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -24,11 +23,7 @@ public class DayPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = new DayPagerFragment();
-        Bundle arguments = new Bundle();
-        arguments.putInt("day", position+1);
-        arguments.putInt("year", calenderList.year);
-        arguments.putInt("month", calenderList.month);
-        fragment.setArguments(arguments);
+        fragment.setArguments(DayPagerFragment.createArguments(position, calenderList));
         return fragment;
     }
 

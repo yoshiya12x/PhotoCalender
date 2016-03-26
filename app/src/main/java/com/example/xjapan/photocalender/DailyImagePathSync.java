@@ -9,13 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.util.ArrayList;
 
 /**
  * Created by xjapan on 16/01/16.
  */
-public class DailyImagePathSync extends AsyncTask<Integer, Void, ArrayList<String>>{
+public class DailyImagePathSync extends AsyncTask<Integer, Void, ArrayList<String>> {
 
     private Context context;
     private DailyTopDB dailyTopDB;
@@ -35,15 +37,14 @@ public class DailyImagePathSync extends AsyncTask<Integer, Void, ArrayList<Strin
     }
 
     @Override
-    protected void onPostExecute(ArrayList<String> result){
-        if(this.tag.equals(this.holder.gridImageView.getTag())){
-            Log.d("onPostExecute", holder.gridImageView.getTag().toString());
+    protected void onPostExecute(ArrayList<String> result) {
+        if (this.tag.equals(this.holder.gridImageView.getTag())) {
             if (result.size() != 0) {
                 if (result.get(0) != null) {
                     File imageFile = new File(result.get(0));
                     if (imageFile.exists()) {
-                        holder.gridImageView.setImageResource(R.drawable.noimage1);
-//                    Picasso.with(context).load(imageFile).into(imageView);
+//                        holder.gridImageView.setImageResource(R.drawable.noimage1);
+                        Picasso.with(context).load(imageFile).into(holder.gridImageView);
                     } else {
                         holder.gridImageView.setImageResource(R.drawable.noimage1);
                     }
@@ -59,7 +60,7 @@ public class DailyImagePathSync extends AsyncTask<Integer, Void, ArrayList<Strin
             } else {
                 holder.gridImageView.setImageResource(R.drawable.noimage1);
             }
-        }else{
+        } else {
             Log.d("onPostExecute", "はいらない");
         }
     }
