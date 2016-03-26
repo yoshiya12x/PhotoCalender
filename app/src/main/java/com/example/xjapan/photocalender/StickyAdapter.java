@@ -74,10 +74,10 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             holder = (ViewHolder) view.getTag();
         }
 
-        if (dayList.day.equals("")) {
+        if (dayList.day.isEmpty()) {
             holder.gridImageView.setImageBitmap(null);
         } else {
-            holder.gridImageView.setTag(i+"");
+            holder.gridImageView.setTag(i + "");
             DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(holder, context);
             dailyImagePathSync.execute(dayList.year, dayList.month, Integer.parseInt(dayList.day));
 //            DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(context, dayList.year, dayList.month, dayList.day, holder, common);
@@ -138,7 +138,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             holder.gridTextView.setTextColor(Color.RED);
         } else if (dayList.isSaturday) {
             holder.gridTextView.setTextColor(Color.BLUE);
-        } else if (!dayList.day.equals("") && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
+        } else if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
             holder.gridTextView.setTextColor(context.getResources().getColor(R.color.colorDarkGray));
         } else {
             holder.gridTextView.setTextColor(Color.WHITE);

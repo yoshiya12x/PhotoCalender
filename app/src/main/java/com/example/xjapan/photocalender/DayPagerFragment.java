@@ -79,7 +79,7 @@ public class DayPagerFragment extends Fragment {
             }
         });
 
-        if (memo.equals("")) {
+        if (memo.isEmpty()) {
             memoButton.setEnabled(false);
             memoButton.setBackground(getResources().getDrawable(R.drawable.memo_send_button));
             memoButton.setTextColor(getResources().getColor(R.color.colorDarkGray));
