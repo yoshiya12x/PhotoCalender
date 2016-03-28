@@ -1,10 +1,16 @@
 package com.example.xjapan.photocalender;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
 
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
@@ -18,21 +24,101 @@ import java.util.List;
 public class PagerFragment extends Fragment {
 
     private MyCalender myCalender;
+    private Common common;
+    private ArrayList<CalenderList> allList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myCalender = new MyCalender();
+        common = (Common)getActivity().getApplication();
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_month, null);
-        ArrayList<CalenderList> allList = myCalender.getAllList();
+        allList = myCalender.getAllList();
         CalenderList currentDate = myCalender.getCurrentDate();
 
         ArrayList<DayList> allDays = setDays(allList);
         StickyGridHeadersGridView stickyGridHeadersGridView = (StickyGridHeadersGridView) view.findViewById(R.id.listViewCalendar);
-        stickyGridHeadersGridView.setAdapter(new StickyAdapter(getActivity(), allList, allDays, (Common) getActivity().getApplication()));
+        stickyGridHeadersGridView.setAdapter(new StickyAdapter(this.getActivity(), allList, allDays));
         stickyGridHeadersGridView.setNumColumns(7);
         //自動スクロール
         stickyGridHeadersGridView.setSelection(getCurrentPosition(allList, currentDate));
+        stickyGridHeadersGridView.setOnItemClickListener(createOnItemClickListener(allDays));
         return view;
+    }
+
+    private AdapterView.OnItemClickListener createOnItemClickListener(final ArrayList<DayList> allDays){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                DayList dayList =  allDays.get(i);
+                if(common.isStamp){
+                    setClickStampCase(dayList);
+                }else if(common.isPencil){
+                    setClickPencilCase(dayList);
+                }else{
+                    CalenderList postCalenderList = getCalenderListByDayId(i);
+                    view.getContext().startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
+                }
+            }
+        };
+    }
+
+    private void setClickStampCase(DayList dayList){
+        common.year = dayList.year;
+        common.month = dayList.month;
+        common.day = Integer.parseInt(dayList.day);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View layout = inflater.inflate(R.layout.select_stamp, (ViewGroup) this.getActivity().findViewById(R.id.select_stamp_layout));
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
+        builder.setView(layout);
+        AlertDialog alertDialog = builder.show();
+        common.alertDialog = alertDialog;
+    }
+
+    private void setClickPencilCase(DayList dayList){
+        common.year = dayList.year;
+        common.month = dayList.month;
+        common.day = Integer.parseInt(dayList.day);
+        final Context context = this.getActivity();
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View layout = inflater.inflate(R.layout.edit_title_memo, (ViewGroup) this.getActivity().findViewById(R.id.edit_title_memo_layout));
+        final EditText editText = (EditText) layout.findViewById(R.id.edit_title_memo);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
+        builder.setView(layout);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                DailyTopDB dailyTopDB = new DailyTopDB(context);
+                SpannableStringBuilder sb = (SpannableStringBuilder) editText.getText();
+                ArrayList<String> topList = dailyTopDB.selectAll(common.year, common.month, common.day);
+                if (topList.size() == 0) {
+                    dailyTopDB.insertTitleMemo(common.year, common.month, common.day, sb.toString());
+                } else {
+                    dailyTopDB.updateTitleMemo(common.year, common.month, common.day, sb.toString());
+                }
+            }
+        });
+        builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog alertDialog = builder.show();
+        common.alertDialog = alertDialog;
+    }
+
+    private CalenderList getCalenderListByDayId(int dayId) {
+        CalenderList calenderList = new CalenderList();
+        int count = 0;
+        for (int i = 0; i < allList.size(); i++) {
+            CalenderList object = allList.get(i);
+            count = count + object.startDay + object.days - 1;
+            if (count < dayId) {
+            } else {
+                calenderList = object;
+                break;
+            }
+        }
+        return calenderList;
     }
 
     public ArrayList<DayList> setDays(ArrayList<CalenderList> allList) {
@@ -82,7 +168,6 @@ public class PagerFragment extends Fragment {
                 break;
             } else {
                 currentPosition = currentPosition + calenderList.days + calenderList.startDay - 1;
-
             }
         }
         return currentPosition;

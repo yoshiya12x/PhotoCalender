@@ -1,15 +1,11 @@
 package com.example.xjapan.photocalender;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,16 +24,12 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     private LayoutInflater inflater;
     private ArrayList<CalenderList> allList;
     private ArrayList<DayList> allDays;
-    private Context context;
-    private Common common;
 
-    public StickyAdapter(Context context, ArrayList<CalenderList> allList, ArrayList<DayList> allDays, Common common) {
+    public StickyAdapter(Context context, ArrayList<CalenderList> allList, ArrayList<DayList> allDays) {
         super();
         this.inflater = LayoutInflater.from(context);
         this.allList = allList;
         this.allDays = allDays;
-        this.context = context;
-        this.common = common;
     }
 
     @Override
@@ -58,7 +50,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
-        final int temp_i = i;
         final DayList dayList = allDays.get(i);
 
         if (view == null) {
@@ -78,57 +69,10 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             holder.gridImageView.setImageBitmap(null);
         } else {
             holder.gridImageView.setTag(i + "");
-            DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(holder, context);
+            DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(holder, view.getContext());
             dailyImagePathSync.execute(dayList.year, dayList.month, Integer.parseInt(dayList.day));
 //            DailyImagePathSync dailyImagePathSync = new DailyImagePathSync(context, dayList.year, dayList.month, dayList.day, holder, common);
 //            dailyImagePathSync.forceLoad();
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (common.isStamp) {
-                        //スタンプ9つに絞る
-                        common.year = dayList.year;
-                        common.month = dayList.month;
-                        common.day = Integer.parseInt(dayList.day);
-                        View layout = inflater.inflate(R.layout.select_stamp, (ViewGroup) view.findViewById(R.id.select_stamp_layout));
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
-                        builder.setView(layout);
-                        AlertDialog alertDialog = builder.show();
-                        common.alertDialog = alertDialog;
-                    } else if (common.isPencil) {
-                        common.year = dayList.year;
-                        common.month = dayList.month;
-                        common.day = Integer.parseInt(dayList.day);
-                        View layout = inflater.inflate(R.layout.edit_title_memo, (ViewGroup) view.findViewById(R.id.edit_title_memo_layout));
-                        final EditText editText = (EditText) layout.findViewById(R.id.edit_title_memo);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
-                        builder.setView(layout);
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                DailyTopDB dailyTopDB = new DailyTopDB(context);
-                                SpannableStringBuilder sb = (SpannableStringBuilder) editText.getText();
-                                ArrayList<String> topList = dailyTopDB.selectAll(common.year, common.month, common.day);
-                                if (topList.size() == 0) {
-                                    dailyTopDB.insertTitleMemo(common.year, common.month, common.day, sb.toString());
-                                } else {
-                                    dailyTopDB.updateTitleMemo(common.year, common.month, common.day, sb.toString());
-                                }
-                            }
-                        });
-                        builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-                        AlertDialog alertDialog = builder.show();
-                        common.alertDialog = alertDialog;
-                    } else {
-                        CalenderList postCalenderList = getCalenderListByDayId(temp_i);
-                        view.getContext().startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
-                    }
-                }
-            });
         }
 
         holder.gridTextView.setText(dayList.day);
@@ -139,7 +83,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
         } else if (dayList.isSaturday) {
             holder.gridTextView.setTextColor(Color.BLUE);
         } else if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
-            holder.gridTextView.setTextColor(context.getResources().getColor(R.color.colorDarkGray));
+            holder.gridTextView.setTextColor(view.getContext().getResources().getColor(R.color.colorDarkGray));
         } else {
             holder.gridTextView.setTextColor(Color.WHITE);
         }
@@ -190,20 +134,4 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
 
         return holder;
     }
-
-    public CalenderList getCalenderListByDayId(int dayId) {
-        CalenderList calenderList = new CalenderList();
-        int count = 0;
-        for (int i = 0; i < allList.size(); i++) {
-            CalenderList object = allList.get(i);
-            count = count + object.startDay + object.days - 1;
-            if (count < dayId) {
-            } else {
-                calenderList = object;
-                break;
-            }
-        }
-        return calenderList;
-    }
-
 }
