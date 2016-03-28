@@ -24,9 +24,8 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
     private int month;
     private int day;
     private DailyTopDB dailyTopDB;
-    private Common common;
 
-    public SetDayDetailImage(Context context, RelativeLayout relativeLayout, ImageView imageView, int year, int month, int day, Common common) {
+    public SetDayDetailImage(Context context, RelativeLayout relativeLayout, ImageView imageView, int year, int month, int day) {
         super(context);
         this.context = context;
         this.relativeLayout = relativeLayout;
@@ -35,7 +34,6 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
         this.month = month;
         this.day = day;
         this.dailyTopDB = new DailyTopDB(context);
-        this.common = common;
     }
 
     @Override

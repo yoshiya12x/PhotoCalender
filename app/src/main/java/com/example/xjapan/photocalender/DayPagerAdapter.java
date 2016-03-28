@@ -10,13 +10,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class DayPagerAdapter extends FragmentPagerAdapter {
 
     private CalenderList calenderList;
-    private int selectedDay;
     private int currentDay;
 
-    public DayPagerAdapter(FragmentManager fm, CalenderList calenderList, int selectedDay, int currentDay) {
+    public DayPagerAdapter(FragmentManager fm, CalenderList calenderList, int currentDay) {
         super(fm);
         this.calenderList = calenderList;
-        this.selectedDay = selectedDay;
         this.currentDay = currentDay;
     }
 

@@ -71,8 +71,7 @@ public class PagerFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
         builder.setView(layout);
-        AlertDialog alertDialog = builder.show();
-        common.alertDialog = alertDialog;
+        common.alertDialog = builder.show();
     }
 
     private void setClickPencilCase(DayList dayList) {
@@ -102,8 +101,7 @@ public class PagerFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
             }
         });
-        AlertDialog alertDialog = builder.show();
-        common.alertDialog = alertDialog;
+        common.alertDialog = builder.show();
     }
 
     private CalenderList getCalenderListByDayId(int dayId) {
@@ -112,8 +110,7 @@ public class PagerFragment extends Fragment {
         for (int i = 0; i < allList.size(); i++) {
             CalenderList object = allList.get(i);
             count = count + object.startDay + object.days - 1;
-            if (count < dayId) {
-            } else {
+            if (count >= dayId) {
                 calenderList = object;
                 break;
             }
@@ -121,7 +118,7 @@ public class PagerFragment extends Fragment {
         return calenderList;
     }
 
-    public ArrayList<DayList> setDays(ArrayList<CalenderList> allList) {
+    private ArrayList<DayList> setDays(ArrayList<CalenderList> allList) {
         ArrayList<DayList> allDays = new ArrayList();
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);
@@ -158,7 +155,7 @@ public class PagerFragment extends Fragment {
         return allDays;
     }
 
-    public int getCurrentPosition(ArrayList<CalenderList> allList, CalenderList currentDate) {
+    private int getCurrentPosition(ArrayList<CalenderList> allList, CalenderList currentDate) {
         int currentPosition = 0;
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);

@@ -45,6 +45,7 @@ public class DayDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(calenderList.year + "年" + calenderList.month + "月");
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -53,7 +54,7 @@ public class DayDetailActivity extends AppCompatActivity {
 
     public void setViewPager(int selectedDay) {
         ViewPager viewPager = (ViewPager) findViewById(R.id.day_pager);
-        viewPager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), calenderList, selectedDay, currentDay));
+        viewPager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), calenderList, currentDay));
         viewPager.setCurrentItem(selectedDay - 1);
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.day_tabs);
         tabStrip.setViewPager(viewPager);
@@ -119,6 +120,7 @@ public class DayDetailActivity extends AppCompatActivity {
                     MediaStore.Images.Media.DATA
             };
             Cursor c = cr.query(data.getData(), columns, null, null, null);
+            assert c != null;
             int column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             c.moveToFirst();
             imagePath = c.getString(column_index);

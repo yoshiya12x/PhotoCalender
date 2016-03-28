@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -124,7 +125,7 @@ public class DayPagerFragment extends Fragment {
 
     public void setImage() {
         //ここではRalativeLayoutに縦幅横幅を設定するため，Picassoを使わない．
-        SetDayDetailImage setDayDetailImage = new SetDayDetailImage(getContext(), imageRelativeLayout, dayImage, year, month, day, common);
+        SetDayDetailImage setDayDetailImage = new SetDayDetailImage(getContext(), imageRelativeLayout, dayImage, year, month, day);
         setDayDetailImage.forceLoad();
     }
 
@@ -143,6 +144,7 @@ public class DayPagerFragment extends Fragment {
         public static final int MEDIA_TYPE_VIDEO = 2;
         public Common common;
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             CharSequence[] items = {"ギャラリーから選択", "写真を撮る", "削除する", "キャンセル"};
