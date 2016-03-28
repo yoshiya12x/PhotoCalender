@@ -30,7 +30,7 @@ public class PagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myCalender = new MyCalender();
-        common = (Common)getActivity().getApplication();
+        common = (Common) getActivity().getApplication();
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_month, null);
         allList = myCalender.getAllList();
         CalenderList currentDate = myCalender.getCurrentDate();
@@ -45,16 +45,16 @@ public class PagerFragment extends Fragment {
         return view;
     }
 
-    private AdapterView.OnItemClickListener createOnItemClickListener(final ArrayList<DayList> allDays){
+    private AdapterView.OnItemClickListener createOnItemClickListener(final ArrayList<DayList> allDays) {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DayList dayList =  allDays.get(i);
-                if(common.isStamp){
+                DayList dayList = allDays.get(i);
+                if (common.isStamp) {
                     setClickStampCase(dayList);
-                }else if(common.isPencil){
+                } else if (common.isPencil) {
                     setClickPencilCase(dayList);
-                }else{
+                } else {
                     CalenderList postCalenderList = getCalenderListByDayId(i);
                     view.getContext().startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
                 }
@@ -62,7 +62,7 @@ public class PagerFragment extends Fragment {
         };
     }
 
-    private void setClickStampCase(DayList dayList){
+    private void setClickStampCase(DayList dayList) {
         common.year = dayList.year;
         common.month = dayList.month;
         common.day = Integer.parseInt(dayList.day);
@@ -75,7 +75,7 @@ public class PagerFragment extends Fragment {
         common.alertDialog = alertDialog;
     }
 
-    private void setClickPencilCase(DayList dayList){
+    private void setClickPencilCase(DayList dayList) {
         common.year = dayList.year;
         common.month = dayList.month;
         common.day = Integer.parseInt(dayList.day);

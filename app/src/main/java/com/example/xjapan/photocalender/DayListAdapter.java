@@ -63,12 +63,6 @@ public class DayListAdapter extends ArrayAdapter {
         if (i_temp == currentDay) {
             dayRelativeLayout.setBackgroundColor(Color.rgb(255, 240, 245));
         }
-        dayRelativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                convertView.getContext().startActivity(DayDetailActivity.createIntent(convertView.getContext(), calenderList, i_temp, currentDay));
-            }
-        });
 
         ImageView dayImage = (ImageView) view.findViewById(R.id.day_image);
         dayImage.setImageResource(R.drawable.noimage1);
