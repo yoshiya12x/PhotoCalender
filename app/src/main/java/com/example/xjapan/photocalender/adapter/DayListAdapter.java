@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,6 +10,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.db.DailyMemoDB;
+import com.example.xjapan.photocalender.db.DailyTopDB;
+import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.ViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

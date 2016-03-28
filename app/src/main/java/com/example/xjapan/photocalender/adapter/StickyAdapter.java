@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.ViewHolder;
+import com.example.xjapan.photocalender.asyncTask.DailyImagePathSync;
+import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.model.DayList;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 
 import java.util.ArrayList;

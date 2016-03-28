@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.activity;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -18,6 +18,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.util.Common;
+import com.example.xjapan.photocalender.db.DailyTopDB;
+import com.example.xjapan.photocalender.adapter.DayPagerAdapter;
+import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.asyncTask.SetDialogImage;
 
 import java.util.ArrayList;
 

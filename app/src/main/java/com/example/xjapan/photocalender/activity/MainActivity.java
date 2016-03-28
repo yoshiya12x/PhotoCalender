@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.activity;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -11,6 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.example.xjapan.photocalender.util.Common;
+import com.example.xjapan.photocalender.db.DailyTopDB;
+import com.example.xjapan.photocalender.adapter.MonthPagerAdapter;
+import com.example.xjapan.photocalender.R;
 
 import java.util.ArrayList;
 

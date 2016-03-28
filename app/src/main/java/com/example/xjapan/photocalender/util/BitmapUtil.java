@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

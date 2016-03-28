@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.xjapan.photocalender.DayDetailActivity"
+    tools:context=".activity.DayDetailActivity"
     tools:showIn="@layout/activity_day_detail">
 
     <android.support.v4.view.ViewPager

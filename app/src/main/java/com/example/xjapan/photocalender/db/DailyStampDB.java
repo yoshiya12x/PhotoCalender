@@ -1,24 +1,28 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-/**
- * Created by xjapan on 16/01/09.
- */
-public class DailyMemoDB {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-    private String tableName = "dailyMemo";
+/**
+ * Created by xjapan on 16/01/19.
+ */
+public class DailyStampDB {
+
+    private String tableName = "dailyStamp";
     private SQLiteHelper helper;
 
-    public DailyMemoDB(Context context) {
+    public DailyStampDB(Context context) {
         helper = new SQLiteHelper(context);
     }
 
-    public String selectMemo(int year, int month, int day) {
-        String[] tableColumn = {"dailyMemoId", "year", "month", "day", "memo"};
+    public String selectStamp(int year, int month, int day) {
+        String[] tableColumn = {"dailyStampId", "year", "month", "day", "stamp", "updated"};
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
         boolean mov = cursor.moveToFirst();
@@ -32,8 +36,8 @@ public class DailyMemoDB {
         return query;
     }
 
-    public int selectDailyMemoId(int year, int month, int day) {
-        String[] tableColumn = {"dailyMemoId", "year", "month", "day", "memo"};
+    public int selectDailyStampId(int year, int month, int day) {
+        String[] tableColumn = {"dailyStampId", "year", "month", "day", "stamp", "updated"};
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
         boolean mov = cursor.moveToFirst();
@@ -47,23 +51,47 @@ public class DailyMemoDB {
         return query;
     }
 
-    public void insertMemo(int year, int month, int day, String memo) {
+    public void insertStamp(int year, int month, int day, int stamp) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues insertValues = new ContentValues();
         insertValues.put("year", year + "");
         insertValues.put("month", month + "");
         insertValues.put("day", day + "");
-        insertValues.put("memo", memo);
+        insertValues.put("stamp", stamp + "");
+        insertValues.put("updated", getDateTime());
         long id = db.insert(tableName, "00", insertValues);
         db.close();
     }
 
-    public void updateMemo(int year, int month, int day, String memo) {
+    public void updateStamp(int year, int month, int day, int stamp) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues updateValues = new ContentValues();
-        updateValues.put("memo", memo);
+        updateValues.put("stamp", stamp + "");
+        updateValues.put("updated", getDateTime());
         db.update(tableName, updateValues, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""});
         db.close();
+    }
+
+    public String selectUpdated(int year, int month, int day) {
+        String[] tableColumn = {"dailyStampId", "year", "month", "day", "stamp", "updated"};
+        SQLiteDatabase db = helper.getWritableDatabase();
+        Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
+        boolean mov = cursor.moveToFirst();
+        String query = "";
+        while (mov) {
+            query = cursor.getString(5);
+            mov = cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return query;
+    }
+
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 }

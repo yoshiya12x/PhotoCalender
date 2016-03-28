@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.model;
 
 /**
  * Created by xjapan on 16/01/02.

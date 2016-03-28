@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,10 +1,12 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.xjapan.photocalender.R;
 
 /**
  * Created by xjapan on 16/01/14.

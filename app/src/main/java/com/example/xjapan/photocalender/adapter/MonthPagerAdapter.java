@@ -1,9 +1,12 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.adapter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.xjapan.photocalender.fragment.PagerFragment;
+import com.example.xjapan.photocalender.fragment.PhotoFragment;
 
 /**
  * Created by xjapan on 15/11/24.

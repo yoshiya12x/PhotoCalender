@@ -1,9 +1,11 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.example.xjapan.photocalender.db.SQLiteHelper;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,6 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.util;
+
+import com.example.xjapan.photocalender.model.CalenderList;
 
 import java.util.ArrayList;
 import java.util.Calendar;

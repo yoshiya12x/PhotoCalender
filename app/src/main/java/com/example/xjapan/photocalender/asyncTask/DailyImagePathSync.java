@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.asyncTask;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.ViewHolder;
+import com.example.xjapan.photocalender.db.DailyTopDB;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

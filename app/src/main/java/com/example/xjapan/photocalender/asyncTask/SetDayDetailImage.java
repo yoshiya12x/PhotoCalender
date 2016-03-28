@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.asyncTask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,9 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.example.xjapan.photocalender.db.DailyTopDB;
+import com.example.xjapan.photocalender.util.BitmapUtil;
 
 import java.io.File;
 import java.util.ArrayList;

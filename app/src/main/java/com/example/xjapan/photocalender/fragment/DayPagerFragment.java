@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.fragment;
 
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
@@ -23,6 +23,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.asyncTask.SetDayDetailImage;
+import com.example.xjapan.photocalender.db.DailyMemoDB;
+import com.example.xjapan.photocalender.db.DailyTopDB;
+import com.example.xjapan.photocalender.util.Common;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

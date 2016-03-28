@@ -1,4 +1,4 @@
-package com.example.xjapan.photocalender;
+package com.example.xjapan.photocalender.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,17 +12,17 @@ import java.util.Locale;
 /**
  * Created by xjapan on 16/01/19.
  */
-public class DailyStampDB {
+public class DailyTitleMemoDB {
 
-    private String tableName = "dailyStamp";
+    private String tableName = "dailyTitleMemo";
     private SQLiteHelper helper;
 
-    public DailyStampDB(Context context) {
+    public DailyTitleMemoDB(Context context) {
         helper = new SQLiteHelper(context);
     }
 
-    public String selectStamp(int year, int month, int day) {
-        String[] tableColumn = {"dailyStampId", "year", "month", "day", "stamp", "updated"};
+    public String selectTitleMemo(int year, int month, int day) {
+        String[] tableColumn = {"dailyTitleMemoId", "year", "month", "day", "titleMemo", "updated"};
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
         boolean mov = cursor.moveToFirst();
@@ -36,8 +36,8 @@ public class DailyStampDB {
         return query;
     }
 
-    public int selectDailyStampId(int year, int month, int day) {
-        String[] tableColumn = {"dailyStampId", "year", "month", "day", "stamp", "updated"};
+    public int selectDailyTitleMemoId(int year, int month, int day) {
+        String[] tableColumn = {"dailyTitleMemoId", "year", "month", "day", "titleMemo", "updated"};
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
         boolean mov = cursor.moveToFirst();
@@ -51,29 +51,29 @@ public class DailyStampDB {
         return query;
     }
 
-    public void insertStamp(int year, int month, int day, int stamp) {
+    public void insertTitleMemo(int year, int month, int day, String titleMemo) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues insertValues = new ContentValues();
         insertValues.put("year", year + "");
         insertValues.put("month", month + "");
         insertValues.put("day", day + "");
-        insertValues.put("stamp", stamp + "");
+        insertValues.put("titleMemo", titleMemo);
         insertValues.put("updated", getDateTime());
         long id = db.insert(tableName, "00", insertValues);
         db.close();
     }
 
-    public void updateStamp(int year, int month, int day, int stamp) {
+    public void updateTitleMemo(int year, int month, int day, String titleMemo) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues updateValues = new ContentValues();
-        updateValues.put("stamp", stamp + "");
+        updateValues.put("titleMemo", titleMemo);
         updateValues.put("updated", getDateTime());
         db.update(tableName, updateValues, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""});
         db.close();
     }
 
     public String selectUpdated(int year, int month, int day) {
-        String[] tableColumn = {"dailyStampId", "year", "month", "day", "stamp", "updated"};
+        String[] tableColumn = {"dailyTitleMemoId", "year", "month", "day", "titleMemo", "updated"};
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.query(tableName, tableColumn, "year = ? and month = ? and day = ?", new String[]{year + "", month + "", day + ""}, null, null, null);
         boolean mov = cursor.moveToFirst();
@@ -93,5 +93,4 @@ public class DailyStampDB {
         Date date = new Date();
         return dateFormat.format(date);
     }
-
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.xjapan.photocalender.MainActivity">
+    tools:context=".activity.MainActivity">
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
