@@ -47,7 +47,6 @@ public class DayPagerFragment extends Fragment {
     private int month;
     private int day;
     private Button memoConfirmText;
-    private Button changeImageButton;
     private RelativeLayout imageRelativeLayout;
     private ImageView dayImage;
     public Common common;
@@ -109,7 +108,7 @@ public class DayPagerFragment extends Fragment {
             }
         });
 
-        changeImageButton = (Button) view.findViewById(R.id.changeImageButton);
+        Button changeImageButton = (Button) view.findViewById(R.id.changeImageButton);
         changeImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
