@@ -10,11 +10,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.xjapan.photocalender.model.CalenderList;
-import com.example.xjapan.photocalender.db.DailyMemoDB;
-import com.example.xjapan.photocalender.db.DailyTopDB;
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.ViewHolder;
+import com.example.xjapan.photocalender.db.DailyMemoDB;
+import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
+import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.model.DailyTop;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -35,6 +36,7 @@ public class DayListAdapter extends ArrayAdapter {
     private ArrayList<Integer> sundayList;
     private ArrayList<Integer> saturdayList;
     private List<Calendar> holidayList;
+    private DailyTopDAO dao = DailyTopDAO.get();
 
     public DayListAdapter(Context context, int resource, CalenderList calenderList, int currentDay, ArrayList<Integer> sundayList, ArrayList<Integer> saturdayList, List<Calendar> holidayList) {
         super(context, resource);
@@ -71,23 +73,13 @@ public class DayListAdapter extends ArrayAdapter {
 
         ImageView dayImage = (ImageView) view.findViewById(R.id.day_image);
         dayImage.setImageResource(R.drawable.noimage1);
-        DailyTopDB dailyTopDB = new DailyTopDB(context);
-        ArrayList<String> allItem = dailyTopDB.selectAll(calenderList.year, calenderList.month, i_temp);
-
-        if (allItem.size() != 0) {
-            if (allItem.get(0) != null) {
-                File imageFile = new File(allItem.get(0));
+        DailyTop dailyTop = dao.getItem(calenderList.year, calenderList.month, i_temp);
+        if (dailyTop != null) {
+            if (dailyTop.path != null) {
+                File imageFile = new File(dailyTop.path);
                 if (imageFile.exists()) {
-                    //AsyncTaskを使う場合
-                    //SetMonthDetailImage setMonthDetailImage = new SetMonthDetailImage(context, dayImage, imageFile);
-                    //setMonthDetailImage.forceLoad();
-                    //Picassoを使う場合
-                    Picasso.with(context).load(imageFile).into(dayImage);
-                    //普通にセットする場合
-                    //dayImage.setImageURI(Uri.fromFile(imageFile));
+                    Picasso.with(view.getContext()).load(imageFile).into(dayImage);
                 }
-            } else {
-
             }
         }
 

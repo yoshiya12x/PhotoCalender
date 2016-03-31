@@ -1,5 +1,7 @@
 package com.example.xjapan.photocalender.model;
 
+import android.support.annotation.Nullable;
+
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
@@ -23,15 +25,19 @@ public class DailyTop {
     @Column(indexed = true)
     public int day;
 
+    @Nullable
     @Column(indexed = true)
     public String path;
 
+    @Nullable
     @Column(indexed = true)
     public int stamp;
 
+    @Nullable
     @Column(indexed = true)
     public String titleMemo;
 
+    @Nullable
     @Column(indexed = true)
     public int flag;
 

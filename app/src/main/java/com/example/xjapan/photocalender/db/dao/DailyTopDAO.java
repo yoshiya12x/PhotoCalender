@@ -25,7 +25,7 @@ public class DailyTopDAO {
         return dao;
     }
 
-    public DailyTop getItem(int year, int month, int day){
+    public DailyTop getItem(int year, int month, int day) {
         assert orma != null;
         return orma.selectFromDailyTop()
                 .yearEq(year)
@@ -34,7 +34,7 @@ public class DailyTopDAO {
                 .getOrNull(0);
     }
 
-    public long insertStamp(int stamp, int year, int month, int day){
+    public long insertStamp(int stamp, int year, int month, int day) {
         DailyTop dailyTop = new DailyTop();
         dailyTop.year = year;
         dailyTop.month = month;
@@ -44,7 +44,7 @@ public class DailyTopDAO {
         return orma.insertIntoDailyTop(dailyTop);
     }
 
-    public long updateStamp(int stamp, int year, int month, int day){
+    public long updateStamp(int stamp, int year, int month, int day) {
         return orma.updateDailyTop()
                 .yearEq(year)
                 .month(month)
@@ -54,18 +54,18 @@ public class DailyTopDAO {
                 .execute();
     }
 
-    public long insertTitleMemo(String titleMemo, int year, int month, int day){
+    public long insertTitleMemo(String titleMemo, int year, int month, int day) {
         DailyTop dailyTop = new DailyTop();
         dailyTop.year = year;
-        dailyTop .month = month;
+        dailyTop.month = month;
         dailyTop.day = day;
         dailyTop.titleMemo = titleMemo;
         dailyTop.flag = 1;
         return orma.insertIntoDailyTop(dailyTop);
     }
 
-    public long updateTitleMemo(String titleMemo, int year, int month, int day){
-        return orma. updateDailyTop()
+    public long updateTitleMemo(String titleMemo, int year, int month, int day) {
+        return orma.updateDailyTop()
                 .yearEq(year)
                 .monthEq(month)
                 .dayEq(day)
