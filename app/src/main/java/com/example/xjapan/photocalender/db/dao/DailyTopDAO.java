@@ -72,4 +72,23 @@ public class DailyTopDAO {
                 .titleMemo(titleMemo)
                 .execute();
     }
+
+    public long insertPath(String path, int year, int month, int day){
+        DailyTop dailyTop = new DailyTop();
+        dailyTop.year = year;
+        dailyTop.month = month;
+        dailyTop.day = day;
+        dailyTop.path = path;
+        return orma.insertIntoDailyTop(dailyTop);
+    }
+
+    public long updatePath(String path, int year, int month, int day){
+        return orma.updateDailyTop()
+                .yearEq(year)
+                .monthEq(month)
+                .dayEq(day)
+                .path(path)
+                .execute();
+    }
+
 }

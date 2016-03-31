@@ -35,6 +35,7 @@ public class DayDetailActivity extends AppCompatActivity {
     private CalenderList calenderList;
     private int currentDay;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
