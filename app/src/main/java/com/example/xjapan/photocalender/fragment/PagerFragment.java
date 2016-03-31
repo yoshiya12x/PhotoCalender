@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,9 @@ import android.widget.EditText;
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.activity.MonthDetailActivity;
 import com.example.xjapan.photocalender.adapter.StickyAdapter;
-import com.example.xjapan.photocalender.db.DailyTopDB;
+import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.model.DailyTop;
 import com.example.xjapan.photocalender.model.DayList;
 import com.example.xjapan.photocalender.util.Common;
 import com.example.xjapan.photocalender.util.JapaneseHolidayUtils;
@@ -96,13 +96,12 @@ public class PagerFragment extends Fragment {
         builder.setView(layout);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                DailyTopDB dailyTopDB = new DailyTopDB(context);
-                SpannableStringBuilder sb = (SpannableStringBuilder) editText.getText();
-                ArrayList<String> topList = dailyTopDB.selectAll(common.year, common.month, common.day);
-                if (topList.size() == 0) {
-                    dailyTopDB.insertTitleMemo(common.year, common.month, common.day, sb.toString());
+                DailyTopDAO dao = DailyTopDAO.get();
+                DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
+                if (dailyTop == null) {
+                    dao.insertTitleMemo(editText.getText().toString(), common.year, common.month, common.day);
                 } else {
-                    dailyTopDB.updateTitleMemo(common.year, common.month, common.day, sb.toString());
+                    dao.updateTitleMemo(editText.getText().toString(), common.year, common.month, common.day);
                 }
             }
         });

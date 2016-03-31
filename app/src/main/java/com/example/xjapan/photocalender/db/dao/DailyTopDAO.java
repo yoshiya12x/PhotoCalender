@@ -34,9 +34,13 @@ public class DailyTopDAO {
                 .getOrNull(0);
     }
 
-    public long insertStamp(int stamp){
+    public long insertStamp(int stamp, int year, int month, int day){
         DailyTop dailyTop = new DailyTop();
+        dailyTop.year = year;
+        dailyTop.month = month;
+        dailyTop.day = day;
         dailyTop.stamp = stamp;
+        dailyTop.flag = 0;
         return orma.insertIntoDailyTop(dailyTop);
     }
 
@@ -46,6 +50,26 @@ public class DailyTopDAO {
                 .month(month)
                 .dayEq(day)
                 .stamp(stamp)
+                .flag(0)
+                .execute();
+    }
+
+    public long insertTitleMemo(String titleMemo, int year, int month, int day){
+        DailyTop dailyTop = new DailyTop();
+        dailyTop.year = year;
+        dailyTop .month = month;
+        dailyTop.day = day;
+        dailyTop.titleMemo = titleMemo;
+        dailyTop.flag = 1;
+        return orma.insertIntoDailyTop(dailyTop);
+    }
+
+    public long updateTitleMemo(String titleMemo, int year, int month, int day){
+        return orma. updateDailyTop()
+                .yearEq(year)
+                .monthEq(month)
+                .dayEq(day)
+                .titleMemo(titleMemo)
                 .execute();
     }
 }

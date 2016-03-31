@@ -128,7 +128,7 @@ public class MainActivity extends FragmentActivity {
                 break;
         }
         if (dailyTop == null) {
-            dao.insertStamp(updateStamp);
+            dao.insertStamp(updateStamp, common.year, common.month, common.day);
         } else {
             dao.updateStamp(updateStamp, common.year, common.month, common.day);
         }
