@@ -12,24 +12,36 @@ public class DailyTopDAO {
     private static final DailyTopDAO dao = new DailyTopDAO();
     private OrmaDatabase orma;
 
-    static void inject(OrmaDatabase orma){
+    DailyTopDAO() {
+    }
+
+    static void inject(OrmaDatabase orma) {
         dao.orma = orma;
     }
 
-    static void leave(){
+    static void leave() {
         dao.orma = null;
     }
 
-    public static DailyTopDAO get(){
+    public static DailyTopDAO get() {
         return dao;
     }
 
-    public DailyTop findFirst(){
+    public DailyTop getItem(int year, int month, int day){
+        assert orma != null;
+        return orma.selectFromDailyTop()
+                .yearEq(year)
+                .monthEq(month)
+                .dayEq(day)
+                .getOrNull(0);
+    }
+
+    public DailyTop findFirst() {
         assert orma != null;
         return orma.selectFromDailyTop().getOrNull(0);
     }
 
-    public List<DailyTop> findAll(){
+    public List<DailyTop> findAll() {
         assert orma != null;
         return orma.selectFromDailyTop().toList();
     }

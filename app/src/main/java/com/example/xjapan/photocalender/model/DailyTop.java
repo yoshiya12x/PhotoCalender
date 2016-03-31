@@ -15,23 +15,26 @@ public class DailyTop {
     public int dailyTopId;
 
     @Column(indexed = true)
-    public String year;
+    public int year;
 
     @Column(indexed = true)
-    public String month;
+    public int month;
 
     @Column(indexed = true)
-    public String day;
+    public int day;
 
     @Column(indexed = true)
     public String path;
 
     @Column(indexed = true)
-    public String stamp;
+    public int stamp;
 
     @Column(indexed = true)
     public String titleMemo;
 
     @Column(indexed = true)
-    public String flag;
+    public int flag;
+
+    public DailyTop() {
+    }
 }

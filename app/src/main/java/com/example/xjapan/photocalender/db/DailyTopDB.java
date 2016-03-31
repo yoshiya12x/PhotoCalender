@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class DailyTopDB {
 
-    private String tableName = "dailyTop";
+    private String tableName = "DailyTop";
     private SQLiteHelper helper;
 
     public DailyTopDB(Context context) {

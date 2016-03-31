@@ -5,6 +5,8 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import com.example.xjapan.photocalender.db.dao.DAOInjector;
+
 /**
  * Created by xjapan on 16/01/10.
  */
@@ -21,4 +23,15 @@ public class Common extends Application {
     public boolean isPencil = false;
     public AlertDialog alertDialog;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        DAOInjector.inject(this);
+    }
+
+    @Override
+    public void onTerminate() {
+        DAOInjector.leave();
+        super.onTerminate();
+    }
 }

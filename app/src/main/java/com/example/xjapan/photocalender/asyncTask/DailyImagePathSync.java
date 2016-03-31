@@ -12,13 +12,10 @@ import android.view.WindowManager;
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.ViewHolder;
 import com.example.xjapan.photocalender.db.DailyTopDB;
-import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
-import com.example.xjapan.photocalender.model.DailyTop;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by xjapan on 16/01/16.
@@ -29,7 +26,6 @@ public class DailyImagePathSync extends AsyncTask<Integer, Void, ArrayList<Strin
     private DailyTopDB dailyTopDB;
     private ViewHolder holder;
     private String tag;
-    private DailyTopDAO dao = DailyTopDAO.get();
 
     public DailyImagePathSync(ViewHolder viewHolder, Context context) {
         this.context = context;
@@ -40,10 +36,6 @@ public class DailyImagePathSync extends AsyncTask<Integer, Void, ArrayList<Strin
 
     @Override
     protected ArrayList<String> doInBackground(Integer... ints) {
-        Log.d("dao_test", "test");
-        List<DailyTop> test = dao.findAll();
-        Log.d("dao_test", test.get(0).day);
-
         return dailyTopDB.selectAll(ints[0], ints[1], ints[2]);
     }
 
