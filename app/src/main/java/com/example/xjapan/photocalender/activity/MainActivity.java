@@ -11,12 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.example.xjapan.photocalender.util.Common;
-import com.example.xjapan.photocalender.db.DailyTopDB;
-import com.example.xjapan.photocalender.adapter.MonthPagerAdapter;
 import com.example.xjapan.photocalender.R;
-
-import java.util.ArrayList;
+import com.example.xjapan.photocalender.adapter.MonthPagerAdapter;
+import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
+import com.example.xjapan.photocalender.model.DailyTop;
+import com.example.xjapan.photocalender.util.Common;
 
 public class MainActivity extends FragmentActivity {
 
@@ -93,8 +92,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onStampClick(View view) {
-        DailyTopDB dailyTopDB = new DailyTopDB(this);
-        ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
+        DailyTopDAO dao = DailyTopDAO.get();
+        DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
         int updateStamp;
         switch (view.getId()) {
             case R.id.stamp_image_1:
@@ -128,10 +127,10 @@ public class MainActivity extends FragmentActivity {
                 updateStamp = R.drawable.heart;
                 break;
         }
-        if (item.size() == 0) {
-            dailyTopDB.insertStamp(common.year, common.month, common.day, updateStamp);
+        if (dailyTop == null) {
+            dao.insertStamp(updateStamp);
         } else {
-            dailyTopDB.updateStamp(common.year, common.month, common.day, updateStamp);
+            dao.updateStamp(updateStamp, common.year, common.month, common.day);
         }
         common.alertDialog.dismiss();
     }
