@@ -29,7 +29,6 @@ import com.example.xjapan.photocalender.util.Common;
 public class DayDetailActivity extends AppCompatActivity {
 
     private Common common;
-    private String imagePath;
     private CalenderList calenderList;
     private int currentDay;
     private DailyTopDAO dao = DailyTopDAO.get();
@@ -95,13 +94,13 @@ public class DayDetailActivity extends AppCompatActivity {
             assert c != null;
             int column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             c.moveToFirst();
-            imagePath = c.getString(column_index);
+            String imagePath = c.getString(column_index);
             showDialog(imagePath);
         }
 
     }
 
-    private void showDialog(String path) {
+    private void showDialog(final String path) {
         if (null != common.bm) {
             common.bm.recycle();
         }
@@ -118,9 +117,9 @@ public class DayDetailActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
                 if (dailyTop == null) {
-                    dao.insertPath(common.m_uri.getPath(), common.year, common.month, common.day);
+                    dao.insertPath(path, common.year, common.month, common.day);
                 } else {
-                    dao.updatePath(common.m_uri.getPath(), common.year, common.month, common.day);
+                    dao.updatePath(path, common.year, common.month, common.day);
                 }
                 setViewPager(common.day);
             }

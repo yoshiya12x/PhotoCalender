@@ -63,7 +63,6 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
                 params.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
                 params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 1);
                 relativeLayout.setLayoutParams(params);
-            } else {
             }
         }
     }

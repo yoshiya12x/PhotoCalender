@@ -10,12 +10,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.adapter.DayListAdapter;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DayList;
-import com.example.xjapan.photocalender.adapter.DayListAdapter;
 import com.example.xjapan.photocalender.util.JapaneseHolidayUtils;
 import com.example.xjapan.photocalender.util.MyCalender;
-import com.example.xjapan.photocalender.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,16 +88,16 @@ public class MonthDetailActivity extends AppCompatActivity {
         return result;
     }
 
-    private AdapterView.OnItemClickListener createOnItemClickListener(){
-        return new AdapterView.OnItemClickListener(){
+    private AdapterView.OnItemClickListener createOnItemClickListener() {
+        return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                view.getContext().startActivity(DayDetailActivity.createIntent(view.getContext(), calenderList, i, genzaiDay));
+                view.getContext().startActivity(DayDetailActivity.createIntent(view.getContext(), calenderList, i + 1, genzaiDay));
             }
         };
     }
 
-    public static Intent createIntent(Context context, DayList dayList, CalenderList postCalenderList ){
+    public static Intent createIntent(Context context, DayList dayList, CalenderList postCalenderList) {
         Intent intent = new Intent(context.getApplicationContext(), MonthDetailActivity.class);
         intent.putExtra("dayListDay", dayList.day);
         intent.putExtra("calenderListYear", postCalenderList.year);

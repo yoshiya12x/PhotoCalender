@@ -2,8 +2,10 @@ package com.example.xjapan.photocalender.fragment;
 
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,11 +14,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,12 +29,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
-import com.example.xjapan.photocalender.asyncTask.SetDayDetailImage;
 import com.example.xjapan.photocalender.db.dao.DailyMemoDAO;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DailyMemo;
 import com.example.xjapan.photocalender.model.DailyTop;
+import com.example.xjapan.photocalender.util.BitmapUtil;
 import com.example.xjapan.photocalender.util.Common;
 
 import java.io.File;
@@ -134,11 +139,32 @@ public class DayPagerFragment extends Fragment {
 
     public void setImage() {
         //ここではRalativeLayoutに縦幅横幅を設定するため，Picassoを使わない．
-        SetDayDetailImage setDayDetailImage = new SetDayDetailImage(getContext(), imageRelativeLayout, dayImage, year, month, day);
-        setDayDetailImage.forceLoad();
+        DailyTop dailyTop = dailyTopDAO.getItem(year, month, day);
+        if (dailyTop != null) {
+            if (dailyTop.path != null) {
+                File imageFile = new File(dailyTop.path);
+                if (imageFile.exists()) {
+                    WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+                    Display display = wm.getDefaultDisplay();
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    display.getMetrics(displayMetrics);
+                    BitmapUtil bitmapUtil = new BitmapUtil();
+                    Bitmap bitmap = bitmapUtil.createBitmap(dailyTop.path, displayMetrics.widthPixels * 3 / 5, displayMetrics.widthPixels * 3 / 5);
+                    dayImage.setImageBitmap(bitmap);
+                    RelativeLayout.LayoutParams params = createRelativeLayoutParam(bitmap.getWidth(), bitmap.getHeight());
+                    params.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 1);
+                    imageRelativeLayout.setLayoutParams(params);
+                }
+            }
+        }
     }
 
-    public void animateAlpha1(Button target) {
+    private RelativeLayout.LayoutParams createRelativeLayoutParam(int w, int h) {
+        return new RelativeLayout.LayoutParams(w, h);
+    }
+
+    private void animateAlpha1(Button target) {
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(target, "alpha", 0f, 1f);
         objectAnimator.setDuration(800);
         objectAnimator.start();
@@ -248,10 +274,6 @@ public class DayPagerFragment extends Fragment {
 
             return mediaFile;
         }
-    }
-
-    private RelativeLayout.LayoutParams createRelativeLayoutParam(int w, int h) {
-        return new RelativeLayout.LayoutParams(w, h);
     }
 
     public static Bundle createArguments(int position, CalenderList calenderList) {
