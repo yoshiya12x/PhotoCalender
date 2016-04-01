@@ -20,7 +20,6 @@ import java.util.ArrayList;
  */
 public class SetDayDetailImage extends AsyncTaskLoader<String> {
 
-    private Context context;
     private RelativeLayout relativeLayout;
     private ImageView imageView;
     private int year;
@@ -30,7 +29,6 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
 
     public SetDayDetailImage(Context context, RelativeLayout relativeLayout, ImageView imageView, int year, int month, int day) {
         super(context);
-        this.context = context;
         this.relativeLayout = relativeLayout;
         this.imageView = imageView;
         this.year = year;
@@ -54,7 +52,7 @@ public class SetDayDetailImage extends AsyncTaskLoader<String> {
         } else {
             File imageFile = new File(result);
             if (imageFile.exists()) {
-                WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 display.getMetrics(displayMetrics);

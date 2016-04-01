@@ -25,9 +25,10 @@ import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.asyncTask.SetDayDetailImage;
-import com.example.xjapan.photocalender.db.DailyMemoDB;
+import com.example.xjapan.photocalender.db.dao.DailyMemoDAO;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.model.DailyMemo;
 import com.example.xjapan.photocalender.model.DailyTop;
 import com.example.xjapan.photocalender.util.Common;
 
@@ -42,7 +43,6 @@ public class DayPagerFragment extends Fragment {
 
     private EditText editText;
     private Button memoButton;
-    private DailyMemoDB dailyMemoDB;
     private int year;
     private int month;
     private int day;
@@ -50,7 +50,9 @@ public class DayPagerFragment extends Fragment {
     private RelativeLayout imageRelativeLayout;
     private ImageView dayImage;
     public Common common;
-    private DailyTopDAO dao = DailyTopDAO.get();
+    private DailyTopDAO dailyTopDAO = DailyTopDAO.get();
+    private DailyMemoDAO dailyMemoDAO = DailyMemoDAO.get();
+    private DailyMemo dailyMemo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,21 +65,24 @@ public class DayPagerFragment extends Fragment {
         month = getArguments().getInt("month");
         day = getArguments().getInt("day");
 
-        dailyMemoDB = new DailyMemoDB(getActivity());
-        String memo = dailyMemoDB.selectMemo(year, month, day);
-
+        dailyMemo = dailyMemoDAO.getItem(year, month, day);
+        String memo = "";
         memoConfirmText = (Button) view.findViewById(R.id.memoConfirm);
         editText = (EditText) view.findViewById(R.id.dateEditText);
-        editText.setText(memo, TextView.BufferType.NORMAL);
+        if (dailyMemo != null) {
+            editText.setText(dailyMemo.memo, TextView.BufferType.NORMAL);
+            memo = dailyMemo.memo;
+        } else {
+            editText.setText("", TextView.BufferType.NORMAL);
+        }
         memoButton = (Button) view.findViewById(R.id.memoButton);
         memoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DailyTop dailyTop = dao.getItem(year, month, day);
-                if(dailyTop == null){
-                    dao.insertPath(editText.getText().toString(), year, month, day);
-                }else{
-                    dao.updatePath(editText.getText().toString(), year, month, day);
+                if (dailyMemo == null) {
+                    dailyMemoDAO.insertMemo(editText.getText().toString(), year, month, day);
+                } else {
+                    dailyMemoDAO.updateMemo(editText.getText().toString(), year, month, day);
                 }
                 memoConfirmText.setVisibility(View.VISIBLE);
                 animateAlpha1(memoConfirmText);
@@ -187,9 +192,9 @@ public class DayPagerFragment extends Fragment {
             builder.setMessage("削除してもよろしいですか");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    DailyTop dailyTop = dao.getItem(year, month, day);
+                    DailyTop dailyTop = dailyTopDAO.getItem(year, month, day);
                     if (dailyTop != null) {
-                        dao.updatePath("", year, month, day);
+                        dailyTopDAO.updatePath("", year, month, day);
                         dayImage.setImageResource(R.drawable.noimage2);
                     }
                 }

@@ -12,9 +12,10 @@ import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.ViewHolder;
-import com.example.xjapan.photocalender.db.DailyMemoDB;
+import com.example.xjapan.photocalender.db.dao.DailyMemoDAO;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.model.DailyMemo;
 import com.example.xjapan.photocalender.model.DailyTop;
 import com.squareup.picasso.Picasso;
 
@@ -36,7 +37,7 @@ public class DayListAdapter extends ArrayAdapter {
     private ArrayList<Integer> sundayList;
     private ArrayList<Integer> saturdayList;
     private List<Calendar> holidayList;
-    private DailyTopDAO dao = DailyTopDAO.get();
+    private DailyTopDAO dailyTopDAO = DailyTopDAO.get();
 
     public DayListAdapter(Context context, int resource, CalenderList calenderList, int currentDay, ArrayList<Integer> sundayList, ArrayList<Integer> saturdayList, List<Calendar> holidayList) {
         super(context, resource);
@@ -73,7 +74,7 @@ public class DayListAdapter extends ArrayAdapter {
 
         ImageView dayImage = (ImageView) view.findViewById(R.id.day_image);
         dayImage.setImageResource(R.drawable.noimage1);
-        DailyTop dailyTop = dao.getItem(calenderList.year, calenderList.month, i_temp);
+        DailyTop dailyTop = dailyTopDAO.getItem(calenderList.year, calenderList.month, i_temp);
         if (dailyTop != null) {
             if (dailyTop.path != null) {
                 File imageFile = new File(dailyTop.path);
@@ -98,11 +99,14 @@ public class DayListAdapter extends ArrayAdapter {
             }
         }
 
-        DailyMemoDB dailyMemoDB = new DailyMemoDB(context);
-        String memo = dailyMemoDB.selectMemo(calenderList.year, calenderList.month, i_temp);
+        DailyMemoDAO dailyMemoDAO = DailyMemoDAO.get();
+        DailyMemo dailyMemo = dailyMemoDAO.getItem(calenderList.year, calenderList.month, i_temp);
         TextView memoText = (TextView) view.findViewById(R.id.day_memo);
-        memoText.setText(memo);
-
+        if (dailyMemo != null) {
+            memoText.setText(dailyMemo.memo);
+        } else {
+            memoText.setText("");
+        }
         return view;
     }
 }

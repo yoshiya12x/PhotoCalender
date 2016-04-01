@@ -19,9 +19,11 @@ public class DAOInjector {
                 build();
 
         DailyTopDAO.inject(orma);
+        DailyMemoDAO.inject(orma);
     }
 
     public static void leave() {
         DailyTopDAO.leave();
+        DailyMemoDAO.leave();
     }
 }

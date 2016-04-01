@@ -18,29 +18,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.example.xjapan.photocalender.model.CalenderList;
-import com.example.xjapan.photocalender.util.Common;
-import com.example.xjapan.photocalender.db.DailyTopDB;
-import com.example.xjapan.photocalender.adapter.DayPagerAdapter;
 import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.adapter.DayPagerAdapter;
 import com.example.xjapan.photocalender.asyncTask.SetDialogImage;
-
-import java.util.ArrayList;
+import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
+import com.example.xjapan.photocalender.model.CalenderList;
+import com.example.xjapan.photocalender.model.DailyTop;
+import com.example.xjapan.photocalender.util.Common;
 
 public class DayDetailActivity extends AppCompatActivity {
 
     private Common common;
     private String imagePath;
-    private DailyTopDB dailyTopDB;
     private CalenderList calenderList;
     private int currentDay;
-
+    private DailyTopDAO dao = DailyTopDAO.get();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_detail);
-        dailyTopDB = new DailyTopDB(this);
         calenderList = new CalenderList();
         calenderList.year = getIntent().getIntExtra("calenderListYear", 0);
         calenderList.month = getIntent().getIntExtra("calenderListMonth", 0);
@@ -88,39 +85,7 @@ public class DayDetailActivity extends AppCompatActivity {
         common = (Common) getApplication();
 
         if (common.isCamera && resultCode == RESULT_OK) {
-
-            if (null != common.bm) {
-                common.bm.recycle();
-            }
-
-            LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.image_change_confirm, (ViewGroup) findViewById(R.id.alertdialog_layout));
-
-            ImageView takeImageView = (ImageView) layout.findViewById(R.id.take_image);
-            ImageView preImageView = (ImageView) layout.findViewById(R.id.pre_image);
-            SetDialogImage setDialogImage = new SetDialogImage(this, takeImageView, preImageView, common.m_uri.getPath(), common.year, common.month, common.day);
-            setDialogImage.forceLoad();
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(common.year + "年" + common.month + "月" + common.day + "日の画像");
-            builder.setView(layout);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
-                    if (item.size() == 0) {
-                        dailyTopDB.insertPath(common.year, common.month, common.day, common.m_uri.getPath());
-                    } else {
-                        dailyTopDB.updatePath(common.year, common.month, common.day, common.m_uri.getPath());
-                    }
-                    setViewPager(common.day);
-                }
-            });
-            builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            builder.create().show();
-
+            showDialog(common.m_uri.getPath());
         } else if (common.isGallery && resultCode == RESULT_OK) {
             ContentResolver cr = getContentResolver();
             String[] columns = {
@@ -131,40 +96,40 @@ public class DayDetailActivity extends AppCompatActivity {
             int column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             c.moveToFirst();
             imagePath = c.getString(column_index);
-
-            if (null != common.bm) {
-                common.bm.recycle();
-            }
-
-            LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.image_change_confirm, (ViewGroup) findViewById(R.id.alertdialog_layout));
-
-            ImageView takeImageView = (ImageView) layout.findViewById(R.id.take_image);
-            ImageView preImageView = (ImageView) layout.findViewById(R.id.pre_image);
-            SetDialogImage setDialogImage = new SetDialogImage(this, takeImageView, preImageView, imagePath, common.year, common.month, common.day);
-            setDialogImage.forceLoad();
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(common.year + "年" + common.month + "月" + common.day + "日の画像");
-            builder.setView(layout);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ArrayList<String> item = dailyTopDB.selectAll(common.year, common.month, common.day);
-                    if (item.size() == 0) {
-                        dailyTopDB.insertPath(common.year, common.month, common.day, imagePath);
-                    } else {
-                        dailyTopDB.updatePath(common.year, common.month, common.day, imagePath);
-                    }
-                    setViewPager(common.day);
-                }
-            });
-            builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            builder.create().show();
+            showDialog(imagePath);
         }
 
+    }
+
+    private void showDialog(String path) {
+        if (null != common.bm) {
+            common.bm.recycle();
+        }
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.image_change_confirm, (ViewGroup) findViewById(R.id.alertdialog_layout));
+        ImageView takeImageView = (ImageView) layout.findViewById(R.id.take_image);
+        ImageView preImageView = (ImageView) layout.findViewById(R.id.pre_image);
+        SetDialogImage setDialogImage = new SetDialogImage(this, takeImageView, preImageView, path, common.year, common.month, common.day);
+        setDialogImage.forceLoad();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(common.year + "年" + common.month + "月" + common.day + "日の画像");
+        builder.setView(layout);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
+                if (dailyTop == null) {
+                    dao.insertPath(common.m_uri.getPath(), common.year, common.month, common.day);
+                } else {
+                    dao.updatePath(common.m_uri.getPath(), common.year, common.month, common.day);
+                }
+                setViewPager(common.day);
+            }
+        });
+        builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.create().show();
     }
 
     public static Intent createIntent(Context context, CalenderList calenderList, int selectedDay, int currentDay) {
