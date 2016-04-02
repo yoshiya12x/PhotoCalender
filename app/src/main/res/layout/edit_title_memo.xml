@@ -27,8 +27,9 @@
             android:id="@+id/edit_title_memo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="10文字以内だよ"
+            android:hint="15文字以内だよ"
             android:inputType="text"
+            android:maxLength="15"
             android:textColor="@color/colorWhite" />
 
     </android.support.design.widget.TextInputLayout>

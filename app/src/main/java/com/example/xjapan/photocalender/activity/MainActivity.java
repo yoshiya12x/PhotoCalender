@@ -132,6 +132,8 @@ public class MainActivity extends FragmentActivity {
         } else {
             dao.updateStamp(updateStamp, common.year, common.month, common.day);
         }
+        common.stickyAdapter.notifyDataSetChanged();
+        common.stickyGridHeadersGridView.invalidateViews();
         common.alertDialog.dismiss();
     }
 }

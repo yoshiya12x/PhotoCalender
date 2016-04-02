@@ -1,7 +1,6 @@
 package com.example.xjapan.photocalender.fragment;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,24 +31,23 @@ import java.util.List;
  */
 public class PagerFragment extends Fragment {
 
-    private MyCalender myCalender;
     private Common common;
     private ArrayList<CalenderList> allList;
+    private StickyGridHeadersGridView stickyGridHeadersGridView;
+    private StickyAdapter stickyAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myCalender = new MyCalender();
+        MyCalender myCalender = new MyCalender();
         common = (Common) getActivity().getApplication();
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_month, null);
         allList = myCalender.getAllList();
-        CalenderList currentDate = myCalender.getCurrentDate();
-
         ArrayList<DayList> allDays = setDays(allList);
-        StickyGridHeadersGridView stickyGridHeadersGridView = (StickyGridHeadersGridView) view.findViewById(R.id.listViewCalendar);
-        stickyGridHeadersGridView.setAdapter(new StickyAdapter(this.getActivity(), allList, allDays));
+        stickyGridHeadersGridView = (StickyGridHeadersGridView) view.findViewById(R.id.listViewCalendar);
+        stickyAdapter = new StickyAdapter(this.getActivity(), allList, allDays);
+        stickyGridHeadersGridView.setAdapter(stickyAdapter);
         stickyGridHeadersGridView.setNumColumns(7);
-        //自動スクロール
-        stickyGridHeadersGridView.setSelection(getCurrentPosition(allList, currentDate));
+        stickyGridHeadersGridView.setSelection(getCurrentPosition(allList, myCalender.getCurrentDate()));
         stickyGridHeadersGridView.setOnItemClickListener(createOnItemClickListener(allDays));
         return view;
     }
@@ -62,7 +60,7 @@ public class PagerFragment extends Fragment {
                 if (common.isStamp) {
                     setClickStampCase(dayList);
                 } else if (common.isPencil) {
-                    setClickPencilCase(dayList);
+                    setClickPencilCase(dayList, i);
                 } else {
                     CalenderList postCalenderList = getCalenderListByDayId(i);
                     view.getContext().startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
@@ -80,14 +78,15 @@ public class PagerFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
         builder.setView(layout);
+        common.stickyGridHeadersGridView = stickyGridHeadersGridView;
+        common.stickyAdapter = stickyAdapter;
         common.alertDialog = builder.show();
     }
 
-    private void setClickPencilCase(DayList dayList) {
+    private void setClickPencilCase(DayList dayList, final int position) {
         common.year = dayList.year;
         common.month = dayList.month;
         common.day = Integer.parseInt(dayList.day);
-        final Context context = this.getActivity();
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View layout = inflater.inflate(R.layout.edit_title_memo, (ViewGroup) this.getActivity().findViewById(R.id.edit_title_memo_layout));
         final EditText editText = (EditText) layout.findViewById(R.id.edit_title_memo);
@@ -103,6 +102,8 @@ public class PagerFragment extends Fragment {
                 } else {
                     dao.updateTitleMemo(editText.getText().toString(), common.year, common.month, common.day);
                 }
+                stickyAdapter.notifyDataSetChanged();
+                stickyGridHeadersGridView.invalidateViews();
             }
         });
         builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
@@ -127,6 +128,7 @@ public class PagerFragment extends Fragment {
     }
 
     private ArrayList<DayList> setDays(ArrayList<CalenderList> allList) {
+        MyCalender myCalender = new MyCalender();
         ArrayList<DayList> allDays = new ArrayList();
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);

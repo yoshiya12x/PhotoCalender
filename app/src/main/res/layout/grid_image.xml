@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="2dp">
 
     <ImageView
         android:id="@+id/item_imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="2dp"
         android:adjustViewBounds="true" />
 
     <TextView
@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_margin="4dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="2dp"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 
@@ -23,16 +25,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:layout_margin="@dimen/activity_horizontal_quoter_margin"
+        android:layout_margin="2dp"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/title_memo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/day_text"
         android:layout_centerInParent="true"
-        android:layout_margin="@dimen/activity_horizontal_quoter_margin"
+        android:layout_marginLeft="2dp"
         android:textColor="@android:color/white"
+        android:textSize="10dp"
         android:visibility="gone" />
 
 </RelativeLayout>
