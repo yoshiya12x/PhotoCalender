@@ -122,6 +122,8 @@ public class DayDetailActivity extends AppCompatActivity {
                     dao.updatePath(path, common.year, common.month, common.day);
                 }
                 setViewPager(common.day);
+                common.stickyAdapter.notifyDataSetChanged();
+                common.stickyGridHeadersGridView.invalidateViews();
             }
         });
         builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {

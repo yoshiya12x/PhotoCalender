@@ -49,6 +49,8 @@ public class PagerFragment extends Fragment {
         stickyGridHeadersGridView.setNumColumns(7);
         stickyGridHeadersGridView.setSelection(getCurrentPosition(allList, myCalender.getCurrentDate()));
         stickyGridHeadersGridView.setOnItemClickListener(createOnItemClickListener(allDays));
+        common.stickyGridHeadersGridView = stickyGridHeadersGridView;
+        common.stickyAdapter = stickyAdapter;
         return view;
     }
 
@@ -78,8 +80,6 @@ public class PagerFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
         builder.setView(layout);
-        common.stickyGridHeadersGridView = stickyGridHeadersGridView;
-        common.stickyAdapter = stickyAdapter;
         common.alertDialog = builder.show();
     }
 
