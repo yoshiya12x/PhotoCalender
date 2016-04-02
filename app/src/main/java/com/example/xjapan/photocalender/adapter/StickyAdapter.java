@@ -3,6 +3,7 @@ package com.example.xjapan.photocalender.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +66,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
         final DayList dayList = allDays.get(i);
 
         if (view == null) {
-//            view = inflater.inflate(R.layout.grid_image, viewGroup, false);
             view = inflater.inflate(R.layout.grid_image, null);
             holder = new ViewHolder();
             holder.gridImageView = (ImageView) view.findViewById(R.id.item_imageview);
@@ -89,8 +89,11 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
                 if (dailyTop.path != null) {
                     File imageFile = new File(dailyTop.path);
                     if (imageFile.exists()) {
+                        Log.d("photo_test", dayList.year + "");
+                        Log.d("photo_test", dayList.month + "");
+                        Log.d("photo_test", dayList.day + "");
                         Picasso.with(view.getContext()).load(imageFile).into(holder.gridImageView);
-                    }else{
+                    } else {
                         holder.gridImageView.setImageResource(R.drawable.noimage1);
                     }
                 } else {
