@@ -63,7 +63,6 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
         final DayList dayList = allDays.get(i);
-
         if (view == null) {
             view = inflater.inflate(R.layout.grid_image, null);
             holder = new ViewHolder();
@@ -75,6 +74,9 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
         } else {
             holder = (ViewHolder) view.getTag();
         }
+
+        holder.stampImageView.setImageBitmap(null);
+        holder.titleMemoTextView.setText("");
 
         //カレンダー上に日付があるかどうかの判定
         if (dayList.day.isEmpty()) {
@@ -107,14 +109,13 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
         }
 
         holder.gridTextView.setText(dayList.day);
-
         Calendar genzai = Calendar.getInstance();
-        if (dayList.isSunday || dayList.isHoliday) {
+        if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
+            holder.gridTextView.setTextColor(view.getContext().getResources().getColor(R.color.colorDarkGray));
+        } else if (dayList.isSunday || dayList.isHoliday) {
             holder.gridTextView.setTextColor(Color.RED);
         } else if (dayList.isSaturday) {
             holder.gridTextView.setTextColor(Color.BLUE);
-        } else if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
-            holder.gridTextView.setTextColor(view.getContext().getResources().getColor(R.color.colorDarkGray));
         } else {
             holder.gridTextView.setTextColor(Color.WHITE);
         }
