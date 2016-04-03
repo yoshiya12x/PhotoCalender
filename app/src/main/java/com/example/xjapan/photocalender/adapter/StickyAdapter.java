@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
-import com.example.xjapan.photocalender.ViewHolder;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DailyTop;
@@ -75,6 +74,7 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
             holder = (ViewHolder) view.getTag();
         }
 
+        //初期化
         holder.stampImageView.setImageBitmap(null);
         holder.titleMemoTextView.setText("");
 
@@ -178,5 +178,12 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
     public void setTitleMemo(String titleMemo, ViewHolder holder) {
         holder.titleMemoTextView.setVisibility(View.VISIBLE);
         holder.titleMemoTextView.setText(titleMemo);
+    }
+
+    private class ViewHolder {
+        private ImageView gridImageView;
+        private TextView gridTextView;
+        private ImageView stampImageView;
+        private TextView titleMemoTextView;
     }
 }

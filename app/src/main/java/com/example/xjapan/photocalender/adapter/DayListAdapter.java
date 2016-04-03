@@ -28,7 +28,6 @@ import java.util.List;
  */
 public class DayListAdapter extends ArrayAdapter {
 
-    private Context context;
     private int resourceId;
     private LayoutInflater inflater;
     private CalenderList calenderList;
@@ -40,7 +39,6 @@ public class DayListAdapter extends ArrayAdapter {
 
     public DayListAdapter(Context context, int resource, CalenderList calenderList, int currentDay, ArrayList<Integer> sundayList, ArrayList<Integer> saturdayList, List<Calendar> holidayList) {
         super(context, resource);
-        this.context = context;
         this.resourceId = resource;
         this.inflater = LayoutInflater.from(context);
         this.calenderList = calenderList;
@@ -56,55 +54,76 @@ public class DayListAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(int i, final View convertView, ViewGroup viewGroup) {
-        View view;
-        final int i_temp = i + 1;
-        if (convertView == null) {
-            view = this.inflater.inflate(resourceId, null);
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        ViewHolder holder;
+        int i_temp = i + 1;
+        if (view == null) {
+            view = inflater.inflate(R.layout.day_list_item, null);
+            holder = new ViewHolder();
+            holder.dayRelativelayout = (RelativeLayout) view.findViewById(R.id.day_relativelayout);
+            holder.dayImageView = (ImageView) view.findViewById(R.id.day_image);
+            holder.dayStampImageView = (ImageView) view.findViewById(R.id.stamp_day_image);
+            holder.dayTextView = (TextView) view.findViewById(R.id.day_list_day_text);
+            holder.dayTitleMemoTextView = (TextView) view.findViewById(R.id.day_title_memo);
+            holder.dayMemoTextView = (TextView) view.findViewById(R.id.day_memo);
+            view.setTag(holder);
         } else {
-            view = this.inflater.inflate(resourceId, null);
+            holder = (ViewHolder) view.getTag();
         }
 
-        RelativeLayout dayRelativeLayout = (RelativeLayout) view.findViewById(R.id.day_relativelayout);
+        //初期化
+        holder.dayRelativelayout.setBackgroundColor(Color.WHITE);
+        holder.dayImageView.setImageResource(R.drawable.noimage1);
+        holder.dayStampImageView.setImageBitmap(null);
+        holder.dayTextView.setText(i_temp + "");
+        holder.dayTextView.setTextColor(Color.WHITE);
+        holder.dayTitleMemoTextView.setText("");
+        holder.dayMemoTextView.setText("");
+
         if (i_temp == currentDay) {
-            dayRelativeLayout.setBackgroundColor(Color.rgb(255, 240, 245));
+            holder.dayRelativelayout.setBackgroundColor(Color.rgb(255, 240, 245));
         }
-
-        ImageView dayImage = (ImageView) view.findViewById(R.id.day_image);
-        dayImage.setImageResource(R.drawable.noimage1);
         DailyTop dailyTop = dailyTopDAO.getItem(calenderList.year, calenderList.month, i_temp);
         if (dailyTop != null) {
             if (dailyTop.path != null) {
                 File imageFile = new File(dailyTop.path);
                 if (imageFile.exists()) {
-                    Picasso.with(view.getContext()).load(imageFile).into(dayImage);
+                    Picasso.with(view.getContext()).load(imageFile).into(holder.dayImageView);
                 }
+            } else if (dailyTop.stamp != 0) {
+                holder.dayStampImageView.setImageResource(dailyTop.stamp);
+            }
+            if (dailyTop.titleMemo != null) {
+                holder.dayTitleMemoTextView.setText(dailyTop.titleMemo);
             }
         }
-
-        TextView day = (TextView) view.findViewById(R.id.day_list_day_text);
-        day.setText(i_temp + "");
         if (sundayList.indexOf(i_temp) != -1) {
-            day.setTextColor(Color.RED);
+            holder.dayTextView.setTextColor(Color.RED);
         } else if (saturdayList.indexOf(i_temp) != -1) {
-            day.setTextColor(Color.BLUE);
+            holder.dayTextView.setTextColor(Color.BLUE);
         } else {
             for (int j = 0; j < holidayList.size(); j++) {
                 if (holidayList.get(j).get(Calendar.DATE) == i_temp) {
-                    day.setTextColor(Color.RED);
+                    holder.dayTextView.setTextColor(Color.RED);
                     break;
                 }
             }
         }
-
         DailyMemoDAO dailyMemoDAO = DailyMemoDAO.get();
         DailyMemo dailyMemo = dailyMemoDAO.getItem(calenderList.year, calenderList.month, i_temp);
-        TextView memoText = (TextView) view.findViewById(R.id.day_memo);
         if (dailyMemo != null) {
-            memoText.setText(dailyMemo.memo);
-        } else {
-            memoText.setText("");
+            holder.dayMemoTextView.setText(dailyMemo.memo);
         }
+
         return view;
+    }
+
+    private class ViewHolder {
+        private RelativeLayout dayRelativelayout;
+        private ImageView dayImageView;
+        private ImageView dayStampImageView;
+        private TextView dayTextView;
+        private TextView dayTitleMemoTextView;
+        private TextView dayMemoTextView;
     }
 }
