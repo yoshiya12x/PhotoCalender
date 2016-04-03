@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
-import com.example.xjapan.photocalender.ViewHolder;
 import com.example.xjapan.photocalender.db.dao.DailyMemoDAO;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
@@ -58,7 +57,6 @@ public class DayListAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int i, final View convertView, ViewGroup viewGroup) {
-        ViewHolder holder;
         View view;
         final int i_temp = i + 1;
         if (convertView == null) {

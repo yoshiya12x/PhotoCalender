@@ -40,7 +40,6 @@ public class DailyTopDAO {
         dailyTop.month = month;
         dailyTop.day = day;
         dailyTop.stamp = stamp;
-        dailyTop.flag = 0;
         return orma.insertIntoDailyTop(dailyTop);
     }
 
@@ -50,7 +49,6 @@ public class DailyTopDAO {
                 .month(month)
                 .dayEq(day)
                 .stamp(stamp)
-                .flag(0)
                 .execute();
     }
 
@@ -60,7 +58,6 @@ public class DailyTopDAO {
         dailyTop.month = month;
         dailyTop.day = day;
         dailyTop.titleMemo = titleMemo;
-        dailyTop.flag = 1;
         return orma.insertIntoDailyTop(dailyTop);
     }
 
@@ -70,7 +67,6 @@ public class DailyTopDAO {
                 .monthEq(month)
                 .dayEq(day)
                 .titleMemo(titleMemo)
-                .flag(1)
                 .execute();
     }
 

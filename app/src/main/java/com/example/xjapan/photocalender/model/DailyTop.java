@@ -37,10 +37,6 @@ public class DailyTop {
     @Column(indexed = true)
     public String titleMemo;
 
-    @Nullable
-    @Column(indexed = true)
-    public int flag;
-
     public DailyTop() {
     }
 }

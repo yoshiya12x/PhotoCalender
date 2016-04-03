@@ -96,12 +96,8 @@ public class StickyAdapter extends BaseAdapter implements StickyGridHeadersBaseA
                     }
                 } else {
                     holder.gridImageView.setImageResource(R.drawable.noimage1);
-                    //flag 0=スタンプ、1=メモ
-                    if (dailyTop.flag == 0) {
-                        setStamp(dailyTop.stamp, view.getContext(), holder);
-                    } else if (dailyTop.flag == 1) {
-                        setTitleMemo(dailyTop.titleMemo, holder);
-                    }
+                    setStamp(dailyTop.stamp, view.getContext(), holder);
+                    setTitleMemo(dailyTop.titleMemo, holder);
                 }
             } else {
                 holder.gridImageView.setImageResource(R.drawable.noimage1);

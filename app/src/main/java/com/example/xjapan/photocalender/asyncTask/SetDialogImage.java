@@ -56,19 +56,5 @@ public class SetDialogImage extends AsyncTaskLoader<String> {
                 Picasso.with(context).load(imageFile).into(preImageView);
             }
         }
-
-//        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-//        Display display = wm.getDefaultDisplay();
-//        DisplayMetrics displayMetrics = new DisplayMetrics();
-//        display.getMetrics(displayMetrics);
-//        BitmapUtil bitmapUtil = new BitmapUtil();
-//        Bitmap bitmap = bitmapUtil.createBitmap(nextPath, displayMetrics.widthPixels / 2, displayMetrics.widthPixels / 2);
-//        nextImageView.setImageBitmap(bitmap);
-//
-//        File imageFile = new File(preImagePath);
-//        if(imageFile.exists()){
-//            bitmap = bitmapUtil.createBitmap(preImagePath, displayMetrics.widthPixels / 2, displayMetrics.widthPixels / 2);
-//            preImageView.setImageBitmap(bitmap);
-//        }
     }
 }

@@ -8,12 +8,11 @@
     tools:context=".activity.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+        android:id="@+id/listViewCalendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tabs"
-        android:paddingTop="48dip" />
+        android:layout_height="match_parent"
+        android:background="@color/colorSubImage" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/top_stamp"
