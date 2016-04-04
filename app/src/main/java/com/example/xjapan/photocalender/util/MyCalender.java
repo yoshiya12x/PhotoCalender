@@ -1,7 +1,5 @@
 package com.example.xjapan.photocalender.util;
 
-import android.util.Log;
-
 import com.example.xjapan.photocalender.model.CalenderList;
 
 import java.util.ArrayList;
@@ -18,18 +16,8 @@ public class MyCalender {
 
     public MyCalender() {
         calendar = Calendar.getInstance();
-        Log.d("calender_test", Calendar.YEAR + "");
-        Log.d("calender_test", Calendar.MONTH + "");
         currentYear = calendar.get(Calendar.YEAR);
         currentMonth = calendar.get(Calendar.MONTH) + 1;
-    }
-
-    public MyCalender(int year, int month) {
-        calendar = Calendar.getInstance();
-        Log.d("calender_test", year + "");
-        Log.d("calender_test", month + "");
-        currentYear = calendar.get(year);
-        currentMonth = calendar.get(month) + 1;
     }
 
     public CalenderList getCurrentDate() {

@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.adapter.CalenderRecyclerAdapter;
 import com.example.xjapan.photocalender.adapter.StickyAdapter;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
@@ -44,23 +47,36 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         common = (Common) getApplication();
-        setStickyGridHeadersGridView();
+//        setStickyGridHeadersGridView();
+        setRecyclerView();
         setButton();
     }
 
-    private void setStickyGridHeadersGridView() {
+    private void setRecyclerView() {
         MyCalender myCalender = new MyCalender();
         allList = myCalender.getAllList();
         ArrayList<DayList> allDays = setDays(allList);
-        stickyGridHeadersGridView = (StickyGridHeadersGridView) this.findViewById(R.id.listViewCalendar);
-        stickyAdapter = new StickyAdapter(this.getApplicationContext(), allList, allDays);
-        stickyGridHeadersGridView.setAdapter(stickyAdapter);
-        stickyGridHeadersGridView.setNumColumns(7);
-        stickyGridHeadersGridView.setSelection(getCurrentPosition(allList, myCalender.getCurrentDate()));
-        stickyGridHeadersGridView.setOnItemClickListener(createOnItemClickListener(allDays));
-        common.stickyGridHeadersGridView = stickyGridHeadersGridView;
-        common.stickyAdapter = stickyAdapter;
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 7);
+        gridLayoutManager.scrollToPosition(getCurrentPosition(allList, myCalender.getCurrentDate()));
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setAdapter(new CalenderRecyclerAdapter(this.getApplicationContext(), allList, allDays));
+
     }
+
+//    private void setStickyGridHeadersGridView() {
+//        MyCalender myCalender = new MyCalender();
+//        allList = myCalender.getAllList();
+//        ArrayList<DayList> allDays = setDays(allList);
+//        stickyGridHeadersGridView = (StickyGridHeadersGridView) this.findViewById(R.id.listViewCalendar);
+//        stickyAdapter = new StickyAdapter(this.getApplicationContext(), allList, allDays);
+//        stickyGridHeadersGridView.setAdapter(stickyAdapter);
+//        stickyGridHeadersGridView.setNumColumns(7);
+//        stickyGridHeadersGridView.setSelection(getCurrentPosition(allList, myCalender.getCurrentDate()));
+//        stickyGridHeadersGridView.setOnItemClickListener(createOnItemClickListener(allDays));
+//        common.stickyGridHeadersGridView = stickyGridHeadersGridView;
+//        common.stickyAdapter = stickyAdapter;
+//    }
 
     private ArrayList<DayList> setDays(ArrayList<CalenderList> allList) {
         MyCalender myCalender = new MyCalender();
@@ -96,7 +112,26 @@ public class MainActivity extends FragmentActivity {
                 }
                 allDays.add(dayList);
             }
+            int diff = calenderList.startDay + (calenderList.days % 7) - 1;
+            if (diff > 7) {
+                for (int j = 0; j < 7 - diff % 7; j++) {
+                    DayList dayList = new DayList();
+                    dayList.day = "";
+                    dayList.year = calenderList.year;
+                    dayList.month = calenderList.month;
+                    allDays.add(dayList);
+                }
+            } else if (diff > 0 && diff < 7) {
+                for (int j = 0; j < 7 - diff; j++) {
+                    DayList dayList = new DayList();
+                    dayList.day = "";
+                    dayList.year = calenderList.year;
+                    dayList.month = calenderList.month;
+                    allDays.add(dayList);
+                }
+            }
         }
+
         return allDays;
     }
 
@@ -106,10 +141,21 @@ public class MainActivity extends FragmentActivity {
             CalenderList calenderList = allList.get(i);
             if (calenderList.year == currentDate.year && calenderList.month == currentDate.month) {
                 Calendar genzai = Calendar.getInstance();
-                currentPosition = currentPosition + (i + 1) * 7 + currentDate.startDay - 1 + genzai.get(Calendar.DATE);
+                currentPosition = currentPosition + currentDate.startDay - 1 + genzai.get(Calendar.DATE);
                 break;
             } else {
-                currentPosition = currentPosition + calenderList.days + calenderList.startDay - 1;
+                int diff = calenderList.startDay + (calenderList.days % 7) - 1;
+                int spaceCount = 0;
+                if (diff > 7) {
+                    while (spaceCount < 7 - diff % 7) {
+                        spaceCount++;
+                    }
+                } else if (diff > 0 && diff < 7) {
+                    while (spaceCount < 7 - diff) {
+                        spaceCount++;
+                    }
+                }
+                currentPosition = currentPosition + calenderList.days + calenderList.startDay - 1 + spaceCount;
             }
         }
         return currentPosition;
