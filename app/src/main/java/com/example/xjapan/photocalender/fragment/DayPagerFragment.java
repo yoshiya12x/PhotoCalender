@@ -222,8 +222,6 @@ public class DayPagerFragment extends Fragment {
                     if (dailyTop != null) {
                         dailyTopDAO.updatePath("", year, month, day);
                         dayImage.setImageResource(R.drawable.noimage2);
-                        common.stickyAdapter.notifyDataSetChanged();
-                        common.stickyGridHeadersGridView.invalidateViews();
                     }
                 }
             });

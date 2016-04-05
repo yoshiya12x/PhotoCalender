@@ -14,12 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.adapter.CalenderRecyclerAdapter;
-import com.example.xjapan.photocalender.adapter.StickyAdapter;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.listener.RecyclerItemClickListener;
 import com.example.xjapan.photocalender.model.CalenderList;
@@ -28,7 +26,6 @@ import com.example.xjapan.photocalender.model.DayList;
 import com.example.xjapan.photocalender.util.Common;
 import com.example.xjapan.photocalender.util.JapaneseHolidayUtils;
 import com.example.xjapan.photocalender.util.MyCalender;
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,8 +38,7 @@ public class MainActivity extends FragmentActivity {
     private FloatingActionButton stampButton;
     private ArrayList<CalenderList> allList;
     private ArrayList<DayList> allDays;
-    private StickyGridHeadersGridView stickyGridHeadersGridView;
-    private StickyAdapter stickyAdapter;
+    private RecyclerView.Adapter recyclerViewAdapter;
     public ArrayList<Integer> headerCountList = new ArrayList<>();
 
     @Override
@@ -50,7 +46,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         common = (Common) getApplication();
-//        setStickyGridHeadersGridView();
         setRecyclerView();
         setButton();
     }
@@ -60,20 +55,6 @@ public class MainActivity extends FragmentActivity {
         allList = myCalender.getAllList();
         allDays = setDays(allList);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                DayList dayList = allDays.get(position);
-                if (common.isStamp) {
-                    setClickStampCase(dayList);
-                } else if (common.isPencil) {
-                    setClickPencilCase(dayList);
-                } else {
-                    CalenderList postCalenderList = getCalenderListByDayId(position);
-                    startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
-                }
-            }
-        }));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 7);
         gridLayoutManager.scrollToPosition(getCurrentPosition(allList, myCalender.getCurrentDate()));
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -86,23 +67,24 @@ public class MainActivity extends FragmentActivity {
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(new CalenderRecyclerAdapter(this.getApplicationContext(), allDays, headerCountList));
+        recyclerViewAdapter = new CalenderRecyclerAdapter(this.getApplicationContext(), allDays, headerCountList);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                DayList dayList = allDays.get(position);
+                if (common.isStamp) {
+                    setClickStampCase(dayList);
+                    common.position = position;
+                } else if (common.isPencil) {
+                    setClickPencilCase(dayList);
+                } else {
+                    CalenderList postCalenderList = getCalenderListByDayId(position);
+                    startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
+                }
+            }
+        }));
+        recyclerView.setAdapter(recyclerViewAdapter);
     }
-
-//    private void setStickyGridHeadersGridView() {
-//        MyCalender myCalender = new MyCalender();
-//        allList = myCalender.getAllList();
-//        ArrayList<DayList> allDays = setDays(allList);
-//        stickyGridHeadersGridView = (StickyGridHeadersGridView) this.findViewById(R.id.listViewCalendar);
-//        stickyAdapter = new StickyAdapter(this.getApplicationContext(), allList, allDays);
-//        stickyGridHeadersGridView.setAdapter(stickyAdapter);
-//        stickyGridHeadersGridView.setNumColumns(7);
-//        stickyGridHeadersGridView.setSelection(getCurrentPosition(allList, myCalender.getCurrentDate()));
-//        stickyGridHeadersGridView.setOnItemClickListener(createOnItemClickListener(allDays));
-//        common.stickyGridHeadersGridView = stickyGridHeadersGridView;
-//        common.stickyAdapter = stickyAdapter;
-//    }
-
 
     private ArrayList<DayList> setDays(ArrayList<CalenderList> allList) {
         MyCalender myCalender = new MyCalender();
@@ -182,8 +164,6 @@ public class MainActivity extends FragmentActivity {
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);
             if (calenderList.year == currentDate.year && calenderList.month == currentDate.month) {
-//                Calendar genzai = Calendar.getInstance();
-//                currentPosition = currentPosition + currentDate.startDay - 1 + genzai.get(Calendar.DATE);
                 break;
             } else {
                 int diff = calenderList.startDay + (calenderList.days % 7) - 1;
@@ -201,23 +181,6 @@ public class MainActivity extends FragmentActivity {
             }
         }
         return currentPosition;
-    }
-
-    private AdapterView.OnItemClickListener createOnItemClickListener(final ArrayList<DayList> allDays) {
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DayList dayList = allDays.get(i);
-                if (common.isStamp) {
-                    setClickStampCase(dayList);
-                } else if (common.isPencil) {
-                    setClickPencilCase(dayList);
-                } else {
-                    CalenderList postCalenderList = getCalenderListByDayId(i);
-                    view.getContext().startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
-                }
-            }
-        };
     }
 
     private void setClickStampCase(DayList dayList) {
@@ -251,8 +214,6 @@ public class MainActivity extends FragmentActivity {
                 } else {
                     dao.updateTitleMemo(editText.getText().toString(), common.year, common.month, common.day);
                 }
-                stickyAdapter.notifyDataSetChanged();
-                stickyGridHeadersGridView.invalidateViews();
             }
         });
         builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
@@ -372,8 +333,7 @@ public class MainActivity extends FragmentActivity {
         } else {
             dao.updateStamp(updateStamp, common.year, common.month, common.day);
         }
-        common.stickyAdapter.notifyDataSetChanged();
-        common.stickyGridHeadersGridView.invalidateViews();
+        recyclerViewAdapter.notifyItemChanged(common.position);
         common.alertDialog.dismiss();
     }
 }
