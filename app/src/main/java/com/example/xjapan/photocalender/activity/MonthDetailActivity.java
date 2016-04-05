@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.example.xjapan.photocalender.R;
-import com.example.xjapan.photocalender.adapter.DayListAdapter;
+import com.example.xjapan.photocalender.adapter.MonthRecyclerAdapter;
+import com.example.xjapan.photocalender.listener.RecyclerItemClickListener;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DayList;
 import com.example.xjapan.photocalender.util.JapaneseHolidayUtils;
@@ -59,16 +60,28 @@ public class MonthDetailActivity extends AppCompatActivity {
         sundayList = myCalender.getSundayList(calenderList);
         saturdayList = myCalender.getSaturDayList(calenderList);
         holidayList = JapaneseHolidayUtils.getHolidaysOf(calenderList.year, calenderList.month);
+
+        setMonthRecyclerView();
+    }
+
+    public void setMonthRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.monthRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.scrollToPosition(Integer.parseInt(currentDay) - 1);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        RecyclerView.Adapter recyclerViewAdapter = new MonthRecyclerAdapter(getApplicationContext(), calenderList, genzaiDay, sundayList, saturdayList, holidayList);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                startActivity(DayDetailActivity.createIntent(view.getContext(), calenderList, position + 1, genzaiDay));
+            }
+        }));
+        recyclerView.setAdapter(recyclerViewAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ListView dayListView = (ListView) findViewById(R.id.dayListView);
-        DayListAdapter dayListAdapter = new DayListAdapter(MonthDetailActivity.this, R.layout.day_list_item, calenderList, genzaiDay, sundayList, saturdayList, holidayList);
-        dayListView.setAdapter(dayListAdapter);
-        dayListView.setSelection(Integer.parseInt(currentDay) - 1);
-        dayListView.setOnItemClickListener(createOnItemClickListener());
     }
 
     @Override
@@ -86,15 +99,6 @@ public class MonthDetailActivity extends AppCompatActivity {
         }
 
         return result;
-    }
-
-    private AdapterView.OnItemClickListener createOnItemClickListener() {
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                view.getContext().startActivity(DayDetailActivity.createIntent(view.getContext(), calenderList, i + 1, genzaiDay));
-            }
-        };
     }
 
     public static Intent createIntent(Context context, DayList dayList, CalenderList postCalenderList) {
