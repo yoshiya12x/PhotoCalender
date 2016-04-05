@@ -40,6 +40,7 @@ public class MainActivity extends FragmentActivity {
     private ArrayList<DayList> allDays;
     private RecyclerView.Adapter recyclerViewAdapter;
     public ArrayList<Integer> headerCountList = new ArrayList<>();
+    private int clickPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +75,14 @@ public class MainActivity extends FragmentActivity {
                 DayList dayList = allDays.get(position);
                 if (common.isStamp) {
                     setClickStampCase(dayList);
-                    common.position = position;
+                    clickPosition = position;
                 } else if (common.isPencil) {
-                    setClickPencilCase(dayList);
+                    setClickPencilCase(dayList, position);
                 } else {
-                    CalenderList postCalenderList = getCalenderListByDayId(position);
-                    startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
+                    if (!dayList.day.isEmpty()) {
+                        CalenderList postCalenderList = getCalenderListByDayId(position);
+                        startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
+                    }
                 }
             }
         }));
@@ -166,21 +169,26 @@ public class MainActivity extends FragmentActivity {
             if (calenderList.year == currentDate.year && calenderList.month == currentDate.month) {
                 break;
             } else {
-                int diff = calenderList.startDay + (calenderList.days % 7) - 1;
-                int spaceCount = 0;
-                if (diff > 7) {
-                    while (spaceCount < 7 - diff % 7) {
-                        spaceCount++;
-                    }
-                } else if (diff > 0 && diff < 7) {
-                    while (spaceCount < 7 - diff) {
-                        spaceCount++;
-                    }
-                }
+                int spaceCount = getSpaceCount(calenderList);
                 currentPosition = currentPosition + 1 + calenderList.days + calenderList.startDay - 1 + spaceCount;
             }
         }
         return currentPosition;
+    }
+
+    private int getSpaceCount(CalenderList calenderList) {
+        int diff = calenderList.startDay + (calenderList.days % 7) - 1;
+        int spaceCount = 0;
+        if (diff > 7) {
+            while (spaceCount < 7 - diff % 7) {
+                spaceCount++;
+            }
+        } else if (diff > 0 && diff < 7) {
+            while (spaceCount < 7 - diff) {
+                spaceCount++;
+            }
+        }
+        return spaceCount;
     }
 
     private void setClickStampCase(DayList dayList) {
@@ -195,7 +203,7 @@ public class MainActivity extends FragmentActivity {
         common.alertDialog = builder.show();
     }
 
-    private void setClickPencilCase(DayList dayList) {
+    private void setClickPencilCase(DayList dayList, final int position) {
         common.year = dayList.year;
         common.month = dayList.month;
         common.day = Integer.parseInt(dayList.day);
@@ -214,6 +222,7 @@ public class MainActivity extends FragmentActivity {
                 } else {
                     dao.updateTitleMemo(editText.getText().toString(), common.year, common.month, common.day);
                 }
+                recyclerViewAdapter.notifyItemChanged(position);
             }
         });
         builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
@@ -228,7 +237,8 @@ public class MainActivity extends FragmentActivity {
         int count = 0;
         for (int i = 0; i < allList.size(); i++) {
             CalenderList object = allList.get(i);
-            count = count + object.startDay + object.days - 1;
+            int spaceCount = getSpaceCount(object);
+            count = count + 1 + object.startDay + object.days - 1 + spaceCount;
             if (count >= dayId) {
                 calenderList = object;
                 break;
@@ -333,7 +343,7 @@ public class MainActivity extends FragmentActivity {
         } else {
             dao.updateStamp(updateStamp, common.year, common.month, common.day);
         }
-        recyclerViewAdapter.notifyItemChanged(common.position);
+        recyclerViewAdapter.notifyItemChanged(clickPosition);
         common.alertDialog.dismiss();
     }
 }

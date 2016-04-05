@@ -15,7 +15,6 @@ public class Common extends Application {
     public int year;
     public int month;
     public int day;
-    public int position;
     public Uri m_uri;
     public Bitmap bm;
     public boolean isCamera = false;
