@@ -21,6 +21,7 @@ import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.adapter.CalenderRecyclerAdapter;
 import com.example.xjapan.photocalender.adapter.StickyAdapter;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
+import com.example.xjapan.photocalender.listener.RecyclerItemClickListener;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DailyTop;
 import com.example.xjapan.photocalender.model.DayList;
@@ -39,8 +40,10 @@ public class MainActivity extends FragmentActivity {
     private FloatingActionButton pencilButton;
     private FloatingActionButton stampButton;
     private ArrayList<CalenderList> allList;
+    private ArrayList<DayList> allDays;
     private StickyGridHeadersGridView stickyGridHeadersGridView;
     private StickyAdapter stickyAdapter;
+    public ArrayList<Integer> headerCountList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +58,35 @@ public class MainActivity extends FragmentActivity {
     private void setRecyclerView() {
         MyCalender myCalender = new MyCalender();
         allList = myCalender.getAllList();
-        ArrayList<DayList> allDays = setDays(allList);
+        allDays = setDays(allList);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                DayList dayList = allDays.get(position);
+                if (common.isStamp) {
+                    setClickStampCase(dayList);
+                } else if (common.isPencil) {
+                    setClickPencilCase(dayList);
+                } else {
+                    CalenderList postCalenderList = getCalenderListByDayId(position);
+                    startActivity(MonthDetailActivity.createIntent(view.getContext(), dayList, postCalenderList));
+                }
+            }
+        }));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 7);
         gridLayoutManager.scrollToPosition(getCurrentPosition(allList, myCalender.getCurrentDate()));
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (headerCountList.indexOf(position) != -1) {
+                    return 7;
+                }
+                return 1;
+            }
+        });
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(new CalenderRecyclerAdapter(this.getApplicationContext(), allList, allDays));
-
+        recyclerView.setAdapter(new CalenderRecyclerAdapter(this.getApplicationContext(), allDays, headerCountList));
     }
 
 //    private void setStickyGridHeadersGridView() {
@@ -78,21 +103,34 @@ public class MainActivity extends FragmentActivity {
 //        common.stickyAdapter = stickyAdapter;
 //    }
 
+
     private ArrayList<DayList> setDays(ArrayList<CalenderList> allList) {
         MyCalender myCalender = new MyCalender();
-        ArrayList<DayList> allDays = new ArrayList();
+        int headerCount = -1;
+        ArrayList<DayList> allDays = new ArrayList<>();
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);
             ArrayList<Integer> sundayList = myCalender.getSundayList(calenderList);
             ArrayList<Integer> saturdayList = myCalender.getSaturDayList(calenderList);
             List<Calendar> holidayList = JapaneseHolidayUtils.getHolidaysOf(calenderList.year, calenderList.month);
+
+            DayList headerTopDayList = new DayList();
+            headerTopDayList.day = "";
+            headerTopDayList.year = calenderList.year;
+            headerTopDayList.month = calenderList.month;
+            allDays.add(headerTopDayList);
+            headerCount++;
+            headerCountList.add(headerCount);
+
             for (int j = 1; j < calenderList.startDay; j++) {
                 DayList dayList = new DayList();
                 dayList.day = "";
                 dayList.year = calenderList.year;
                 dayList.month = calenderList.month;
                 allDays.add(dayList);
+                headerCount++;
             }
+
             for (int j = 1; j <= calenderList.days; j++) {
                 DayList dayList = new DayList();
                 dayList.day = j + "";
@@ -111,7 +149,9 @@ public class MainActivity extends FragmentActivity {
                     }
                 }
                 allDays.add(dayList);
+                headerCount++;
             }
+
             int diff = calenderList.startDay + (calenderList.days % 7) - 1;
             if (diff > 7) {
                 for (int j = 0; j < 7 - diff % 7; j++) {
@@ -120,6 +160,7 @@ public class MainActivity extends FragmentActivity {
                     dayList.year = calenderList.year;
                     dayList.month = calenderList.month;
                     allDays.add(dayList);
+                    headerCount++;
                 }
             } else if (diff > 0 && diff < 7) {
                 for (int j = 0; j < 7 - diff; j++) {
@@ -128,6 +169,7 @@ public class MainActivity extends FragmentActivity {
                     dayList.year = calenderList.year;
                     dayList.month = calenderList.month;
                     allDays.add(dayList);
+                    headerCount++;
                 }
             }
         }
@@ -140,8 +182,8 @@ public class MainActivity extends FragmentActivity {
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);
             if (calenderList.year == currentDate.year && calenderList.month == currentDate.month) {
-                Calendar genzai = Calendar.getInstance();
-                currentPosition = currentPosition + currentDate.startDay - 1 + genzai.get(Calendar.DATE);
+//                Calendar genzai = Calendar.getInstance();
+//                currentPosition = currentPosition + currentDate.startDay - 1 + genzai.get(Calendar.DATE);
                 break;
             } else {
                 int diff = calenderList.startDay + (calenderList.days % 7) - 1;
@@ -155,7 +197,7 @@ public class MainActivity extends FragmentActivity {
                         spaceCount++;
                     }
                 }
-                currentPosition = currentPosition + calenderList.days + calenderList.startDay - 1 + spaceCount;
+                currentPosition = currentPosition + 1 + calenderList.days + calenderList.startDay - 1 + spaceCount;
             }
         }
         return currentPosition;

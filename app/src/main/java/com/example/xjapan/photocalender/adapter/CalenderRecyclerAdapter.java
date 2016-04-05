@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
-import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DailyTop;
 import com.example.xjapan.photocalender.model.DayList;
 import com.squareup.picasso.Picasso;
@@ -26,72 +25,90 @@ import java.util.Calendar;
 /**
  * Created by xjapan on 16/04/04.
  */
-public class CalenderRecyclerAdapter extends RecyclerView.Adapter<CalenderRecyclerAdapter.ViewHolder> {
+public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
 
     private Context context;
     private LayoutInflater inflater;
-    private ArrayList<CalenderList> allList;
     private ArrayList<DayList> allDays;
+    private ArrayList<Integer> headerCountList;
     private DailyTopDAO dao = DailyTopDAO.get();
+    private static final int HEADER = 0;
+    private static final int ITEM = 1;
 
-    public CalenderRecyclerAdapter(Context context, ArrayList<CalenderList> allList, ArrayList<DayList> allDays) {
+    public CalenderRecyclerAdapter(Context context, ArrayList<DayList> allDays, ArrayList<Integer> headerCountList) {
         super();
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.allList = allList;
         this.allDays = allDays;
+        this.headerCountList = headerCountList;
     }
 
     @Override
-    public CalenderRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.grid_image, parent, false));
+    public int getItemViewType(int position) {
+        if (headerCountList.indexOf(position) != -1) {
+            return HEADER;
+        }
+        return ITEM;
     }
 
     @Override
-    public void onBindViewHolder(CalenderRecyclerAdapter.ViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == HEADER) {
+            return new HeaderDayViewHolder(inflater.inflate(R.layout.header_text, parent, false));
+        }
+        return new ItemViewHolder(inflater.inflate(R.layout.grid_image, parent, false));
+    }
 
-        final DayList dayList = allDays.get(position);
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof HeaderDayViewHolder) {
+            HeaderDayViewHolder headerDayViewHolder = (HeaderDayViewHolder) holder;
+            DayList dayList = allDays.get(position);
+            headerDayViewHolder.headerTextView.setText(dayList.year + "年" + dayList.month + "月");
+        } else if (holder instanceof ItemViewHolder) {
+            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+            final DayList dayList = allDays.get(position);
 
-        //初期化
-        holder.stampImageView.setImageBitmap(null);
-        holder.titleMemoTextView.setText("");
+            //初期化
+            itemViewHolder.stampImageView.setImageBitmap(null);
+            itemViewHolder.titleMemoTextView.setText("");
 
-        //カレンダー上に日付があるかどうかの判定
-        if (dayList.day.isEmpty()) {
-            holder.gridImageView.setImageBitmap(null);
-        } else {
-            holder.gridImageView.setTag(position + "");
-            DailyTop dailyTop = dao.getItem(dayList.year, dayList.month, Integer.parseInt(dayList.day));
-            //端末内に各日付に写真、スタンプ、メモが保存されているか判定
-            if (dailyTop != null) {
-                //写真が保存されているか判定
-                if (dailyTop.path != null) {
-                    File imageFile = new File(dailyTop.path);
-                    if (imageFile.exists()) {
-                        Picasso.with(context).load(imageFile).into(holder.gridImageView);
+            //カレンダー上に日付があるかどうかの判定
+            if (dayList.day.isEmpty()) {
+                itemViewHolder.gridImageView.setImageBitmap(null);
+            } else {
+                DailyTop dailyTop = dao.getItem(dayList.year, dayList.month, Integer.parseInt(dayList.day));
+                //端末内に各日付に写真、スタンプ、メモが保存されているか判定
+                if (dailyTop != null) {
+                    //写真が保存されているか判定
+                    if (dailyTop.path != null) {
+                        File imageFile = new File(dailyTop.path);
+                        if (imageFile.exists()) {
+                            Picasso.with(context).load(imageFile).into(itemViewHolder.gridImageView);
+                        } else {
+                            itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
+                        }
                     } else {
-                        holder.gridImageView.setImageResource(R.drawable.noimage1);
+                        itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
+                        setStamp(dailyTop.stamp, context, itemViewHolder);
+                        setTitleMemo(dailyTop.titleMemo, itemViewHolder);
                     }
                 } else {
-                    holder.gridImageView.setImageResource(R.drawable.noimage1);
-                    setStamp(dailyTop.stamp, context, holder);
-                    setTitleMemo(dailyTop.titleMemo, holder);
+                    itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
                 }
-            } else {
-                holder.gridImageView.setImageResource(R.drawable.noimage1);
             }
-        }
 
-        holder.gridTextView.setText(dayList.day);
-        Calendar genzai = Calendar.getInstance();
-        if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
-            holder.gridTextView.setTextColor(context.getResources().getColor(R.color.colorDarkGray));
-        } else if (dayList.isSunday || dayList.isHoliday) {
-            holder.gridTextView.setTextColor(Color.RED);
-        } else if (dayList.isSaturday) {
-            holder.gridTextView.setTextColor(Color.BLUE);
-        } else {
-            holder.gridTextView.setTextColor(Color.WHITE);
+            itemViewHolder.gridTextView.setText(dayList.day);
+            Calendar genzai = Calendar.getInstance();
+            if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
+                itemViewHolder.gridTextView.setTextColor(context.getResources().getColor(R.color.colorDarkGray));
+            } else if (dayList.isSunday || dayList.isHoliday) {
+                itemViewHolder.gridTextView.setTextColor(Color.RED);
+            } else if (dayList.isSaturday) {
+                itemViewHolder.gridTextView.setTextColor(Color.BLUE);
+            } else {
+                itemViewHolder.gridTextView.setTextColor(Color.WHITE);
+            }
         }
     }
 
@@ -100,7 +117,7 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter<CalenderRecycl
         return allDays.size();
     }
 
-    public void setStamp(int stamp, Context context, ViewHolder holder) {
+    public void setStamp(int stamp, Context context, ItemViewHolder holder) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -113,23 +130,32 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter<CalenderRecycl
         holder.stampImageView.setImageAlpha(100);
     }
 
-    public void setTitleMemo(String titleMemo, ViewHolder holder) {
+    public void setTitleMemo(String titleMemo, ItemViewHolder holder) {
         holder.titleMemoTextView.setVisibility(View.VISIBLE);
         holder.titleMemoTextView.setText(titleMemo);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
         private ImageView gridImageView;
         private TextView gridTextView;
         private ImageView stampImageView;
         private TextView titleMemoTextView;
 
-        public ViewHolder(View view) {
+        public ItemViewHolder(View view) {
             super(view);
             this.gridImageView = (ImageView) view.findViewById(R.id.item_imageview);
             this.gridTextView = (TextView) view.findViewById(R.id.day_text);
             this.stampImageView = (ImageView) view.findViewById(R.id.stamp_imageview);
             this.titleMemoTextView = (TextView) view.findViewById(R.id.title_memo);
+        }
+    }
+
+    public class HeaderDayViewHolder extends RecyclerView.ViewHolder {
+        private TextView headerTextView;
+
+        public HeaderDayViewHolder(View view) {
+            super(view);
+            this.headerTextView = (TextView) view.findViewById(R.id.header_textview);
         }
     }
 }
