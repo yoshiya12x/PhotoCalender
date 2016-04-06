@@ -3,6 +3,8 @@ package com.example.xjapan.photocalender.db.dao;
 import com.example.xjapan.photocalender.model.DailyTop;
 import com.example.xjapan.photocalender.model.OrmaDatabase;
 
+import java.util.List;
+
 /**
  * Created by xjapan on 16/03/28.
  */
@@ -32,6 +34,12 @@ public class DailyTopDAO {
                 .monthEq(month)
                 .dayEq(day)
                 .getOrNull(0);
+    }
+
+    public List<DailyTop> getAll(){
+        assert orma != null;
+        return orma.selectFromDailyTop()
+                .toList();
     }
 
     public long insertStamp(int stamp, int year, int month, int day) {

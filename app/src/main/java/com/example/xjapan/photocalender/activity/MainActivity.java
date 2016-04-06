@@ -41,6 +41,9 @@ public class MainActivity extends FragmentActivity {
     private RecyclerView.Adapter recyclerViewAdapter;
     public ArrayList<Integer> headerCountList = new ArrayList<>();
     private int clickPosition;
+    private DailyTopDAO dao = DailyTopDAO.get();
+    private List<DailyTop> dailyTopAllList;
+    private MyCalender myCalender = new MyCalender();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,20 +52,41 @@ public class MainActivity extends FragmentActivity {
         common = (Common) getApplication();
         setRecyclerView();
         setButton();
+        dailyTopAllList = dao.getAll();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        List<DailyTop> dailyTopAllList_tmp = dao.getAll();
+        for (int i = 0; i < dailyTopAllList_tmp.size(); i++) {
+            DailyTop dailyTop_tmp = dailyTopAllList_tmp.get(i);
+            if (i < dailyTopAllList.size()) {
+                DailyTop dailyTop = dailyTopAllList.get(i);
+                if (dailyTop_tmp.year == dailyTop.year && dailyTop_tmp.month == dailyTop.month && dailyTop_tmp.day == dailyTop.day) {
+                    if (dailyTop.path != null && dailyTop_tmp.path != null) {
+                        if (!dailyTop.path.equals(dailyTop_tmp.path)) {
+                            int position = getCurrentPosition(allList, myCalender.getTargetDate(dailyTop_tmp.year, dailyTop_tmp.month), 1, dailyTop_tmp.day);
+                            recyclerViewAdapter.notifyItemChanged(position);
+                        }
+                    } else if (dailyTop.path == null && dailyTop_tmp.path != null) {
+                        int position = getCurrentPosition(allList, myCalender.getTargetDate(dailyTop_tmp.year, dailyTop_tmp.month), 1, dailyTop_tmp.day);
+                        recyclerViewAdapter.notifyItemChanged(position);
+                    }
+                }
+            } else {
+                int position = getCurrentPosition(allList, myCalender.getTargetDate(dailyTop_tmp.year, dailyTop_tmp.month), 1, dailyTop_tmp.day);
+                recyclerViewAdapter.notifyItemChanged(position);
+            }
+        }
     }
 
     private void setRecyclerView() {
-        MyCalender myCalender = new MyCalender();
         allList = myCalender.getAllList();
         allDays = setDays(allList);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 7);
-        gridLayoutManager.scrollToPosition(getCurrentPosition(allList, myCalender.getCurrentDate()));
+        gridLayoutManager.scrollToPosition(getCurrentPosition(allList, myCalender.getCurrentDate(), 0, 0));
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -73,7 +97,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerViewAdapter = new CalenderRecyclerAdapter(this.getApplicationContext(), allDays, headerCountList);
+        recyclerViewAdapter = new CalenderRecyclerAdapter(this.getApplicationContext(), allDays, headerCountList, dao);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -167,11 +191,14 @@ public class MainActivity extends FragmentActivity {
         return allDays;
     }
 
-    private int getCurrentPosition(ArrayList<CalenderList> allList, CalenderList currentDate) {
+    private int getCurrentPosition(ArrayList<CalenderList> allList, CalenderList currentDate, int flag, int day) {
         int currentPosition = 0;
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);
             if (calenderList.year == currentDate.year && calenderList.month == currentDate.month) {
+                if (flag == 1) {
+                    currentPosition = currentPosition + currentDate.startDay - 1 + day;
+                }
                 break;
             } else {
                 int spaceCount = getSpaceCount(calenderList);

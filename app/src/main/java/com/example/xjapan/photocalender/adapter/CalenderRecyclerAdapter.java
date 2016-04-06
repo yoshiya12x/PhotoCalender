@@ -31,16 +31,17 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
     private LayoutInflater inflater;
     private ArrayList<DayList> allDays;
     private ArrayList<Integer> headerCountList;
-    private DailyTopDAO dao = DailyTopDAO.get();
+    private DailyTopDAO dao;
     private static final int HEADER = 0;
     private static final int ITEM = 1;
 
-    public CalenderRecyclerAdapter(Context context, ArrayList<DayList> allDays, ArrayList<Integer> headerCountList) {
+    public CalenderRecyclerAdapter(Context context, ArrayList<DayList> allDays, ArrayList<Integer> headerCountList, DailyTopDAO dao) {
         super();
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.allDays = allDays;
         this.headerCountList = headerCountList;
+        this.dao = dao;
     }
 
     @Override
