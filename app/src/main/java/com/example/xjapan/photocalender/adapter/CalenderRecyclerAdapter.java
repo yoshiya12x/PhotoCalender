@@ -88,6 +88,8 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
                             Picasso.with(context).load(imageFile).into(itemViewHolder.gridImageView);
                         } else {
                             itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
+                            setStamp(dailyTop.stamp, context, itemViewHolder);
+                            setTitleMemo(dailyTop.titleMemo, itemViewHolder);
                         }
                     } else {
                         itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);

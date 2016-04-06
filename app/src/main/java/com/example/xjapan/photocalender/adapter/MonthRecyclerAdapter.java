@@ -76,6 +76,8 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
                 File imageFile = new File(dailyTop.path);
                 if (imageFile.exists()) {
                     Picasso.with(context).load(imageFile).into(viewHolder.dayImageView);
+                } else {
+                    viewHolder.dayStampImageView.setImageResource(dailyTop.stamp);
                 }
             } else if (dailyTop.stamp != 0) {
                 viewHolder.dayStampImageView.setImageResource(dailyTop.stamp);

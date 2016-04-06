@@ -197,7 +197,7 @@ public class DayPagerFragment extends Fragment {
         public void delImagePath() {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             builder.setTitle(common.year + "年" + common.month + "月" + common.day + "日の画像");
-            builder.setMessage("削除してもよろしいですか");
+            builder.setMessage(R.string.confirm_del);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     DailyTop dailyTop = dailyTopDAO.getItem(year, month, day);
