@@ -51,6 +51,11 @@ public class MainActivity extends FragmentActivity {
         setButton();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private void setRecyclerView() {
         MyCalender myCalender = new MyCalender();
         allList = myCalender.getAllList();

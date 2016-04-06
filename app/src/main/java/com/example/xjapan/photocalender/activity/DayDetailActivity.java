@@ -121,6 +121,7 @@ public class DayDetailActivity extends AppCompatActivity {
                 } else {
                     dao.updatePath(path, common.year, common.month, common.day);
                 }
+                //
                 setViewPager(common.day);
             }
         });

@@ -35,7 +35,6 @@ public class MonthDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month_detail);
-
         Calendar genzai = Calendar.getInstance();
         genzaiDay = 0;
 
@@ -77,6 +76,7 @@ public class MonthDetailActivity extends AppCompatActivity {
             }
         }));
         recyclerView.setAdapter(recyclerViewAdapter);
+
     }
 
     @Override

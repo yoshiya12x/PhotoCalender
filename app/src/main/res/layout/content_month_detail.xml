@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_half_margin"
-    android:paddingRight="@dimen/activity_horizontal_half_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.MonthDetailActivity"
     tools:showIn="@layout/activity_month_detail">
@@ -16,10 +14,4 @@
         android:layout_height="match_parent"
         android:background="@color/colorSubImage" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dayListView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>
