@@ -319,31 +319,31 @@ public class MainActivity extends FragmentActivity {
         int updateStamp;
         switch (view.getId()) {
             case R.id.stamp_image_1:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.airplane;
                 break;
             case R.id.stamp_image_2:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.music;
                 break;
             case R.id.stamp_image_3:
                 updateStamp = R.drawable.heart;
                 break;
             case R.id.stamp_image_4:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.food;
                 break;
             case R.id.stamp_image_5:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.shopping;
                 break;
             case R.id.stamp_image_6:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.cake;
                 break;
             case R.id.stamp_image_7:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.drink;
                 break;
             case R.id.stamp_image_8:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.pen;
                 break;
             case R.id.stamp_image_9:
-                updateStamp = R.drawable.heart;
+                updateStamp = R.drawable.flag;
                 break;
             default:
                 updateStamp = R.drawable.heart;

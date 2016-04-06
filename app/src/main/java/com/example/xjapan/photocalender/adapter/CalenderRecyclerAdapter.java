@@ -130,7 +130,6 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
         params.height = displayMetrics.widthPixels / 14;
         holder.stampImageView.setVisibility(View.VISIBLE);
         holder.stampImageView.setImageResource(stamp);
-        holder.stampImageView.setImageAlpha(100);
     }
 
     public void setTitleMemo(String titleMemo, ItemViewHolder holder) {

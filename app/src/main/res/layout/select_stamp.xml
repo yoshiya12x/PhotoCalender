@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/airplane" />
 
         <ImageView
             android:id="@+id/stamp_image_2"
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/music" />
 
         <ImageView
             android:id="@+id/stamp_image_3"
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/heart" />
 
     </LinearLayout>
 
@@ -64,7 +64,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/heart" />
+            android:src="@drawable/food" />
 
         <ImageView
             android:id="@+id/stamp_image_5"
@@ -74,7 +74,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/shopping" />
 
         <ImageView
             android:id="@+id/stamp_image_6"
@@ -84,7 +84,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/cake" />
 
     </LinearLayout>
 
@@ -101,7 +101,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/drink" />
 
         <ImageView
             android:id="@+id/stamp_image_8"
@@ -111,7 +111,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/pen" />
 
         <ImageView
             android:id="@+id/stamp_image_9"
@@ -121,7 +121,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:onClick="onStampClick"
-            android:src="@drawable/sparrow2" />
+            android:src="@drawable/flag" />
 
     </LinearLayout>
 
