@@ -42,8 +42,9 @@ public class MainActivity extends FragmentActivity {
     public ArrayList<Integer> headerCountList = new ArrayList<>();
     private int clickPosition;
     private DailyTopDAO dao = DailyTopDAO.get();
-    private List<DailyTop> dailyTopAllList;
     private static MyCalender myCalender = new MyCalender();
+    private static final int HEADER_COUNT = 7;
+    private static final int ITEM_COUNT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,6 @@ public class MainActivity extends FragmentActivity {
         common = (Common) getApplication();
         setRecyclerView();
         setButton();
-        dailyTopAllList = dao.getAll();
     }
 
     @Override
@@ -70,9 +70,9 @@ public class MainActivity extends FragmentActivity {
             @Override
             public int getSpanSize(int position) {
                 if (headerCountList.indexOf(position) != -1) {
-                    return 7;
+                    return HEADER_COUNT;
                 }
-                return 1;
+                return ITEM_COUNT;
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);

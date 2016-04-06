@@ -2,10 +2,8 @@ package com.example.xjapan.photocalender.fragment;
 
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,18 +12,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
@@ -36,8 +30,8 @@ import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DailyMemo;
 import com.example.xjapan.photocalender.model.DailyTop;
-import com.example.xjapan.photocalender.util.BitmapUtil;
 import com.example.xjapan.photocalender.util.Common;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -54,7 +48,6 @@ public class DayPagerFragment extends Fragment {
     private int month;
     private int day;
     private Button memoConfirmText;
-    private RelativeLayout imageRelativeLayout;
     private ImageView dayImage;
     public Common common;
     private DailyTopDAO dailyTopDAO = DailyTopDAO.get();
@@ -66,7 +59,6 @@ public class DayPagerFragment extends Fragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.date, null);
         common = (Common) getActivity().getApplication();
         dayImage = (ImageView) view.findViewById(R.id.day_detail_image);
-        imageRelativeLayout = (RelativeLayout) view.findViewById(R.id.imageRelativeLayout);
 
         year = getArguments().getInt("year");
         month = getArguments().getInt("month");
@@ -131,41 +123,27 @@ public class DayPagerFragment extends Fragment {
                 newFragment.show(getFragmentManager(), "contact_us");
             }
         });
+
+        setImage();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        setImage();
         memoConfirmText.setVisibility(View.GONE);
     }
 
-    public void setImage() {
-        //ここではRalativeLayoutに縦幅横幅を設定するため，Picassoを使わない．
+    private void setImage() {
         DailyTop dailyTop = dailyTopDAO.getItem(year, month, day);
         if (dailyTop != null) {
             if (dailyTop.path != null) {
                 File imageFile = new File(dailyTop.path);
                 if (imageFile.exists()) {
-                    WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-                    Display display = wm.getDefaultDisplay();
-                    DisplayMetrics displayMetrics = new DisplayMetrics();
-                    display.getMetrics(displayMetrics);
-                    BitmapUtil bitmapUtil = new BitmapUtil();
-                    Bitmap bitmap = bitmapUtil.createBitmap(dailyTop.path, displayMetrics.widthPixels * 3 / 5, displayMetrics.widthPixels * 3 / 5);
-                    dayImage.setImageBitmap(bitmap);
-                    RelativeLayout.LayoutParams params = createRelativeLayoutParam(bitmap.getWidth(), bitmap.getHeight());
-                    params.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 1);
-                    imageRelativeLayout.setLayoutParams(params);
+                    Picasso.with(getContext()).load(imageFile).into(dayImage);
                 }
             }
         }
-    }
-
-    private RelativeLayout.LayoutParams createRelativeLayoutParam(int w, int h) {
-        return new RelativeLayout.LayoutParams(w, h);
     }
 
     private void animateAlpha1(Button target) {
@@ -226,6 +204,7 @@ public class DayPagerFragment extends Fragment {
                     if (dailyTop != null) {
                         dailyTopDAO.updatePath("", year, month, day);
                         dayImage.setImageResource(R.drawable.noimage2);
+                        setImage();
                         MainActivity.reloadView(year, month, day);
                         MonthDetailActivity.reloadView(day);
                     }

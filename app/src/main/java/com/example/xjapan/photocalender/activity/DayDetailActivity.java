@@ -20,11 +20,13 @@ import android.widget.ImageView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.adapter.DayPagerAdapter;
-import com.example.xjapan.photocalender.asyncTask.SetDialogImage;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DailyTop;
 import com.example.xjapan.photocalender.util.Common;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 public class DayDetailActivity extends AppCompatActivity {
 
@@ -32,6 +34,7 @@ public class DayDetailActivity extends AppCompatActivity {
     private CalenderList calenderList;
     private int currentDay;
     private DailyTopDAO dao = DailyTopDAO.get();
+    private PagerSlidingTabStrip tabStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +62,9 @@ public class DayDetailActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.day_pager);
         viewPager.setAdapter(new DayPagerAdapter(getSupportFragmentManager(), calenderList, currentDay));
         viewPager.setCurrentItem(selectedDay - 1);
-        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.day_tabs);
+        tabStrip = (PagerSlidingTabStrip) findViewById(R.id.day_tabs);
         tabStrip.setViewPager(viewPager);
+        tabStrip.notifyDataSetChanged();
     }
 
     @Override
@@ -108,8 +112,7 @@ public class DayDetailActivity extends AppCompatActivity {
         View layout = inflater.inflate(R.layout.image_change_confirm, (ViewGroup) findViewById(R.id.alertdialog_layout));
         ImageView takeImageView = (ImageView) layout.findViewById(R.id.take_image);
         ImageView preImageView = (ImageView) layout.findViewById(R.id.pre_image);
-        SetDialogImage setDialogImage = new SetDialogImage(this, takeImageView, preImageView, path, common.year, common.month, common.day);
-        setDialogImage.forceLoad();
+        setImage(takeImageView, preImageView, path, common.year, common.month, common.day);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(common.year + "年" + common.month + "月" + common.day + "日の画像");
         builder.setView(layout);
@@ -122,6 +125,7 @@ public class DayDetailActivity extends AppCompatActivity {
                     dao.updatePath(path, common.year, common.month, common.day);
                 }
                 setViewPager(common.day);
+                tabStrip.notifyDataSetChanged();
                 MainActivity.reloadView(common.year, common.month, common.day);
                 MonthDetailActivity.reloadView(common.day);
             }
@@ -131,6 +135,20 @@ public class DayDetailActivity extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    private void setImage(ImageView nextImageView, ImageView preImageView, String nextPath, int year, int month, int day) {
+        DailyTop dailyTop = dao.getItem(year, month, day);
+        File nextImageFile = new File(nextPath);
+        Picasso.with(getApplicationContext()).load(nextImageFile).into(nextImageView);
+        if (dailyTop != null) {
+            if (dailyTop.path != null) {
+                File preImageFile = new File(dailyTop.path);
+                if (preImageFile.exists()) {
+                    Picasso.with(getApplicationContext()).load(preImageFile).into(preImageView);
+                }
+            }
+        }
     }
 
     public static Intent createIntent(Context context, CalenderList calenderList, int selectedDay, int currentDay) {
