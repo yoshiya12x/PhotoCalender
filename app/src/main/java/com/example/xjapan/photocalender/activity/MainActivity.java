@@ -36,14 +36,14 @@ public class MainActivity extends FragmentActivity {
     private Common common;
     private FloatingActionButton pencilButton;
     private FloatingActionButton stampButton;
-    private ArrayList<CalenderList> allList;
+    private static ArrayList<CalenderList> allList;
     private ArrayList<DayList> allDays;
-    private RecyclerView.Adapter recyclerViewAdapter;
+    private static RecyclerView.Adapter recyclerViewAdapter;
     public ArrayList<Integer> headerCountList = new ArrayList<>();
     private int clickPosition;
     private DailyTopDAO dao = DailyTopDAO.get();
     private List<DailyTop> dailyTopAllList;
-    private MyCalender myCalender = new MyCalender();
+    private static MyCalender myCalender = new MyCalender();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,27 +58,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
-        List<DailyTop> dailyTopAllList_tmp = dao.getAll();
-        for (int i = 0; i < dailyTopAllList_tmp.size(); i++) {
-            DailyTop dailyTop_tmp = dailyTopAllList_tmp.get(i);
-            if (i < dailyTopAllList.size()) {
-                DailyTop dailyTop = dailyTopAllList.get(i);
-                if (dailyTop_tmp.year == dailyTop.year && dailyTop_tmp.month == dailyTop.month && dailyTop_tmp.day == dailyTop.day) {
-                    if (dailyTop.path != null && dailyTop_tmp.path != null) {
-                        if (!dailyTop.path.equals(dailyTop_tmp.path)) {
-                            int position = getCurrentPosition(allList, myCalender.getTargetDate(dailyTop_tmp.year, dailyTop_tmp.month), 1, dailyTop_tmp.day);
-                            recyclerViewAdapter.notifyItemChanged(position);
-                        }
-                    } else if (dailyTop.path == null && dailyTop_tmp.path != null) {
-                        int position = getCurrentPosition(allList, myCalender.getTargetDate(dailyTop_tmp.year, dailyTop_tmp.month), 1, dailyTop_tmp.day);
-                        recyclerViewAdapter.notifyItemChanged(position);
-                    }
-                }
-            } else {
-                int position = getCurrentPosition(allList, myCalender.getTargetDate(dailyTop_tmp.year, dailyTop_tmp.month), 1, dailyTop_tmp.day);
-                recyclerViewAdapter.notifyItemChanged(position);
-            }
-        }
     }
 
     private void setRecyclerView() {
@@ -191,7 +170,7 @@ public class MainActivity extends FragmentActivity {
         return allDays;
     }
 
-    private int getCurrentPosition(ArrayList<CalenderList> allList, CalenderList currentDate, int flag, int day) {
+    private static int getCurrentPosition(ArrayList<CalenderList> allList, CalenderList currentDate, int flag, int day) {
         int currentPosition = 0;
         for (int i = 0; i < allList.size(); i++) {
             CalenderList calenderList = allList.get(i);
@@ -208,7 +187,7 @@ public class MainActivity extends FragmentActivity {
         return currentPosition;
     }
 
-    private int getSpaceCount(CalenderList calenderList) {
+    private static int getSpaceCount(CalenderList calenderList) {
         int diff = calenderList.startDay + (calenderList.days % 7) - 1;
         int spaceCount = 0;
         if (diff > 7) {
@@ -377,5 +356,10 @@ public class MainActivity extends FragmentActivity {
         }
         recyclerViewAdapter.notifyItemChanged(clickPosition);
         common.alertDialog.dismiss();
+    }
+
+    public static void reloadView(int year, int month, int day) {
+        int position = getCurrentPosition(allList, myCalender.getTargetDate(year, month), 1, day);
+        recyclerViewAdapter.notifyItemChanged(position);
     }
 }

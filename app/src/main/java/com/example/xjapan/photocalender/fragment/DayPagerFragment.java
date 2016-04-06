@@ -29,6 +29,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.activity.MainActivity;
+import com.example.xjapan.photocalender.activity.MonthDetailActivity;
 import com.example.xjapan.photocalender.db.dao.DailyMemoDAO;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
@@ -86,8 +88,10 @@ public class DayPagerFragment extends Fragment {
             public void onClick(View view) {
                 if (dailyMemo == null) {
                     dailyMemoDAO.insertMemo(editText.getText().toString(), year, month, day);
+                    MonthDetailActivity.reloadView(day);
                 } else {
                     dailyMemoDAO.updateMemo(editText.getText().toString(), year, month, day);
+                    MonthDetailActivity.reloadView(day);
                 }
                 memoConfirmText.setVisibility(View.VISIBLE);
                 animateAlpha1(memoConfirmText);
@@ -222,6 +226,8 @@ public class DayPagerFragment extends Fragment {
                     if (dailyTop != null) {
                         dailyTopDAO.updatePath("", year, month, day);
                         dayImage.setImageResource(R.drawable.noimage2);
+                        MainActivity.reloadView(year, month, day);
+                        MonthDetailActivity.reloadView(day);
                     }
                 }
             });

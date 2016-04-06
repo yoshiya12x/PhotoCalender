@@ -30,6 +30,7 @@ public class MonthDetailActivity extends AppCompatActivity {
     private ArrayList<Integer> saturdayList;
     private List<Calendar> holidayList;
     private String currentDay;
+    private static RecyclerView.Adapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class MonthDetailActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.scrollToPosition(Integer.parseInt(currentDay) - 1);
         recyclerView.setLayoutManager(linearLayoutManager);
-        RecyclerView.Adapter recyclerViewAdapter = new MonthRecyclerAdapter(getApplicationContext(), calenderList, genzaiDay, sundayList, saturdayList, holidayList);
+        recyclerViewAdapter = new MonthRecyclerAdapter(getApplicationContext(), calenderList, genzaiDay, sundayList, saturdayList, holidayList);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -76,7 +77,6 @@ public class MonthDetailActivity extends AppCompatActivity {
             }
         }));
         recyclerView.setAdapter(recyclerViewAdapter);
-
     }
 
     @Override
@@ -109,6 +109,10 @@ public class MonthDetailActivity extends AppCompatActivity {
         intent.putExtra("calenderListDays", postCalenderList.days);
         intent.putExtra("calenderListStartDay", postCalenderList.startDay);
         return intent;
+    }
+
+    public static void reloadView(int day) {
+        recyclerViewAdapter.notifyItemChanged(day - 1);
     }
 
 }
