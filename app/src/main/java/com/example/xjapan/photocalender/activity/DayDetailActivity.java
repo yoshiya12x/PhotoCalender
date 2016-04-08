@@ -34,7 +34,7 @@ public class DayDetailActivity extends AppCompatActivity {
     private CalenderList calenderList;
     private int currentDay;
     private DailyTopDAO dao = DailyTopDAO.get();
-    private PagerSlidingTabStrip tabStrip;
+    private static PagerSlidingTabStrip tabStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,4 +162,7 @@ public class DayDetailActivity extends AppCompatActivity {
         return intent;
     }
 
+    public static void reloadView(){
+        tabStrip.notifyDataSetChanged();
+    }
 }

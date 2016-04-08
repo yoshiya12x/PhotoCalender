@@ -119,6 +119,7 @@ public class DayPagerFragment extends Fragment {
                 common.year = year;
                 common.month = month;
                 common.day = day;
+                common.dayImage = dayImage;
                 DialogFragment newFragment = new ContactUsDialogFragment();
                 newFragment.show(getFragmentManager(), "contact_us");
             }
@@ -152,8 +153,9 @@ public class DayPagerFragment extends Fragment {
         objectAnimator.start();
     }
 
-    public class ContactUsDialogFragment extends DialogFragment {
+    public static class ContactUsDialogFragment extends DialogFragment {
 
+        private DailyTopDAO dailyTopDAO = DailyTopDAO.get();
         private Uri fileUri;
         private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
         private static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 10;
@@ -200,13 +202,12 @@ public class DayPagerFragment extends Fragment {
             builder.setMessage(R.string.confirm_del);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    DailyTop dailyTop = dailyTopDAO.getItem(year, month, day);
+                    DailyTop dailyTop = dailyTopDAO.getItem(common.year, common.month, common.day);
                     if (dailyTop != null) {
-                        dailyTopDAO.updatePath("", year, month, day);
-                        dayImage.setImageResource(R.drawable.noimage2);
-                        setImage();
-                        MainActivity.reloadView(year, month, day);
-                        MonthDetailActivity.reloadView(day);
+                        dailyTopDAO.updatePath("", common.year, common.month, common.day);
+                        common.dayImage.setImageResource(R.drawable.noimage2);
+                        MainActivity.reloadView(common.year, common.month, common.day);
+                        MonthDetailActivity.reloadView(common.day);
                     }
                 }
             });

@@ -6,7 +6,7 @@ android {
     buildToolsVersion "22.0.0"
 
     defaultConfig {
-        applicationId "com.example.xjapan.photocalender"
+        applicationId "yoppie.photocalender"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1

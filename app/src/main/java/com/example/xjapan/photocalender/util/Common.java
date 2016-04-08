@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import com.example.xjapan.photocalender.db.dao.DAOInjector;
 
@@ -22,6 +23,7 @@ public class Common extends Application {
     public boolean isStamp = false;
     public boolean isPencil = false;
     public AlertDialog alertDialog;
+    public ImageView dayImage;
 
     @Override
     public void onCreate() {
