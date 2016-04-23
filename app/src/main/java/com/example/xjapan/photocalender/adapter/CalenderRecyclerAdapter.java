@@ -22,6 +22,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by xjapan on 16/04/04.
  */
@@ -138,26 +141,28 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        private ImageView gridImageView;
-        private TextView gridTextView;
-        private ImageView stampImageView;
-        private TextView titleMemoTextView;
+        @Bind(R.id.item_imageview)
+        ImageView gridImageView;
+        @Bind(R.id.day_text)
+        TextView gridTextView;
+        @Bind(R.id.stamp_imageview)
+        ImageView stampImageView;
+        @Bind(R.id.title_memo)
+        TextView titleMemoTextView;
 
         public ItemViewHolder(View view) {
             super(view);
-            this.gridImageView = (ImageView) view.findViewById(R.id.item_imageview);
-            this.gridTextView = (TextView) view.findViewById(R.id.day_text);
-            this.stampImageView = (ImageView) view.findViewById(R.id.stamp_imageview);
-            this.titleMemoTextView = (TextView) view.findViewById(R.id.title_memo);
+            ButterKnife.bind(this, view);
         }
     }
 
     public class HeaderDayViewHolder extends RecyclerView.ViewHolder {
-        private TextView headerTextView;
+        @Bind(R.id.header_textview)
+        TextView headerTextView;
 
         public HeaderDayViewHolder(View view) {
             super(view);
-            this.headerTextView = (TextView) view.findViewById(R.id.header_textview);
+            ButterKnife.bind(this, view);
         }
     }
 }

@@ -63,6 +63,7 @@ public class MainActivity extends FragmentActivity {
     private void setRecyclerView() {
         allList = myCalender.getAllList();
         allDays = setDays(allList);
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 7);
         gridLayoutManager.scrollToPosition(getCurrentPosition(allList, myCalender.getCurrentDate(), 0, 0));
