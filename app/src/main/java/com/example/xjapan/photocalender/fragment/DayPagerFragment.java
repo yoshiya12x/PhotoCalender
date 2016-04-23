@@ -37,18 +37,24 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.Bind;
+
 /**
  * Created by xjapan on 16/01/08.
  */
 public class DayPagerFragment extends Fragment {
 
-    private EditText editText;
-    private Button memoButton;
+    @Bind(R.id.day_detail_image)
+    ImageView dayImage;
+    @Bind(R.id.memoConfirm)
+    EditText editText;
+    @Bind(R.id.memoButton)
+    Button memoButton;
+    @Bind(R.id.memoConfirm)
+    Button memoConfirmText;
     private int year;
     private int month;
     private int day;
-    private Button memoConfirmText;
-    private ImageView dayImage;
     public Common common;
     private DailyTopDAO dailyTopDAO = DailyTopDAO.get();
     private DailyMemoDAO dailyMemoDAO = DailyMemoDAO.get();
@@ -58,23 +64,18 @@ public class DayPagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.date, null);
         common = (Common) getActivity().getApplication();
-        dayImage = (ImageView) view.findViewById(R.id.day_detail_image);
 
         year = getArguments().getInt("year");
         month = getArguments().getInt("month");
         day = getArguments().getInt("day");
-
         dailyMemo = dailyMemoDAO.getItem(year, month, day);
         String memo = "";
-        memoConfirmText = (Button) view.findViewById(R.id.memoConfirm);
-        editText = (EditText) view.findViewById(R.id.dateEditText);
         if (dailyMemo != null) {
             editText.setText(dailyMemo.memo, TextView.BufferType.NORMAL);
             memo = dailyMemo.memo;
         } else {
             editText.setText("", TextView.BufferType.NORMAL);
         }
-        memoButton = (Button) view.findViewById(R.id.memoButton);
         memoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

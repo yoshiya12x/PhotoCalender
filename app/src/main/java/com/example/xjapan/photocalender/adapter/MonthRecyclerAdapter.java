@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by xjapan on 16/04/06.
  */
@@ -111,21 +114,22 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        private RelativeLayout dayRelativelayout;
-        private ImageView dayImageView;
-        private ImageView dayStampImageView;
-        private TextView dayTextView;
-        private TextView dayTitleMemoTextView;
-        private TextView dayMemoTextView;
+        @Bind(R.id.day_relativelayout)
+        RelativeLayout dayRelativelayout;
+        @Bind(R.id.day_image)
+        ImageView dayImageView;
+        @Bind(R.id.stamp_day_image)
+        ImageView dayStampImageView;
+        @Bind(R.id.day_list_day_text)
+        TextView dayTextView;
+        @Bind(R.id.day_title_memo)
+        TextView dayTitleMemoTextView;
+        @Bind(R.id.day_memo)
+        TextView dayMemoTextView;
 
         public ItemViewHolder(View view) {
             super(view);
-            this.dayRelativelayout = (RelativeLayout) view.findViewById(R.id.day_relativelayout);
-            this.dayImageView = (ImageView) view.findViewById(R.id.day_image);
-            this.dayStampImageView = (ImageView) view.findViewById(R.id.stamp_day_image);
-            this.dayTextView = (TextView) view.findViewById(R.id.day_list_day_text);
-            this.dayTitleMemoTextView = (TextView) view.findViewById(R.id.day_title_memo);
-            this.dayMemoTextView = (TextView) view.findViewById(R.id.day_memo);
+            ButterKnife.bind(this, view);
         }
     }
 }
