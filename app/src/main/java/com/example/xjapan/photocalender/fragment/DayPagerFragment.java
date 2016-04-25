@@ -13,7 +13,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,17 +102,17 @@ public class DayPagerFragment extends Fragment {
             memoButton.setTextColor(getResources().getColor(R.color.colorAccent));
         }
 
-        editText.setOnKeyListener(new View.OnKeyListener() {
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (i == KeyEvent.KEYCODE_ENTER) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
                     memoButton.setEnabled(true);
                     memoButton.setBackground(getResources().getDrawable(R.drawable.memo_send_button_true));
                     memoButton.setTextColor(getResources().getColor(R.color.colorAccent));
                 }
-                return false;
             }
         });
+
 
         Button changeImageButton = (Button) view.findViewById(R.id.changeImageButton);
         changeImageButton.setOnClickListener(new View.OnClickListener() {
