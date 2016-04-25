@@ -7,24 +7,21 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.example.xjapan.photocalender.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
+import uk.co.senab.photoview.PhotoView;
 
 /**
  * Created by xjapan on 2016/04/25.
  */
 public class ImageDialogFragment extends DialogFragment {
 
-    @Bind(R.id.dialog_image)
-    ImageView dayImage;
-    File imageFile;
+    private File imageFile;
 
     public ImageDialogFragment(File imageFile) {
         this.imageFile = imageFile;
@@ -43,8 +40,8 @@ public class ImageDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater i, ViewGroup c, Bundle b) {
         View view = i.inflate(R.layout.image_dialog_fragment, (ViewGroup) getActivity().findViewById(R.id.dialog_image_layout));
-        ImageView test = (ImageView) view.findViewById(R.id.dialog_image);
-        Picasso.with(getContext()).load(imageFile).into(test);
+        PhotoView dayImage = (PhotoView) view.findViewById(R.id.dialog_image);
+        Picasso.with(getContext()).load(imageFile).into(dayImage);
         return view;
     }
 }
