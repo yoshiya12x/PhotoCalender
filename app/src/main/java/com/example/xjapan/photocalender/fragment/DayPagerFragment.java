@@ -26,6 +26,7 @@ import com.example.xjapan.photocalender.activity.MainActivity;
 import com.example.xjapan.photocalender.activity.MonthDetailActivity;
 import com.example.xjapan.photocalender.db.dao.DailyMemoDAO;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
+import com.example.xjapan.photocalender.dialog.ImageDialogFragment;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DailyMemo;
 import com.example.xjapan.photocalender.model.DailyTop;
@@ -141,12 +142,22 @@ public class DayPagerFragment extends Fragment {
         DailyTop dailyTop = dailyTopDAO.getItem(year, month, day);
         if (dailyTop != null) {
             if (dailyTop.path != null) {
-                File imageFile = new File(dailyTop.path);
+                final File imageFile = new File(dailyTop.path);
                 if (imageFile.exists()) {
                     Picasso.with(getContext()).load(imageFile).into(dayImage);
+                    dayImage.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            setImageDialog(imageFile);
+                        }
+                    });
                 }
             }
         }
+    }
+
+    private void setImageDialog(File imageFile) {
+        ImageDialogFragment imageDialogFragment = new ImageDialogFragment(imageFile);
+        imageDialogFragment.show(getActivity().getSupportFragmentManager(), ImageDialogFragment.class.getSimpleName());
     }
 
     private void animateAlpha1(Button target) {
