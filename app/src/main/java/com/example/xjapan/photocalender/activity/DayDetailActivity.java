@@ -162,7 +162,7 @@ public class DayDetailActivity extends AppCompatActivity {
         return intent;
     }
 
-    public static void reloadView(){
+    public static void reloadView() {
         tabStrip.notifyDataSetChanged();
     }
 }

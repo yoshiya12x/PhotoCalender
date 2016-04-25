@@ -22,9 +22,15 @@ import uk.co.senab.photoview.PhotoView;
 public class ImageDialogFragment extends DialogFragment {
 
     private File imageFile;
+    private int year;
+    private int month;
+    private int day;
 
-    public ImageDialogFragment(File imageFile) {
+    public ImageDialogFragment(File imageFile, int year, int month, int day) {
         this.imageFile = imageFile;
+        this.year = year;
+        this.month = month;
+        this.day = day;
     }
 
     @NonNull
@@ -33,6 +39,7 @@ public class ImageDialogFragment extends DialogFragment {
         ButterKnife.bind(getActivity());
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.image_dialog_fragment);
+        dialog.setTitle(Integer.toString(year) + "年" + Integer.toString(month) + "月" + Integer.toString(day) + "日");
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return dialog;
     }

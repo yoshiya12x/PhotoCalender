@@ -67,6 +67,7 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
         viewHolder.dayStampImageView.setImageBitmap(null);
         viewHolder.dayTextView.setText(position_tmp + "");
         viewHolder.dayTextView.setTextColor(Color.WHITE);
+        viewHolder.dayTextView.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
         viewHolder.dayTitleMemoTextView.setText("");
         viewHolder.dayMemoTextView.setText("");
 
