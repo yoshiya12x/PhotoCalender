@@ -71,7 +71,8 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
         viewHolder.dayMemoTextView.setText("");
 
         if (position_tmp == currentDay) {
-            viewHolder.dayRelativelayout.setBackgroundColor(Color.rgb(255, 240, 245));
+            viewHolder.dayTextView.setTextColor(Color.BLACK);
+            viewHolder.dayTextView.setBackgroundColor(context.getResources().getColor(R.color.colorHalfWhite));
         }
         DailyTop dailyTop = dailyTopDAO.getItem(calenderList.year, calenderList.month, position_tmp);
         if (dailyTop != null) {

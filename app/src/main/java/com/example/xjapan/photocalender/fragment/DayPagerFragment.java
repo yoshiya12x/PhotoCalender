@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.activity.MainActivity;
@@ -38,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by xjapan on 16/01/08.
@@ -46,12 +46,13 @@ public class DayPagerFragment extends Fragment {
 
     @Bind(R.id.day_detail_image)
     ImageView dayImage;
-    @Bind(R.id.memoConfirm)
+    @Bind(R.id.dateEditText)
     EditText editText;
     @Bind(R.id.memoButton)
     Button memoButton;
     @Bind(R.id.memoConfirm)
     Button memoConfirmText;
+
     private int year;
     private int month;
     private int day;
@@ -63,18 +64,18 @@ public class DayPagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.date, null);
+        ButterKnife.bind(this, view);
         common = (Common) getActivity().getApplication();
-
         year = getArguments().getInt("year");
         month = getArguments().getInt("month");
         day = getArguments().getInt("day");
         dailyMemo = dailyMemoDAO.getItem(year, month, day);
         String memo = "";
         if (dailyMemo != null) {
-            editText.setText(dailyMemo.memo, TextView.BufferType.NORMAL);
+            editText.setText(dailyMemo.memo);
             memo = dailyMemo.memo;
         } else {
-            editText.setText("", TextView.BufferType.NORMAL);
+            editText.setText("");
         }
         memoButton.setOnClickListener(new View.OnClickListener() {
             @Override

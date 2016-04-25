@@ -107,7 +107,8 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
             itemViewHolder.gridTextView.setText(dayList.day);
             Calendar genzai = Calendar.getInstance();
             if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
-                itemViewHolder.gridTextView.setTextColor(context.getResources().getColor(R.color.colorDarkGray));
+                itemViewHolder.gridTextView.setTextColor(Color.BLACK);
+                itemViewHolder.gridTextView.setBackgroundColor(context.getResources().getColor(R.color.colorHalfWhite));
             } else if (dayList.isSunday || dayList.isHoliday) {
                 itemViewHolder.gridTextView.setTextColor(Color.RED);
             } else if (dayList.isSaturday) {
