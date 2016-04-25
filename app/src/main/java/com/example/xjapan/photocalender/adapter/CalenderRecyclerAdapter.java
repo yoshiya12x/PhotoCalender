@@ -76,6 +76,7 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
             //初期化
             itemViewHolder.stampImageView.setImageBitmap(null);
             itemViewHolder.titleMemoTextView.setText("");
+            itemViewHolder.gridTextView.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
 
             //カレンダー上に日付があるかどうかの判定
             if (dayList.day.isEmpty()) {
