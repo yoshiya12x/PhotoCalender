@@ -1,20 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/top_day_relativelayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="2dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    android:background="@color/colorAccent">
 
     <ImageView
         android:id="@+id/item_imageview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true" />
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/day_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:padding="2dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="2dp"
         android:textColor="@android:color/white"
         android:textSize="12dp"
         android:textStyle="bold" />
@@ -33,6 +35,7 @@
         android:layout_below="@id/day_text"
         android:layout_centerInParent="true"
         android:layout_marginLeft="2dp"
+        android:layout_marginTop="6dp"
         android:textColor="@android:color/black"
         android:textSize="10dp"
         android:visibility="gone" />

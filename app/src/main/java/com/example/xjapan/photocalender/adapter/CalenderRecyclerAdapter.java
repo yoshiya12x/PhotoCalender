@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
@@ -91,17 +92,20 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
                         if (imageFile.exists()) {
                             Picasso.with(context).load(imageFile).into(itemViewHolder.gridImageView);
                         } else {
-                            itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
+                            itemViewHolder.gridImageView.setImageBitmap(null);
+                            //itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
                             setStamp(dailyTop.stamp, context, itemViewHolder);
                             setTitleMemo(dailyTop.titleMemo, itemViewHolder);
                         }
                     } else {
-                        itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
+                        itemViewHolder.gridImageView.setImageBitmap(null);
+                        //itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
                         setStamp(dailyTop.stamp, context, itemViewHolder);
                         setTitleMemo(dailyTop.titleMemo, itemViewHolder);
                     }
                 } else {
-                    itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
+                    itemViewHolder.gridImageView.setImageBitmap(null);
+                    //itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
                 }
             }
 
@@ -143,6 +147,8 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.top_day_relativelayout)
+        RelativeLayout topDayRelativeLayout;
         @Bind(R.id.item_imageview)
         ImageView gridImageView;
         @Bind(R.id.day_text)
