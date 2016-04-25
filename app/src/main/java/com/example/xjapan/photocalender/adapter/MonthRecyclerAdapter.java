@@ -63,7 +63,7 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
 
         //初期化
         viewHolder.dayRelativelayout.setBackgroundColor(Color.WHITE);
-        viewHolder.dayImageView.setImageResource(R.drawable.noimage1);
+        viewHolder.dayImageView.setImageBitmap(null);
         viewHolder.dayStampImageView.setImageBitmap(null);
         viewHolder.dayTextView.setText(position_tmp + "");
         viewHolder.dayTextView.setTextColor(Color.WHITE);

@@ -78,10 +78,12 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
             itemViewHolder.stampImageView.setImageBitmap(null);
             itemViewHolder.titleMemoTextView.setText("");
             itemViewHolder.gridTextView.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
+            itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorSalmon));
 
             //カレンダー上に日付があるかどうかの判定
             if (dayList.day.isEmpty()) {
                 itemViewHolder.gridImageView.setImageBitmap(null);
+                itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
             } else {
                 DailyTop dailyTop = dao.getItem(dayList.year, dayList.month, Integer.parseInt(dayList.day));
                 //端末内に各日付に写真、スタンプ、メモが保存されているか判定
@@ -93,19 +95,16 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
                             Picasso.with(context).load(imageFile).into(itemViewHolder.gridImageView);
                         } else {
                             itemViewHolder.gridImageView.setImageBitmap(null);
-                            //itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
                             setStamp(dailyTop.stamp, context, itemViewHolder);
                             setTitleMemo(dailyTop.titleMemo, itemViewHolder);
                         }
                     } else {
                         itemViewHolder.gridImageView.setImageBitmap(null);
-                        //itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
                         setStamp(dailyTop.stamp, context, itemViewHolder);
                         setTitleMemo(dailyTop.titleMemo, itemViewHolder);
                     }
                 } else {
                     itemViewHolder.gridImageView.setImageBitmap(null);
-                    //itemViewHolder.gridImageView.setImageResource(R.drawable.noimage1);
                 }
             }
 
