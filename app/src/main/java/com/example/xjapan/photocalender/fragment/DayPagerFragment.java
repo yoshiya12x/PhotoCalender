@@ -155,7 +155,8 @@ public class DayPagerFragment extends Fragment {
     }
 
     private void setImageDialog(File imageFile) {
-        ImageDialogFragment imageDialogFragment = new ImageDialogFragment(imageFile, year, month, day);
+        ImageDialogFragment imageDialogFragment = new ImageDialogFragment();
+        imageDialogFragment.setArguments(ImageDialogFragment.createArguments(imageFile, year, month, day));
         imageDialogFragment.show(getActivity().getSupportFragmentManager(), ImageDialogFragment.class.getSimpleName());
     }
 

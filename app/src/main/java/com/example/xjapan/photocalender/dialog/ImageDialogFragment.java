@@ -22,21 +22,15 @@ import uk.co.senab.photoview.PhotoView;
 public class ImageDialogFragment extends DialogFragment {
 
     private File imageFile;
-    private int year;
-    private int month;
-    private int day;
-
-    public ImageDialogFragment(File imageFile, int year, int month, int day) {
-        this.imageFile = imageFile;
-        this.year = year;
-        this.month = month;
-        this.day = day;
-    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         ButterKnife.bind(getActivity());
+        imageFile = (File) getArguments().getSerializable("imageFile");
+        int year = getArguments().getInt("year");
+        int month = getArguments().getInt("month");
+        int day = getArguments().getInt("day");
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.image_dialog_fragment);
         dialog.setTitle(Integer.toString(year) + "年" + Integer.toString(month) + "月" + Integer.toString(day) + "日");
@@ -50,5 +44,14 @@ public class ImageDialogFragment extends DialogFragment {
         PhotoView dayImage = (PhotoView) view.findViewById(R.id.dialog_image);
         Picasso.with(getContext()).load(imageFile).into(dayImage);
         return view;
+    }
+
+    public static Bundle createArguments(File imageFile, int year, int month, int day) {
+        Bundle arguments = new Bundle();
+        arguments.putSerializable("imageFile", imageFile);
+        arguments.putInt("year", year);
+        arguments.putInt("month", month);
+        arguments.putInt("day", day);
+        return arguments;
     }
 }
