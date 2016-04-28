@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:padding="@dimen/activity_horizontal_quoter_margin">
 
     <RelativeLayout
@@ -46,7 +47,8 @@
             android:layout_height="wrap_content"
             android:hint="メモの入力欄"
             android:inputType="text"
-            android:textColor="@color/colorBlack" />
+            android:textColor="@color/colorBlack"
+            android:theme="@style/EditTextColorControl" />
 
     </android.support.design.widget.TextInputLayout>
 

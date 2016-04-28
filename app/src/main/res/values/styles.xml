@@ -22,6 +22,12 @@
         <item name="android:headerYearTextAppearance">@style/TextAppearance.AppCompat.Large</item>
     </style>
 
+    <style name="EditTextColorControl">
+        <item name="colorControlNormal">@color/colorDarkGray</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorSubImage</item>
+    </style>
+
     <style name="dateText">
         <item name="android:textColor">@color/colorBlack</item>
     </style>

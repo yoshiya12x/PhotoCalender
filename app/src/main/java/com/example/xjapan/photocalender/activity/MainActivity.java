@@ -2,10 +2,7 @@ package com.example.xjapan.photocalender.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,8 +31,6 @@ import java.util.List;
 public class MainActivity extends FragmentActivity {
 
     private Common common;
-    private FloatingActionButton pencilButton;
-    private FloatingActionButton stampButton;
     private static ArrayList<CalenderList> allList;
     private ArrayList<DayList> allDays;
     private static RecyclerView.Adapter recyclerViewAdapter;
@@ -52,7 +47,6 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         common = (Common) getApplication();
         setRecyclerView();
-        setButton();
     }
 
     @Override
@@ -259,38 +253,6 @@ public class MainActivity extends FragmentActivity {
         return calenderList;
     }
 
-    private void setButton() {
-        pencilButton = (FloatingActionButton) findViewById(R.id.top_pencil);
-        stampButton = (FloatingActionButton) findViewById(R.id.top_stamp);
-        stampButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (common.isStamp) {
-                    common.isStamp = false;
-                    stampButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                } else {
-                    common.isStamp = true;
-                    common.isPencil = false;
-                    stampButton.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                    pencilButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                }
-            }
-        });
-        pencilButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (common.isPencil) {
-                    common.isPencil = false;
-                    pencilButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                } else {
-                    common.isPencil = true;
-                    common.isStamp = false;
-                    pencilButton.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                    stampButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                }
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

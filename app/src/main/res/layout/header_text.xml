@@ -32,7 +32,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="月" />
+            android:text="月"
+            android:textColor="@color/colorWhite" />
 
         <TextView
             android:id="@+id/tuesday_textview"
@@ -40,7 +41,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="火" />
+            android:text="火"
+            android:textColor="@color/colorWhite" />
 
         <TextView
             android:id="@+id/wednesday_textview"
@@ -48,7 +50,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="水" />
+            android:text="水"
+            android:textColor="@color/colorWhite" />
 
         <TextView
             android:id="@+id/thursday_textview"
@@ -56,7 +59,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="木" />
+            android:text="木"
+            android:textColor="@color/colorWhite" />
 
         <TextView
             android:id="@+id/friday_textview"
@@ -64,7 +68,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="金" />
+            android:text="金"
+            android:textColor="@color/colorWhite" />
 
         <TextView
             android:id="@+id/saturday_textview"
