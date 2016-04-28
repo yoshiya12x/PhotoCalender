@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.adapter.CalenderRecyclerAdapter;
@@ -28,6 +30,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends FragmentActivity {
 
     private Common common;
@@ -41,10 +47,20 @@ public class MainActivity extends FragmentActivity {
     private static final int HEADER_COUNT = 7;
     private static final int ITEM_COUNT = 1;
 
+    @Bind(R.id.drawerRelativeLayout)
+    RelativeLayout drawerRelativeLayout;
+    @Bind(R.id.drawerButton)
+    ImageButton drawerButton;
+    @Bind(R.id.stampImageButton)
+    ImageButton stampImageButton;
+    @Bind(R.id.pencilImageButton)
+    ImageButton pencilImageButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         common = (Common) getApplication();
         setRecyclerView();
     }
@@ -52,6 +68,42 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @OnClick(R.id.drawerButton)
+    void clickDrawerButton() {
+        if (drawerRelativeLayout.getVisibility() == View.GONE) {
+            drawerRelativeLayout.setVisibility(View.VISIBLE);
+            changeDrawerButtonImage(0);
+            stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        } else {
+            drawerRelativeLayout.setVisibility(View.GONE);
+            changeDrawerButtonImage(1);
+            stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
+            pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
+        }
+    }
+
+    @OnClick(R.id.stampImageButton)
+    void clickStampImageButton() {
+        drawerRelativeLayout.setVisibility(View.VISIBLE);
+        stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
+    }
+
+    @OnClick(R.id.pencilImageButton)
+    void clickPencilImageButton() {
+        drawerRelativeLayout.setVisibility(View.VISIBLE);
+        stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
+        pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+    }
+
+    private void changeDrawerButtonImage(int flag) {
+        if (flag == 0) {
+            drawerButton.setImageResource(R.drawable.dropdown);
+        } else if (flag == 1) {
+            drawerButton.setImageResource(R.drawable.dropup);
+        }
     }
 
     private void setRecyclerView() {

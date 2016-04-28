@@ -63,7 +63,7 @@
             android:background="@color/colorAccent" />
 
         <ImageButton
-            android:id="@+id/dropUpButton"
+            android:id="@+id/drawerButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -76,5 +76,12 @@
             android:src="@drawable/dropup" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/drawerRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/colorWhite"
+        android:visibility="gone">
 
+    </RelativeLayout>
 </LinearLayout>
