@@ -1,6 +1,8 @@
 package com.example.xjapan.photocalender.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -136,7 +138,7 @@ public class MainActivity extends FragmentActivity {
     @OnClick(R.id.drawerTitleMemoSaveButton)
     void clickDrawerTitleMemoSaveButton() {
         if (prePosition == -1) {
-            //snackbarでスタンプを貼る日を促す
+            makeSnackBar("日付を選択して保存ボタンを押してください");
         } else {
             DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
             if (dailyTop == null) {
@@ -152,7 +154,7 @@ public class MainActivity extends FragmentActivity {
     @OnClick(R.id.stampDelButton)
     void clickStampDelButton() {
         if (prePosition == -1) {
-            //snackbarでスタンプを貼る日を促す
+            makeSnackBar("日付を選択してスタンプを削除してください");
         } else {
             DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
             if (dailyTop != null) {
@@ -163,6 +165,11 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         }
+    }
+
+    private void makeSnackBar(String snackBarText) {
+        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.top_root_layout);
+        Snackbar.make(coordinatorLayout, snackBarText, Snackbar.LENGTH_LONG).show();
     }
 
     private void changeDrawerButtonImage(int flag) {
@@ -376,7 +383,7 @@ public class MainActivity extends FragmentActivity {
 
     public void onStampClick(View view) {
         if (prePosition == -1) {
-            //snackbarでスタンプを貼る日を促す
+            makeSnackBar("日付を選択してスタンプを押してください");
         } else {
             DailyTopDAO dao = DailyTopDAO.get();
             DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
