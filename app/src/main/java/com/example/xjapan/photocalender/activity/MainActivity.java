@@ -41,11 +41,12 @@ public class MainActivity extends FragmentActivity {
     private ArrayList<DayList> allDays;
     private static RecyclerView.Adapter recyclerViewAdapter;
     public ArrayList<Integer> headerCountList = new ArrayList<>();
-    private int clickPosition;
     private DailyTopDAO dao = DailyTopDAO.get();
     private static MyCalender myCalender = new MyCalender();
     private static final int HEADER_COUNT = 7;
     private static final int ITEM_COUNT = 1;
+    private int prePosition = -1;
+    private int clickPosition;
 
     @Bind(R.id.drawerRelativeLayout)
     RelativeLayout drawerRelativeLayout;
@@ -73,10 +74,13 @@ public class MainActivity extends FragmentActivity {
     @OnClick(R.id.drawerButton)
     void clickDrawerButton() {
         if (drawerRelativeLayout.getVisibility() == View.GONE) {
+            common.isStamp = true;
             drawerRelativeLayout.setVisibility(View.VISIBLE);
             changeDrawerButtonImage(0);
             stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         } else {
+            common.isStamp = false;
+            common.isPencil = false;
             drawerRelativeLayout.setVisibility(View.GONE);
             changeDrawerButtonImage(1);
             stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
@@ -86,16 +90,32 @@ public class MainActivity extends FragmentActivity {
 
     @OnClick(R.id.stampImageButton)
     void clickStampImageButton() {
+        common.isStamp = true;
+        common.isPencil = false;
         drawerRelativeLayout.setVisibility(View.VISIBLE);
+        changeDrawerButtonImage(0);
         stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
     }
 
     @OnClick(R.id.pencilImageButton)
     void clickPencilImageButton() {
+        common.isStamp = false;
+        common.isPencil = true;
         drawerRelativeLayout.setVisibility(View.VISIBLE);
+        changeDrawerButtonImage(0);
         stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
         pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+    }
+
+    private void setInitialCursor() {
+        common.isCursor = true;
+        Calendar genzai = Calendar.getInstance();
+        int year = genzai.get(Calendar.YEAR);
+        int month = genzai.get(Calendar.MONTH) + 1;
+        int day = genzai.get(Calendar.DATE);
+        int position = getCurrentPosition(allList, myCalender.getTargetDate(year, month), 1, day);
+        recyclerViewAdapter.notifyItemChanged(position);
     }
 
     private void changeDrawerButtonImage(int flag) {
@@ -128,11 +148,14 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onItemClick(View view, int position) {
                 DayList dayList = allDays.get(position);
-                if (common.isStamp) {
-                    setClickStampCase(dayList);
+                if (common.isStamp || common.isPencil) {
                     clickPosition = position;
-                } else if (common.isPencil) {
-                    setClickPencilCase(dayList, position);
+                    common.focusPosition = position;
+                    if (prePosition != -1) {
+                        recyclerViewAdapter.notifyItemChanged(prePosition);
+                    }
+                    recyclerViewAdapter.notifyItemChanged(position);
+                    prePosition = position;
                 } else {
                     if (!dayList.day.isEmpty()) {
                         CalenderList postCalenderList = getCalenderListByDayId(position);

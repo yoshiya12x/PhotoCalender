@@ -1,7 +1,5 @@
 package com.example.xjapan.photocalender.util;
 
-import android.util.Log;
-
 import com.example.xjapan.photocalender.model.CalenderList;
 
 import java.util.ArrayList;
@@ -26,8 +24,6 @@ public class MyCalender {
         CalenderList calenderList = new CalenderList();
         calenderList.year = currentYear;
         calenderList.month = currentMonth;
-        Log.d("calender_year", calenderList.year + "");
-        Log.d("calender_month", calenderList.month + "");
         calenderList.days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         calendar.set(calenderList.year, calenderList.month - 1, 1);
         calenderList.startDay = calendar.get(Calendar.DAY_OF_WEEK);

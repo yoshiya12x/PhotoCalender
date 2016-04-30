@@ -22,8 +22,10 @@ public class Common extends Application {
     public boolean isGallery = false;
     public boolean isStamp = false;
     public boolean isPencil = false;
+    public boolean isCursor = false;
     public AlertDialog alertDialog;
     public ImageView dayImage;
+    public int focusPosition;
 
     @Override
     public void onCreate() {

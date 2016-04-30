@@ -17,6 +17,7 @@ import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.DailyTop;
 import com.example.xjapan.photocalender.model.DayList;
+import com.example.xjapan.photocalender.util.Common;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -31,6 +32,7 @@ import butterknife.ButterKnife;
  */
 public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
 
+    private Common common;
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<DayList> allDays;
@@ -41,6 +43,7 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
 
     public CalenderRecyclerAdapter(Context context, ArrayList<DayList> allDays, ArrayList<Integer> headerCountList, DailyTopDAO dao) {
         super();
+        common = (Common) context.getApplicationContext();
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.allDays = allDays;
@@ -77,8 +80,12 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
             //初期化
             itemViewHolder.stampImageView.setImageBitmap(null);
             itemViewHolder.titleMemoTextView.setText("");
+            if (common.focusPosition == position) {
+                itemViewHolder.topDayRelativeLayout.setBackground(context.getResources().getDrawable(R.drawable.top_day_frame));
+            } else {
+                itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorSalmon));
+            }
             itemViewHolder.gridTextView.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
-            itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorSalmon));
 
             //カレンダー上に日付があるかどうかの判定
             if (dayList.day.isEmpty()) {
@@ -120,6 +127,7 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
             } else {
                 itemViewHolder.gridTextView.setTextColor(Color.WHITE);
             }
+
         }
     }
 
