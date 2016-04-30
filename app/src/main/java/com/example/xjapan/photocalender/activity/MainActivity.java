@@ -1,17 +1,13 @@
 package com.example.xjapan.photocalender.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,7 +44,6 @@ public class MainActivity extends FragmentActivity {
     private static final int HEADER_COUNT = 7;
     private static final int ITEM_COUNT = 1;
     private int prePosition = -1;
-    private int clickPosition;
 
     @Bind(R.id.drawerLinearLayout)
     LinearLayout drawerLinearLayout;
@@ -95,7 +90,7 @@ public class MainActivity extends FragmentActivity {
         } else {
             common.isStamp = false;
             common.isPencil = false;
-            recyclerViewAdapter.notifyItemChanged(clickPosition);
+            recyclerViewAdapter.notifyItemChanged(prePosition);
             drawerLinearLayout.setVisibility(View.GONE);
             drawerStampLayout1.setVisibility(View.GONE);
             drawerStampLayout2.setVisibility(View.GONE);
@@ -135,6 +130,39 @@ public class MainActivity extends FragmentActivity {
         changeDrawerButtonImage(0);
         stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
         pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        setDrawerEditTitleMemo();
+    }
+
+    @OnClick(R.id.drawerTitleMemoSaveButton)
+    void clickDrawerTitleMemoSaveButton() {
+        if (prePosition == -1) {
+            //snackbarでスタンプを貼る日を促す
+        } else {
+            DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
+            if (dailyTop == null) {
+                dao.insertTitleMemo(drawerEditTitleMemo.getText().toString(), common.year, common.month, common.day);
+            } else {
+                dao.updateTitleMemo(drawerEditTitleMemo.getText().toString(), common.year, common.month, common.day);
+            }
+            common.focusPosition = prePosition;
+            recyclerViewAdapter.notifyItemChanged(prePosition);
+        }
+    }
+
+    @OnClick(R.id.stampDelButton)
+    void clickStampDelButton() {
+        if (prePosition == -1) {
+            //snackbarでスタンプを貼る日を促す
+        } else {
+            DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
+            if (dailyTop != null) {
+                if (dailyTop.stamp != -1) {
+                    dao.updateStamp(-1, common.year, common.month, common.day);
+                    common.focusPosition = prePosition;
+                    recyclerViewAdapter.notifyItemChanged(prePosition);
+                }
+            }
+        }
     }
 
     private void changeDrawerButtonImage(int flag) {
@@ -143,6 +171,22 @@ public class MainActivity extends FragmentActivity {
         } else if (flag == 1) {
             drawerButton.setImageResource(R.drawable.dropup);
         }
+    }
+
+    private void setDrawerEditTitleMemo() {
+        drawerTitleMemoSaveButton.setEnabled(false);
+        drawerTitleMemoSaveButton.setBackground(getResources().getDrawable(R.drawable.memo_send_button));
+        drawerTitleMemoSaveButton.setTextColor(getResources().getColor(R.color.colorDarkGray));
+        drawerEditTitleMemo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    drawerTitleMemoSaveButton.setEnabled(true);
+                    drawerTitleMemoSaveButton.setBackground(getResources().getDrawable(R.drawable.memo_send_button_true));
+                    drawerTitleMemoSaveButton.setTextColor(getResources().getColor(R.color.colorAccent));
+                }
+            }
+        });
     }
 
     private void setRecyclerView() {
@@ -167,8 +211,10 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onItemClick(View view, int position) {
                 DayList dayList = allDays.get(position);
+                common.year = dayList.year;
+                common.month = dayList.month;
+                common.day = Integer.parseInt(dayList.day);
                 if (common.isStamp || common.isPencil) {
-                    clickPosition = position;
                     common.focusPosition = position;
                     if (prePosition != -1) {
                         recyclerViewAdapter.notifyItemChanged(prePosition);
@@ -291,47 +337,6 @@ public class MainActivity extends FragmentActivity {
         return spaceCount;
     }
 
-    private void setClickStampCase(DayList dayList) {
-        common.year = dayList.year;
-        common.month = dayList.month;
-        common.day = Integer.parseInt(dayList.day);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View layout = inflater.inflate(R.layout.select_stamp, (ViewGroup) this.findViewById(R.id.select_stamp_layout));
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
-        builder.setView(layout);
-        common.alertDialog = builder.show();
-    }
-
-    private void setClickPencilCase(DayList dayList, final int position) {
-        common.year = dayList.year;
-        common.month = dayList.month;
-        common.day = Integer.parseInt(dayList.day);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View layout = inflater.inflate(R.layout.edit_title_memo, (ViewGroup) this.findViewById(R.id.edit_title_memo_layout));
-        final EditText editText = (EditText) layout.findViewById(R.id.edit_title_memo);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(dayList.year + "年" + dayList.month + "月" + dayList.day + "日");
-        builder.setView(layout);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                DailyTopDAO dao = DailyTopDAO.get();
-                DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
-                if (dailyTop == null) {
-                    dao.insertTitleMemo(editText.getText().toString(), common.year, common.month, common.day);
-                } else {
-                    dao.updateTitleMemo(editText.getText().toString(), common.year, common.month, common.day);
-                }
-                recyclerViewAdapter.notifyItemChanged(position);
-            }
-        });
-        builder.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        common.alertDialog = builder.show();
-    }
-
     private CalenderList getCalenderListByDayId(int dayId) {
         CalenderList calenderList = new CalenderList();
         int count = 0;
@@ -346,7 +351,6 @@ public class MainActivity extends FragmentActivity {
         }
         return calenderList;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -371,48 +375,52 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onStampClick(View view) {
-        DailyTopDAO dao = DailyTopDAO.get();
-        DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
-        int updateStamp;
-        switch (view.getId()) {
-            case R.id.stamp_image_1:
-                updateStamp = R.drawable.airplane;
-                break;
-            case R.id.stamp_image_2:
-                updateStamp = R.drawable.music;
-                break;
-            case R.id.stamp_image_3:
-                updateStamp = R.drawable.heart;
-                break;
-            case R.id.stamp_image_4:
-                updateStamp = R.drawable.food;
-                break;
-            case R.id.stamp_image_5:
-                updateStamp = R.drawable.shopping;
-                break;
-            case R.id.stamp_image_6:
-                updateStamp = R.drawable.cake;
-                break;
-            case R.id.stamp_image_7:
-                updateStamp = R.drawable.drink;
-                break;
-            case R.id.stamp_image_8:
-                updateStamp = R.drawable.pen;
-                break;
-            case R.id.stamp_image_9:
-                updateStamp = R.drawable.flag;
-                break;
-            default:
-                updateStamp = R.drawable.heart;
-                break;
-        }
-        if (dailyTop == null) {
-            dao.insertStamp(updateStamp, common.year, common.month, common.day);
+        if (prePosition == -1) {
+            //snackbarでスタンプを貼る日を促す
         } else {
-            dao.updateStamp(updateStamp, common.year, common.month, common.day);
+            DailyTopDAO dao = DailyTopDAO.get();
+            DailyTop dailyTop = dao.getItem(common.year, common.month, common.day);
+            int updateStamp;
+            switch (view.getId()) {
+                case R.id.stamp_image_1:
+                    updateStamp = R.drawable.airplane;
+                    break;
+                case R.id.stamp_image_2:
+                    updateStamp = R.drawable.music;
+                    break;
+                case R.id.stamp_image_3:
+                    updateStamp = R.drawable.heart;
+                    break;
+                case R.id.stamp_image_4:
+                    updateStamp = R.drawable.food;
+                    break;
+                case R.id.stamp_image_5:
+                    updateStamp = R.drawable.shopping;
+                    break;
+                case R.id.stamp_image_6:
+                    updateStamp = R.drawable.cake;
+                    break;
+                case R.id.stamp_image_7:
+                    updateStamp = R.drawable.drink;
+                    break;
+                case R.id.stamp_image_8:
+                    updateStamp = R.drawable.pen;
+                    break;
+                case R.id.stamp_image_9:
+                    updateStamp = R.drawable.flag;
+                    break;
+                default:
+                    updateStamp = R.drawable.heart;
+                    break;
+            }
+            if (dailyTop == null) {
+                dao.insertStamp(updateStamp, common.year, common.month, common.day);
+            } else {
+                dao.updateStamp(updateStamp, common.year, common.month, common.day);
+            }
+            common.focusPosition = prePosition;
+            recyclerViewAdapter.notifyItemChanged(prePosition);
         }
-        recyclerViewAdapter.notifyItemChanged(clickPosition);
-        common.alertDialog.dismiss();
     }
 
     public static void reloadView(int year, int month, int day) {

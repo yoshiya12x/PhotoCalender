@@ -36,7 +36,7 @@ public class DailyTopDAO {
                 .getOrNull(0);
     }
 
-    public List<DailyTop> getAll(){
+    public List<DailyTop> getAll() {
         assert orma != null;
         return orma.selectFromDailyTop()
                 .toList();
@@ -54,7 +54,7 @@ public class DailyTopDAO {
     public long updateStamp(int stamp, int year, int month, int day) {
         return orma.updateDailyTop()
                 .yearEq(year)
-                .month(month)
+                .monthEq(month)
                 .dayEq(day)
                 .stamp(stamp)
                 .execute();

@@ -82,8 +82,7 @@
         android:layout_height="150dp"
         android:background="@color/colorWhite"
         android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="gone">
+        android:padding="10dp">
 
         <LinearLayout
             android:id="@+id/drawerStampLayout1"
@@ -99,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/airplane" />
 
             <ImageView
@@ -107,6 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/music" />
 
             <ImageView
@@ -115,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/heart" />
 
             <ImageView
@@ -123,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/food" />
 
             <ImageView
@@ -131,6 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/shopping" />
         </LinearLayout>
 
@@ -149,6 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/cake" />
 
             <ImageView
@@ -157,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/drink" />
 
             <ImageView
@@ -165,15 +171,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/pen" />
-
-            <ImageView
-                android:id="@+id/stamp_image_10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:src="@drawable/flag" />
 
             <ImageView
                 android:id="@+id/stamp_image_9"
@@ -181,7 +180,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:onClick="onStampClick"
                 android:src="@drawable/flag" />
+
+            <Button
+                android:id="@+id/stampDelButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/stamp_del_button"
+                android:text="スタンプを\n削除" />
 
         </LinearLayout>
 

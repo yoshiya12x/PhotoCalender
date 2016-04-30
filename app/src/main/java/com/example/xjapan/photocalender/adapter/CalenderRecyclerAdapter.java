@@ -138,15 +138,17 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void setStamp(int stamp, Context context, ItemViewHolder holder) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        display.getMetrics(displayMetrics);
-        ViewGroup.LayoutParams params = holder.stampImageView.getLayoutParams();
-        params.width = displayMetrics.widthPixels / 14;
-        params.height = displayMetrics.widthPixels / 14;
-        holder.stampImageView.setVisibility(View.VISIBLE);
-        holder.stampImageView.setImageResource(stamp);
+        if (stamp != -1) {
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            display.getMetrics(displayMetrics);
+            ViewGroup.LayoutParams params = holder.stampImageView.getLayoutParams();
+            params.width = displayMetrics.widthPixels / 14;
+            params.height = displayMetrics.widthPixels / 14;
+            holder.stampImageView.setVisibility(View.VISIBLE);
+            holder.stampImageView.setImageResource(stamp);
+        }
     }
 
     public void setTitleMemo(String titleMemo, ItemViewHolder holder) {
