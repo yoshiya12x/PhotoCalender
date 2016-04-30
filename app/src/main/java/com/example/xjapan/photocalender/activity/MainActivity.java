@@ -3,6 +3,7 @@ package com.example.xjapan.photocalender.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,9 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.adapter.CalenderRecyclerAdapter;
@@ -48,14 +50,24 @@ public class MainActivity extends FragmentActivity {
     private int prePosition = -1;
     private int clickPosition;
 
-    @Bind(R.id.drawerRelativeLayout)
-    RelativeLayout drawerRelativeLayout;
+    @Bind(R.id.drawerLinearLayout)
+    LinearLayout drawerLinearLayout;
     @Bind(R.id.drawerButton)
     ImageButton drawerButton;
     @Bind(R.id.stampImageButton)
     ImageButton stampImageButton;
     @Bind(R.id.pencilImageButton)
     ImageButton pencilImageButton;
+    @Bind(R.id.drawerStampLayout1)
+    LinearLayout drawerStampLayout1;
+    @Bind(R.id.drawerStampLayout2)
+    LinearLayout drawerStampLayout2;
+    @Bind(R.id.drawerTextInputLayout)
+    TextInputLayout drawerTextInputLayout;
+    @Bind(R.id.drawerTitleMemoSaveButton)
+    Button drawerTitleMemoSaveButton;
+    @Bind(R.id.drawerEditTitleMemo)
+    EditText drawerEditTitleMemo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +85,27 @@ public class MainActivity extends FragmentActivity {
 
     @OnClick(R.id.drawerButton)
     void clickDrawerButton() {
-        if (drawerRelativeLayout.getVisibility() == View.GONE) {
+        if (drawerLinearLayout.getVisibility() == View.GONE) {
             common.isStamp = true;
-            drawerRelativeLayout.setVisibility(View.VISIBLE);
+            drawerLinearLayout.setVisibility(View.VISIBLE);
+            drawerStampLayout1.setVisibility(View.VISIBLE);
+            drawerStampLayout2.setVisibility(View.VISIBLE);
             changeDrawerButtonImage(0);
             stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         } else {
             common.isStamp = false;
             common.isPencil = false;
-            drawerRelativeLayout.setVisibility(View.GONE);
+            recyclerViewAdapter.notifyItemChanged(clickPosition);
+            drawerLinearLayout.setVisibility(View.GONE);
+            drawerStampLayout1.setVisibility(View.GONE);
+            drawerStampLayout2.setVisibility(View.GONE);
+            drawerTextInputLayout.setVisibility(View.GONE);
+            drawerTitleMemoSaveButton.setVisibility(View.GONE);
             changeDrawerButtonImage(1);
             stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
             pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
+            recyclerViewAdapter.notifyItemChanged(prePosition);
+            prePosition = -1;
         }
     }
 
@@ -92,7 +113,11 @@ public class MainActivity extends FragmentActivity {
     void clickStampImageButton() {
         common.isStamp = true;
         common.isPencil = false;
-        drawerRelativeLayout.setVisibility(View.VISIBLE);
+        drawerLinearLayout.setVisibility(View.VISIBLE);
+        drawerTextInputLayout.setVisibility(View.GONE);
+        drawerTitleMemoSaveButton.setVisibility(View.GONE);
+        drawerStampLayout1.setVisibility(View.VISIBLE);
+        drawerStampLayout2.setVisibility(View.VISIBLE);
         changeDrawerButtonImage(0);
         stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
@@ -102,20 +127,14 @@ public class MainActivity extends FragmentActivity {
     void clickPencilImageButton() {
         common.isStamp = false;
         common.isPencil = true;
-        drawerRelativeLayout.setVisibility(View.VISIBLE);
+        drawerLinearLayout.setVisibility(View.VISIBLE);
+        drawerStampLayout1.setVisibility(View.GONE);
+        drawerStampLayout2.setVisibility(View.GONE);
+        drawerTextInputLayout.setVisibility(View.VISIBLE);
+        drawerTitleMemoSaveButton.setVisibility(View.VISIBLE);
         changeDrawerButtonImage(0);
         stampImageButton.setBackgroundColor(getResources().getColor(R.color.colorSubImage));
         pencilImageButton.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-    }
-
-    private void setInitialCursor() {
-        common.isCursor = true;
-        Calendar genzai = Calendar.getInstance();
-        int year = genzai.get(Calendar.YEAR);
-        int month = genzai.get(Calendar.MONTH) + 1;
-        int day = genzai.get(Calendar.DATE);
-        int position = getCurrentPosition(allList, myCalender.getTargetDate(year, month), 1, day);
-        recyclerViewAdapter.notifyItemChanged(position);
     }
 
     private void changeDrawerButtonImage(int flag) {

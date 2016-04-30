@@ -76,12 +76,141 @@
             android:src="@drawable/dropup" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/drawerRelativeLayout"
+    <LinearLayout
+        android:id="@+id/drawerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@color/colorWhite"
+        android:orientation="vertical"
+        android:padding="10dp"
         android:visibility="gone">
 
-    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/drawerStampLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/colorDarkGray"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/stamp_image_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/airplane" />
+
+            <ImageView
+                android:id="@+id/stamp_image_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/music" />
+
+            <ImageView
+                android:id="@+id/stamp_image_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/heart" />
+
+            <ImageView
+                android:id="@+id/stamp_image_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/food" />
+
+            <ImageView
+                android:id="@+id/stamp_image_5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/shopping" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/drawerStampLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/colorDarkGray"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/stamp_image_6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/cake" />
+
+            <ImageView
+                android:id="@+id/stamp_image_7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/drink" />
+
+            <ImageView
+                android:id="@+id/stamp_image_8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/pen" />
+
+            <ImageView
+                android:id="@+id/stamp_image_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/flag" />
+
+            <ImageView
+                android:id="@+id/stamp_image_9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/flag" />
+
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/drawerTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/drawerEditTitleMemo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="予定のタイトルを入力"
+                android:inputType="text"
+                android:maxLength="20"
+                android:textColor="@color/colorBlack" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/drawerTitleMemoSaveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="保存"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
 </LinearLayout>
