@@ -82,7 +82,8 @@
         android:layout_height="150dp"
         android:background="@color/colorWhite"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/drawerStampLayout1"
@@ -189,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/stamp_del_button"
-                android:text="スタンプを\n削除" />
+                android:text="削除" />
 
         </LinearLayout>
 
@@ -206,7 +207,8 @@
                 android:hint="予定のタイトルを入力"
                 android:inputType="text"
                 android:maxLength="20"
-                android:textColor="@color/colorBlack" />
+                android:textColor="@color/colorBlack"
+                android:theme="@style/EditTextColorControl" />
 
         </android.support.design.widget.TextInputLayout>
 
