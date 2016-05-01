@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -191,6 +192,9 @@ public class MainActivity extends FragmentActivity {
                     drawerTitleMemoSaveButton.setEnabled(true);
                     drawerTitleMemoSaveButton.setBackground(getResources().getDrawable(R.drawable.memo_send_button_true));
                     drawerTitleMemoSaveButton.setTextColor(getResources().getColor(R.color.colorAccent));
+                } else {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });
