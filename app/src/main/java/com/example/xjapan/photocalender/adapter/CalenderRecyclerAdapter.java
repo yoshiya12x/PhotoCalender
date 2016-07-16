@@ -84,7 +84,7 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
                 itemViewHolder.topDayRelativeLayout.setBackground(context.getResources().getDrawable(R.drawable.top_day_frame));
                 common.focusPosition = -1;
             } else {
-                itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorSalmon));
+                itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
             }
             itemViewHolder.gridTextView.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
 
@@ -119,14 +119,14 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
             itemViewHolder.gridTextView.setText(dayList.day);
             Calendar genzai = Calendar.getInstance();
             if (!dayList.day.isEmpty() && dayList.year == genzai.get(Calendar.YEAR) && dayList.month == genzai.get(Calendar.MONTH) + 1 && Integer.parseInt(dayList.day) == genzai.get(Calendar.DATE)) {
-                itemViewHolder.gridTextView.setTextColor(Color.BLACK);
+                itemViewHolder.gridTextView.setTextColor(Color.WHITE);
                 itemViewHolder.gridTextView.setBackgroundColor(context.getResources().getColor(R.color.colorHalfWhite));
             } else if (dayList.isSunday || dayList.isHoliday) {
                 itemViewHolder.gridTextView.setTextColor(Color.RED);
             } else if (dayList.isSaturday) {
                 itemViewHolder.gridTextView.setTextColor(Color.BLUE);
             } else {
-                itemViewHolder.gridTextView.setTextColor(Color.WHITE);
+                itemViewHolder.gridTextView.setTextColor(Color.DKGRAY);
             }
 
         }

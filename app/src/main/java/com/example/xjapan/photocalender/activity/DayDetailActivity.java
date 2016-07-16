@@ -86,7 +86,6 @@ public class DayDetailActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         common = (Common) getApplication();
-
         if (common.isCamera && resultCode == RESULT_OK) {
             showDialog(common.m_uri.getPath());
         } else if (common.isGallery && resultCode == RESULT_OK) {
