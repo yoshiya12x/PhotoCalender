@@ -3,14 +3,17 @@ package com.example.xjapan.photocalender.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.xjapan.photocalender.R;
+import com.example.xjapan.photocalender.activity.DayDetailActivity;
 import com.example.xjapan.photocalender.db.dao.DailyMemoDAO;
 import com.example.xjapan.photocalender.db.dao.DailyTopDAO;
 import com.example.xjapan.photocalender.model.CalenderList;
@@ -59,14 +62,14 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ItemViewHolder viewHolder = (ItemViewHolder) holder;
-        int position_tmp = position + 1;
+        final int position_tmp = position + 1;
 
         //初期化
         viewHolder.dayRelativelayout.setBackgroundColor(Color.WHITE);
         viewHolder.dayImageView.setImageBitmap(null);
         viewHolder.dayStampImageView.setImageBitmap(null);
         viewHolder.dayTextView.setText(position_tmp + "");
-        viewHolder.dayTextView.setTextColor(Color.WHITE);
+        viewHolder.dayTextView.setTextColor(Color.BLACK);
         viewHolder.dayTextView.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
         viewHolder.dayTitleMemoTextView.setText("");
         viewHolder.dayMemoTextView.setText("");
@@ -108,6 +111,25 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
         if (dailyMemo != null) {
             viewHolder.dayMemoTextView.setText(dailyMemo.memo);
         }
+
+        viewHolder.subMemoImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("subMemoImageButton", calenderList.year + "");
+                Log.d("subMemoImageButton", calenderList.month + "");
+                Log.d("subMemoImageButton", position_tmp + "");
+            }
+        });
+
+        viewHolder.dayRelativelayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("dayRelativelayout", calenderList.year + "");
+                Log.d("dayRelativelayout", calenderList.month + "");
+                Log.d("dayRelativelayout", position_tmp + "");
+                context.startActivity(DayDetailActivity.createIntent(view.getContext(), calenderList, position_tmp, currentDay));
+            }
+        });
     }
 
     @Override
@@ -128,6 +150,8 @@ public class MonthRecyclerAdapter extends RecyclerView.Adapter {
         TextView dayTitleMemoTextView;
         @Bind(R.id.day_memo)
         TextView dayMemoTextView;
+        @Bind(R.id.sub_memo_image_button)
+        ImageButton subMemoImageButton;
 
         public ItemViewHolder(View view) {
             super(view);

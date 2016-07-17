@@ -8,11 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.xjapan.photocalender.R;
 import com.example.xjapan.photocalender.adapter.MonthRecyclerAdapter;
-import com.example.xjapan.photocalender.listener.RecyclerItemClickListener;
 import com.example.xjapan.photocalender.model.CalenderList;
 import com.example.xjapan.photocalender.model.DayList;
 import com.example.xjapan.photocalender.util.JapaneseHolidayUtils;
@@ -70,12 +68,12 @@ public class MonthDetailActivity extends AppCompatActivity {
         linearLayoutManager.scrollToPosition(Integer.parseInt(currentDay) - 1);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerViewAdapter = new MonthRecyclerAdapter(getApplicationContext(), calenderList, genzaiDay, sundayList, saturdayList, holidayList);
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                startActivity(DayDetailActivity.createIntent(view.getContext(), calenderList, position + 1, genzaiDay));
-            }
-        }));
+//        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                startActivity(DayDetailActivity.createIntent(view.getContext(), calenderList, position + 1, genzaiDay));
+//            }
+//        }));
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 

@@ -84,7 +84,7 @@ public class CalenderRecyclerAdapter extends RecyclerView.Adapter {
                 itemViewHolder.topDayRelativeLayout.setBackground(context.getResources().getDrawable(R.drawable.top_day_frame));
                 common.focusPosition = -1;
             } else {
-                itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
+                itemViewHolder.topDayRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorSalmon));
             }
             itemViewHolder.gridTextView.setBackgroundColor(context.getResources().getColor(R.color.colorTransparent));
 

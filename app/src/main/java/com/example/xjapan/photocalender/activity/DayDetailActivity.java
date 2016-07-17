@@ -158,6 +158,7 @@ public class DayDetailActivity extends AppCompatActivity {
         intent.putExtra("calenderListStartDay", calenderList.startDay);
         intent.putExtra("selectedDay", selectedDay);
         intent.putExtra("currentDay", currentDay);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
 
